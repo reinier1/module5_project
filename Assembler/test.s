@@ -1,1 +1,3 @@
-label:	add %r0, %r1 
+label:	add %r1, label 
+		jp label
+		

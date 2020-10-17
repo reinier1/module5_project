@@ -5,7 +5,7 @@ std::ostream &operator<<(std::ostream &stream,const TOK tok)
 {
 	switch(tok)
 	{
-		case TOK::NONE			return stream<<"none";
+		case TOK::NONE:			return stream<<"none";
 		case TOK::EOL:			return stream<<"\n";
 		case TOK::END:			return stream<<"EOF\n";
 		case TOK::NUMBER: 		return stream<<"number";
@@ -36,6 +36,7 @@ std::ostream &operator<<(std::ostream &stream,const TOK tok)
 		case TOK::PERCENT:		return stream<<"%";
 		case TOK::LBRACKET:		return stream<<"[";
 		case TOK::RBRACKET:		return stream<<"]";
+		case TOK::REG:			return stream<<"reg";
 		default:				return stream<<"bad token";
 	}
 }
@@ -46,6 +47,7 @@ std::ostream &operator<<(std::ostream &stream,const Token tok)
 	{
 		case TOK::NUMBER:		return stream<<"(number:"<<tok.value<<")";
 		case TOK::IDENTIFIER:	return stream<<"(identifier:"<<tok.str<<")";
+		case TOK::REG:			return stream<<"%r"<<tok.value;
 		case TOK::EOL:			return stream<<"\n";
 		default:				return stream<<tok.id;	
 	}

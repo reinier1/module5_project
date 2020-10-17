@@ -25,7 +25,7 @@ Token Lexer::lex_token()
 	int c;
 	for(c=peekc();(std::isspace(c))&&(c!='\n');c=peekc())
 		popc();
-	if(c=='\n')
+	if((c=='\n')||(c==EOF))
 	{
 		popc();
 		return Token(TOK::EOL,linenumber);
@@ -42,21 +42,44 @@ Token Lexer::lex_token()
 			case ':': return Token(TOK::COLON,linenumber);
 			case '[': return Token(TOK::LBRACKET,linenumber);
 			case ']': return Token(TOK::RBRACKET,linenumber);
-			case '%': return Token(TOK::PERCENT,linenumber);
+			case '%':
+			{
+				if(peekc()!='r')
+				{
+					error++;
+					std::cerr<<"Error: Bad register on line "<<linenumber<<"\n";
+				}
+				else 
+				{
+					popc();
+					uint32_t num=lex_number().value;
+					if(num>31)
+					{
+						error++;
+						std::cerr<<"Error: Bad register on line "<<linenumber<<"\n";
+					}
+					else 
+					{
+						return Token(TOK::REG,linenumber,num);
+					}
+				}
+			}
 			default:
+				error++;
 				std::cerr<<"Error: Unkown punctuation '"; std::cerr.put(c); std::cerr<<"' on line "<<linenumber<<"\n";
 		}
 	}
 	else
 	{
-		std::cerr<<"Error: Unkown symbol '"; std::cerr.put(popc()); std::cerr<<"' on line "<<linenumber<<"\n";
+		error++;
+		std::cerr<<"Error: Unkown symbol '"<<popc()<<"' on line "<<linenumber<<"\n";
 	}
 	return Token(TOK::EOL,linenumber);
 }
 
 Token Lexer::lex_number()
 {
-	int n=0;
+	uint32_t n=0;
 	for(int c=peekc();isdigit(c);c=peekc())
 	{
 		popc();
@@ -73,48 +96,56 @@ Token Lexer::lex_id()
 		popc();
 		str.push_back(c);
 	}
-	if(str=="ADD"||str=="add")
-		return Token(TOK::ADD,linenumber);
-	else if(str=="SUB"||str=="sub")
-		return Token(TOK::SUB,linenumber);
-	else if(str=="MUL"||str=="mul")
-		return Token(TOK::MUL,linenumber);
-	else if(str=="AND"||str=="and")
-		return Token(TOK::AND,linenumber);
-	else if(str=="OR"||str=="or")
-		return Token(TOK::OR,linenumber);
-	else if(str=="XOR"||str=="xor")
-		return Token(TOK::XOR,linenumber);
-	else if(str=="SLA"||str=="sla")
-		return Token(TOK::SLA,linenumber);
-	else if(str=="SRA"||str=="sra")
-		return Token(TOK::SRA,linenumber);
-	else if(str=="MOV"||str=="mov")
-		return Token(TOK::MOVE,linenumber);
-	else if(str=="JP"||str=="jp")
-		return Token(TOK::JP,linenumber);
-	else if(str=="JALR"||str=="jalr")
-		return Token(TOK::JALR,linenumber);
-	else if(str=="JAL"||str=="jal")
-		return Token(TOK::JAL,linenumber);
-	else if(str=="JR"||str=="jr")
-		return Token(TOK::JR,linenumber);
-	else if(str=="BEQ"||str=="beq")
-		return Token(TOK::BEQ,linenumber);
-	else if(str=="BNE"||str=="bne")
-		return Token(TOK::BNE,linenumber);
-	else if(str=="BLT"||str=="blt")
-		return Token(TOK::BLT,linenumber);
-	else if(str=="BLTU"||str=="bltu")
-		return Token(TOK::BLTU,linenumber);
-	else if(str=="LW"||str=="lw")
-		return Token(TOK::LW,linenumber);
-	else if(str=="LB"||str=="lb")
-		return Token(TOK::LB,linenumber);
-	else if(str=="SW"||str=="sw")
-		return Token(TOK::SW,linenumber);
-	else if(str=="SB"||str=="sb")
-		return Token(TOK::SB,linenumber);
+	if(string2TOK.count(str))
+	{
+		return Token(string2TOK[str],linenumber);
+	}
 	else
 		return Token(TOK::IDENTIFIER,linenumber,str);
 }
+
+std::map<std::string,TOK> Lexer::string2TOK
+{
+	{"ADD",TOK::ADD},
+	{"add",TOK::ADD},
+	{"SUB",TOK::SUB},
+	{"sub",TOK::SUB},
+	{"MUL",TOK::MUL},
+	{"mul",TOK::MUL},
+	{"AND",TOK::AND},
+	{"and",TOK::AND},
+	{"OR",TOK::OR},
+	{"or",TOK::OR},
+	{"XOR",TOK::XOR},
+	{"xor",TOK::XOR},
+	{"SLA",TOK::SLA},
+	{"sla",TOK::SLA},
+	{"SRA",TOK::SRA},
+	{"sra",TOK::SRA},
+	{"MOV",TOK::MOVE},
+	{"mov",TOK::MOVE},
+	{"JP",TOK::JP},
+	{"jp",TOK::JP},
+	{"JALR",TOK::JALR},
+	{"jalr",TOK::JALR},
+	{"JAL",TOK::JAL},
+	{"jal",TOK::JAL},
+	{"JR",TOK::JR},
+	{"jr",TOK::JR},
+	{"BEQ",TOK::BEQ},
+	{"beq",TOK::BEQ},
+	{"BNE",TOK::BNE},
+	{"bne",TOK::BNE},
+	{"BLT",TOK::BLT},
+	{"blt",TOK::BLT},
+	{"BLTU",TOK::BLTU},
+	{"bltu",TOK::BLTU},
+	{"LW",TOK::LW},
+	{"lw",TOK::LW},
+	{"LB",TOK::LB},
+	{"lb",TOK::LB},
+	{"SW",TOK::SW},
+	{"sw",TOK::SW},
+	{"SB",TOK::SB},
+	{"sb",TOK::SB}
+};

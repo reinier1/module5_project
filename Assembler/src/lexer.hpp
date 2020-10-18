@@ -1,19 +1,19 @@
 #ifndef LEXER_HPP
 #define LEXER_HPP
 #include <vector>
-#include <iostream>
+#include <fstream>
 #include <map>
 #include "tokens.hpp"
 class Lexer
 {
 	public:
 		int error;
-		Lexer(std::istream &stream) : error(0) , stream{&stream} , linenumber(1) {};
+		Lexer(std::ifstream &stream) : error(0) , stream{&stream} , linenumber(1) {};
 		std::vector<Token> lex();
 		
 	private:
 		static std::map<std::string,TOK> string2TOK;
-		std::istream *stream;
+		std::ifstream *stream;
 		int linenumber;
 		
 		int popc();

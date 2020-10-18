@@ -5,9 +5,14 @@
 #include "symbol_table.hpp"
 #include "assembler.hpp"
 
-int main()
+extern std::ifstream input;
+extern std::ofstream output;
+void parse_arguments(int argc,char **argv);
+
+int main(int argc,char **argv)
 {
-	Lexer lexer(std::cin);
+	parse_arguments(argc,argv);
+	Lexer lexer(input);
 	auto tokens=lexer.lex();
 	for(auto it : tokens)
 		std::cerr<<" "<<it;

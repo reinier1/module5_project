@@ -47,7 +47,7 @@ uint16_t Assembler::align(uint16_t &loc,uint16_t alignment)
 {
 	uint16_t old_loc=loc;
 	::align(loc,alignment);
-	std::cerr<<loc-old_loc<<"\n";
+	//std::cerr<<loc-old_loc<<"\n";
 	for(uint16_t i=0;i<(loc-old_loc);i++)
 		output.push_back(0);
 	return loc;

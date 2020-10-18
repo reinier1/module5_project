@@ -8,6 +8,8 @@ SymbolTable::SymbolTable(std::vector<ASTLine> &lines) : error(0)
 	uint16_t loc=0;
 	for(auto &it : lines)
 	{
+		int size=it.instruction->size();
+		align(loc,size);
 		if(it.labeled)
 		{
 			if(contains(it.label.str))
@@ -20,7 +22,8 @@ SymbolTable::SymbolTable(std::vector<ASTLine> &lines) : error(0)
 				dictionary[it.label.str]=loc;
 			}
 		}
-		loc+=it.instruction->size();
+		it.instruction->define(*this);
+		loc+=size;
 	}
 }
 
@@ -32,4 +35,31 @@ bool SymbolTable::contains(std::string label)
 uint16_t &SymbolTable::operator[](std::string label)
 {
 	return dictionary[label];
+}
+
+void ASTInstruction::define(SymbolTable &symtab)	{	}
+void ASTInsDefine::define(SymbolTable &symtab)
+{
+	if(symtab.contains(name))
+	{
+		symtab.error++;
+		std::cerr << "Error: address " << name << " redefined\n";
+	}
+	else
+	{
+		symtab[name]=data->calculate(symtab);
+	}
+}
+
+uint32_t align(uint16_t &offset,uint16_t alignment)
+{
+	if(alignment==0)
+		return offset;
+	uint16_t difference=offset%alignment;
+	if(difference==0)
+		return offset;
+	else 
+	{
+		return offset+=alignment-difference;
+	}
 }

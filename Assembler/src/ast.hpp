@@ -36,6 +36,7 @@ class ASTInstruction : public AST
 		
 		virtual uint16_t size()=0;
 		virtual void assemble(Assembler &assembler,SymbolTable &symtab)=0;
+		virtual void define(SymbolTable &symtab);
 };
 
 class ASTExpression : public AST
@@ -43,7 +44,7 @@ class ASTExpression : public AST
 	public:
 		ASTExpression(int linenumber) : AST(linenumber) {};
 		
-		virtual uint16_t calculate(SymbolTable &symtab)=0;
+		virtual int32_t calculate(SymbolTable &symtab)=0;
 };
 
 class ASTLine : public AST 
@@ -62,10 +63,10 @@ class ASTLine : public AST
 class ASTNumber : public ASTExpression
 {
 	public:
-		ASTNumber(int linenumber,uint16_t value) : ASTExpression(linenumber) , value{value} {};
-		uint16_t value;
+		ASTNumber(int linenumber,uint32_t value) : ASTExpression(linenumber) , value{value} {};
+		uint32_t value;
 		
-		uint16_t calculate(SymbolTable &symtab) override;
+		int32_t calculate(SymbolTable &symtab) override;
 };
 
 class ASTIdentifier : public ASTExpression
@@ -74,7 +75,18 @@ class ASTIdentifier : public ASTExpression
 		ASTIdentifier(int linenumber,std::string id) : ASTExpression(linenumber) , id{id} {};
 		std::string id;
 		
-		uint16_t calculate(SymbolTable &symtab) override;
+		int32_t calculate(SymbolTable &symtab) override;
+};
+
+class ASTUnaryExpr : public ASTExpression
+{
+	public:
+		ASTUnaryExpr(int linenumber,TOK type,std::unique_ptr<ASTExpression> exp) : ASTExpression(linenumber) , type{type} , exp{std::move(exp)} {};
+		
+		TOK type;
+		std::unique_ptr<ASTExpression> exp;
+		
+		int32_t calculate(SymbolTable &symtab) override;
 };
 
 class ASTBadExpr : public ASTExpression
@@ -82,7 +94,7 @@ class ASTBadExpr : public ASTExpression
 	public:
 		ASTBadExpr(int linenumber) : ASTExpression(linenumber) {};
 		
-		uint16_t calculate(SymbolTable &symtab) override;
+		int32_t calculate(SymbolTable &symtab) override;
 };
 
 class ASTReg : public AST
@@ -99,6 +111,32 @@ class ASTInsNone : public ASTInstruction
 		
 		uint16_t size() override;
 		void assemble(Assembler &assembler, SymbolTable &symtab) override;
+};
+
+class ASTInsData : public ASTInstruction
+{
+	public:
+		ASTInsData(int linenumber, TOK tok, std::unique_ptr<ASTExpression> data) : 
+					ASTInstruction(linenumber,tok) , data{std::move(data)} {};
+					
+		std::unique_ptr<ASTExpression> data;
+		
+		uint16_t size() override;
+		void assemble(Assembler &assembler, SymbolTable &symtab) override;
+};
+
+class ASTInsDefine : public ASTInstruction
+{
+	public:
+		ASTInsDefine(int linenumber, TOK tok, std::string name, std::unique_ptr<ASTExpression> data) : 
+					ASTInstruction(linenumber,tok) , name{name} , data{std::move(data)} {};
+					
+		std::string name;
+		std::unique_ptr<ASTExpression> data;
+		
+		uint16_t size() override;
+		void assemble(Assembler &assembler, SymbolTable &symtab) override;
+		void define(SymbolTable &symtab)override;
 };
 
 class ASTInsRegReg : public ASTInstruction

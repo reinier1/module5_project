@@ -21,8 +21,10 @@ class Assembler
 		Assembler &operator<<(uint8_t data);
 		Assembler &operator<<(uint16_t data);
 		Assembler &operator<<(uint32_t data);
+		uint16_t align(uint16_t &loc,uint16_t alignment);
 		uint32_t tok2op(TOK tok);
-		uint32_t align(uint16_t &offset,uint16_t alignment);
+		uint16_t fit_imm(int32_t val,TOK type);
+		bool ins_is_mem(TOK type);
 		friend std::ostream &operator<<(std::ostream &stream,Assembler &assembler);
 		
 	private:

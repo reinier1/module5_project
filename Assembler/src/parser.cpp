@@ -10,7 +10,7 @@ bool Parser::expect(std::vector<Token>::iterator &it,TOK id)
 	if(it->id!=id)
 	{
 		error++;
-		std::cerr<<"Error: Expected "<<id<<" not"<<it->id<<"on line "<<it->linenumber<<"\n";
+		std::cerr<<"Error: Expected "<<id<<" not "<<it->id<<" on line "<<it->linenumber<<"\n";
 		return false;
 	}
 	++it;
@@ -182,6 +182,33 @@ std::unique_ptr<ASTInstruction> Parser::parse_instruction(std::vector<Token>::it
 				return std::make_unique<ASTInsRegImm>(it->linenumber,type,Rd,std::move(imm));
 			}
 		}
+		case TOK::DB:
+		case TOK::DW:
+		{
+			TOK type=it->id;
+			++it;
+			auto imm=parse_expression(it);
+			return std::make_unique<ASTInsData>(it->linenumber,type,std::move(imm));
+		}
+		case TOK::ADDRESS:
+		{
+			++it;
+			if(it->id==TOK::IDENTIFIER)
+			{
+				std::string str=it->str;
+				++it;
+				expect(it,TOK::COMMA);
+				auto imm=parse_expression(it);
+				auto ret=std::make_unique<ASTInsDefine>(it->linenumber,TOK::ADDRESS,str,std::move(imm));
+				return ret;
+			}
+			else 
+			{
+				error++;
+				std::cerr<<"Error: Expected identifier not "<<it->id<<"on line "<<it->linenumber<<"\n";
+				return std::make_unique<ASTInsNone>(it->linenumber);
+			}
+		}
 		default:
 		{
 			int linenumber=it->linenumber;
@@ -214,6 +241,11 @@ std::unique_ptr<ASTExpression> Parser::parse_expression(std::vector<Token>::iter
 	//std::cerr<<"Parse expression\n";
 	switch(it->id)
 	{
+		case TOK::MINUS:
+		{
+			++it;
+			return std::make_unique<ASTUnaryExpr>(it->linenumber,TOK::OP_NEGATE,std::move(parse_expression(it)));
+		}
 		case TOK::NUMBER:
 		{
 			auto ret=std::make_unique<ASTNumber>(it->linenumber,it->value);

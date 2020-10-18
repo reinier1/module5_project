@@ -9,7 +9,9 @@ enum class TOK {
 				ADD,SUB,MUL,AND,OR,XOR,SLA,SRA,MOVE,
 				JP,JALR,JAL,JR,BEQ,BNE,BLT,BLTU,
 				LW,LB,SW,SB,
-				COLON,COMMA,LBRACKET,RBRACKET, PERCENT,
+				DW,DB,ADDRESS,
+				OP_NEGATE,
+				COLON,COMMA,LBRACKET,RBRACKET, PERCENT, MINUS,
 				EOL,END,NONE,REG
 				};
 std::ostream &operator<<(std::ostream &stream,const TOK tok);

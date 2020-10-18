@@ -31,6 +31,11 @@ std::ostream &operator<<(std::ostream &stream,const TOK tok)
 		case TOK::LB: 			return stream<<"lb";
 		case TOK::SW: 			return stream<<"sw";
 		case TOK::SB: 			return stream<<"sb";
+		case TOK::DW:			return stream<<"dw";
+		case TOK::DB:			return stream<<"db";
+		case TOK::ADDRESS:		return stream<<"address";
+		case TOK::OP_NEGATE:	return stream<<"-";
+		case TOK::MINUS:		return stream<<"-";
 		case TOK::COLON:		return stream<<":";
 		case TOK::COMMA:		return stream<<",";
 		case TOK::PERCENT:		return stream<<"%";

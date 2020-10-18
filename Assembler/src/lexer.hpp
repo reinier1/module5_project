@@ -8,7 +8,7 @@ class Lexer
 {
 	public:
 		int error;
-		Lexer(std::istream &stream) : error(0) , stream{&stream} , linenumber(0) {};
+		Lexer(std::istream &stream) : error(0) , stream{&stream} , linenumber(1) {};
 		std::vector<Token> lex();
 		
 	private:

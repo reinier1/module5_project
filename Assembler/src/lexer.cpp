@@ -42,7 +42,8 @@ Token Lexer::lex_token()
 			case ':': return Token(TOK::COLON,linenumber);
 			case '[': return Token(TOK::LBRACKET,linenumber);
 			case ']': return Token(TOK::RBRACKET,linenumber);
-			case '%':
+			case '-': return Token(TOK::MINUS,linenumber);
+			case '%': 
 			{
 				if(peekc()!='r')
 				{
@@ -63,6 +64,7 @@ Token Lexer::lex_token()
 						return Token(TOK::REG,linenumber,num);
 					}
 				}
+
 			}
 			default:
 				error++;
@@ -80,10 +82,39 @@ Token Lexer::lex_token()
 Token Lexer::lex_number()
 {
 	uint32_t n=0;
-	for(int c=peekc();isdigit(c);c=peekc())
+	if(peekc()=='0')
 	{
 		popc();
-		n=10*n+c-'0';
+		if((peekc()=='x')||(peekc()=='X'))
+		{
+			popc();
+			for(int c=peekc();std::isxdigit(c);c=peekc())
+			{
+				popc();
+				if(isdigit(c))
+					n=16*n+c-'0';
+				else if(islower(c))
+					n=16*n+10+c-'a';
+				else if(isupper(c))
+					n=16*n+10+c-'A';
+			}
+		}
+		else 
+		{
+			for(int c=peekc();std::isdigit(c);c=peekc())
+			{
+				popc();
+				n=10*n+c-'0';
+			}
+		}
+	}
+	else 
+	{
+		for(int c=peekc();std::isdigit(c);c=peekc())
+		{
+			popc();
+			n=10*n+c-'0';
+		}
 	}
 	return Token(TOK::NUMBER,linenumber,n);
 }
@@ -91,7 +122,7 @@ Token Lexer::lex_number()
 Token Lexer::lex_id()
 {
 	std::string str;
-	for(int c=peekc();isalnum(c)||(c=='_');c=peekc())
+	for(int c=peekc();std::isalnum(c)||(c=='_');c=peekc())
 	{
 		popc();
 		str.push_back(c);
@@ -147,5 +178,11 @@ std::map<std::string,TOK> Lexer::string2TOK
 	{"SW",TOK::SW},
 	{"sw",TOK::SW},
 	{"SB",TOK::SB},
-	{"sb",TOK::SB}
+	{"sb",TOK::SB},
+	{"DW",TOK::DW},
+	{"dw",TOK::DW},
+	{"DB",TOK::DB},
+	{"db",TOK::DB},
+	{"ADDRESS",TOK::ADDRESS},
+	{"address",TOK::ADDRESS},
 };

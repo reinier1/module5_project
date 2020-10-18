@@ -4,6 +4,7 @@
 #include <map>
 #include <string>
 #include "ast.hpp"
+uint32_t align(uint16_t &offset,uint16_t alignment);
 class SymbolTable
 {
 	public:
@@ -13,6 +14,7 @@ class SymbolTable
 		
 		bool contains(std::string label);
 		uint16_t &operator[](std::string label);
+		
 		
 	private:
 		std::map<std::string,uint16_t> dictionary;

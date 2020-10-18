@@ -43,15 +43,26 @@ Assembler &Assembler::operator<<(uint32_t data)
 	return *this;
 }
 
-uint32_t Assembler::align(uint16_t &offset,uint16_t alignment)
+uint16_t Assembler::align(uint16_t &loc,uint16_t alignment)
 {
-	uint16_t difference=offset%alignment;
-	if(difference==0)
-		return offset;
-	else 
+	uint16_t old_loc=loc;
+	::align(loc,alignment);
+	std::cerr<<loc-old_loc<<"\n";
+	for(uint16_t i=0;i<(loc-old_loc);i++)
+		output.push_back(0);
+	return loc;
+}
+
+uint16_t Assembler::fit_imm(int32_t val,TOK type)
+{
+	if(!ins_is_mem(type))
 	{
-		return offset+=alignment-difference;
+		if(val<-(1<<15)||val>((1<<15)-1))
+		{
+			std::cerr<<"Error: "<<val<<"does not fit into 16-bit signed immediate\n";
+		}
 	}
+	return val&0xffff;
 }
 
 uint32_t Assembler::tok2op(TOK tok)
@@ -79,6 +90,34 @@ uint32_t Assembler::tok2op(TOK tok)
 		default:
 			std::cerr<<"Internal Error: Bad token\n";
 			return tok2op(TOK::ADD);
+	}
+}
+
+bool Assembler::ins_is_mem(TOK type)
+{
+	switch(type)
+	{
+		case TOK::ADD: 	return false;
+		case TOK::SUB: 	return false;
+		case TOK::MUL: 	return false;
+		case TOK::AND: 	return false;
+		case TOK::OR: 	return false;
+		case TOK::XOR: 	return false;
+		case TOK::SLA: 	return false;
+		case TOK::SRA: 	return false;
+		case TOK::BEQ:	return true;
+		case TOK::BNE:	return true;
+		case TOK::BLT: 	return true;
+		case TOK::BLTU:	return true;
+		case TOK::LW: 	return true;
+		case TOK::LB: 	return true;
+		case TOK::SW:	return true;
+		case TOK::SB:	return true;
+		case TOK::MOVE:	return false;
+		case TOK::JP: 	return true;
+		default:
+			std::cerr<<"Internal Error: Bad token\n";
+			return false;
 	}
 }
 

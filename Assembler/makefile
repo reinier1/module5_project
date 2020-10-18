@@ -1,5 +1,5 @@
 IDIR =./src
-CXXFLAGS=-I$(IDIR) -Wall -Werror -Wno-unused-function -Wno-unused-variable
+CXXFLAGS=-I$(IDIR) -Wall  -Werror
 
 ODIR=./obj
 DIR =./src

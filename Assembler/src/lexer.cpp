@@ -33,7 +33,7 @@ Token Lexer::lex_token()
 	}
 	else if(std::isdigit(c))
 		return lex_number();
-	else if(std::isalpha(c))
+	else if(std::isalpha(c)||c=='_')
 		return lex_id();
 	else if(std::ispunct(c))
 	{

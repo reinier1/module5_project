@@ -1,6 +1,7 @@
 		address IO,0xFFF0
 start:	lw %r1, [IO]
 		sw [data], %r2
+		bne %r0,%r0,data
 here:	jp here 
 		
 data:	dw 0xfffff

@@ -4,6 +4,16 @@
 #include <iostream>
 #include <cstdint>
 
+/*******************************************************************************
+** TOK is an enumeration, containing all the various token types
+** Token struct, is a token including necessary information, containing:
+**	- The token type 
+**	- The linenumber on which they were found
+**	- The value if this is a register or number
+**	- The string if this is and identifier/label
+** Both can be printed
+*******************************************************************************/
+
 enum class TOK {		
 				NUMBER,IDENTIFIER,
 				ADD,SUB,MUL,AND,OR,XOR,SLA,SRA,MOVE,

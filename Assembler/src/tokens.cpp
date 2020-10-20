@@ -1,12 +1,17 @@
 #include <iostream>
 #include "tokens.hpp"
+/*******************************************************************************
+** Token and token type printing implementation
+** Token type, will print the token as is
+** Token will print the corresponding type and string if applicable
+*******************************************************************************/
 
 std::ostream &operator<<(std::ostream &stream,const TOK tok)
 {
 	switch(tok)
 	{
 		case TOK::NONE:			return stream<<"none";
-		case TOK::EOL:			return stream<<"\n";
+		case TOK::EOL:			return stream<<"EOL\n";
 		case TOK::END:			return stream<<"EOF\n";
 		case TOK::NUMBER: 		return stream<<"number";
 		case TOK::IDENTIFIER: 	return stream<<"identifier";
@@ -56,5 +61,4 @@ std::ostream &operator<<(std::ostream &stream,const Token tok)
 		case TOK::EOL:			return stream<<"\n";
 		default:				return stream<<tok.id;	
 	}
-	
 }

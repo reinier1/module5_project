@@ -4,6 +4,23 @@
 #include <memory>
 #include <cstdint>
 #include "tokens.hpp"
+/*******************************************************************************
+** AST class definitions
+** The base AST class contains 
+**	- A linenumber
+** The derived class are:
+**  - A label class to store a label name 
+**	- A line class which contains an instruction and a label
+**	- An instruction class from which specific instruction are derived:
+**	- Contains:
+**	   - A type 
+**	   - Method size, which returns size 
+**	   - Method assemble, which will insert an instruction into the byte stream
+**	   - Method defined for instructions that define labels
+**	- An expression class from which specific expression are derived
+**	   - Can calculate its value
+** 	- Register class which contains a register number
+*******************************************************************************/
 class Assembler;
 class SymbolTable;
 class AST;
@@ -11,6 +28,7 @@ class ASTLine;
 class ASTLabel;
 class ASTInstruction;
 
+// AST base class
 class AST
 {
 	public:
@@ -19,6 +37,7 @@ class AST
 		int linenumber;
 };
 
+// AST label class
 class ASTLabel : public AST 
 {
 	public:
@@ -27,6 +46,7 @@ class ASTLabel : public AST
 		std::string str;
 };
 
+// Ast instruction base class.
 class ASTInstruction : public AST
 {
 	public:
@@ -39,6 +59,7 @@ class ASTInstruction : public AST
 		virtual void define(SymbolTable &symtab);
 };
 
+// Ast expression base type
 class ASTExpression : public AST
 {
 	public:
@@ -47,6 +68,11 @@ class ASTExpression : public AST
 		virtual int32_t calculate(SymbolTable &symtab)=0;
 };
 
+// AST line class
+// Contains:
+//	- Boolean wether this instruction is labeled
+//	- A label if there was one
+//	- An instruction
 class ASTLine : public AST 
 {
 	public:
@@ -60,24 +86,30 @@ class ASTLine : public AST
 		std::unique_ptr<ASTInstruction> instruction;
 };
 
+// AST expression number. Corresponds to a constant number in the source code
 class ASTNumber : public ASTExpression
 {
 	public:
 		ASTNumber(int linenumber,uint32_t value) : ASTExpression(linenumber) , value{value} {};
+		
 		uint32_t value;
 		
 		int32_t calculate(SymbolTable &symtab) override;
 };
 
+// AST expression identifier. Corresponds to a label in an expression
 class ASTIdentifier : public ASTExpression
 {
 	public:
 		ASTIdentifier(int linenumber,std::string id) : ASTExpression(linenumber) , id{id} {};
+		
 		std::string id;
 		
 		int32_t calculate(SymbolTable &symtab) override;
 };
 
+// AST unary expression. Corresponds to an expression with only one operand
+// In this case it will always negate the operand it contains
 class ASTUnaryExpr : public ASTExpression
 {
 	public:
@@ -89,6 +121,7 @@ class ASTUnaryExpr : public ASTExpression
 		int32_t calculate(SymbolTable &symtab) override;
 };
 
+// AST Bad expression. Improves errorhandling by still providing a working class
 class ASTBadExpr : public ASTExpression
 {
 	public:
@@ -97,13 +130,16 @@ class ASTBadExpr : public ASTExpression
 		int32_t calculate(SymbolTable &symtab) override;
 };
 
+// AST register. Contains only the corresponding register number. -1 if bad
 class ASTReg : public AST
 {
 	public:
 		ASTReg(int linenumber,int reg) : AST(linenumber) , reg{reg} {};
+		
 		int reg;
 };
 
+// AST none instruction. For bad instructions or empty lines
 class ASTInsNone : public ASTInstruction
 {
 	public:
@@ -113,6 +149,8 @@ class ASTInsNone : public ASTInstruction
 		void assemble(Assembler &assembler, SymbolTable &symtab) override;
 };
 
+// AST data instruction. Used for db and dw to store data in code
+// Contains only an expression for the data
 class ASTInsData : public ASTInstruction
 {
 	public:
@@ -125,6 +163,8 @@ class ASTInsData : public ASTInstruction
 		void assemble(Assembler &assembler, SymbolTable &symtab) override;
 };
 
+// AST define instruction. Used to define IO addresses
+// Contains Label to define and corresponding value
 class ASTInsDefine : public ASTInstruction
 {
 	public:
@@ -139,6 +179,7 @@ class ASTInsDefine : public ASTInstruction
 		void define(SymbolTable &symtab)override;
 };
 
+// AST instruction, with two registers.
 class ASTInsRegReg : public ASTInstruction
 {
 	public:
@@ -151,6 +192,7 @@ class ASTInsRegReg : public ASTInstruction
 		void assemble(Assembler &assembler, SymbolTable &symtab) override;
 };
 
+// AST instruction, with a register and an immediate, which should fit into 16-bits.
 class ASTInsRegImm : public ASTInstruction
 {
 	public:
@@ -164,6 +206,7 @@ class ASTInsRegImm : public ASTInstruction
 		void assemble(Assembler &assembler, SymbolTable &symtab) override;
 };
 
+// AST instruction, with two registers and an immediate. This is for compare-and-branch instructions.
 class ASTInsRegRegImm : public ASTInstruction
 {
 	public:

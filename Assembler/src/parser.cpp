@@ -4,7 +4,17 @@
 #include "parser.hpp"
 #include "tokens.hpp"
 #include "ast.hpp"
+/*******************************************************************************
+** Parser class implementation
+** Contains
+** 	- Public parse method, which returns list of Instruction lines
+**	- Private helper method, for when a specific type of token is expected
+**	- Private methods to parse specific grammar elements
+*******************************************************************************/
 
+// expect(token pointer, token type)
+// If the current token isn't of the token type raise an error and return false
+// Else goto the next token and return true
 bool Parser::expect(std::vector<Token>::iterator &it,TOK id)
 {
 	if(it->id!=id)
@@ -17,6 +27,9 @@ bool Parser::expect(std::vector<Token>::iterator &it,TOK id)
 	return true;
 }
 
+// parse(list of tokens) -> AST 
+// The rest of this file will use BNF to describe the grammar in each section
+// <file> ::= <line> EOF | <line> <file>
 std::vector<ASTLine> Parser::parse(std::vector<Token> tokens)
 {
 	std::vector<ASTLine> assembly;
@@ -33,7 +46,11 @@ std::vector<ASTLine> Parser::parse(std::vector<Token> tokens)
 	}
 	return assembly;
 }
-		
+
+// <line> ::= LABEL : <instruction> EOL
+//			| LABEL : EOL
+//			| <instruction> EOL
+//			| EOL
 ASTLine Parser::parse_line(std::vector<Token>::iterator &it)
 {
 	//std::cerr<<"parse line\n";
@@ -59,11 +76,19 @@ ASTLine Parser::parse_line(std::vector<Token>::iterator &it)
 		return ASTLine(linenumber,std::move(instruction));
 }
 
+// <instruction>  ::= <alu-instruction>
+//					| <jp-instrucion>
+//					| <branch-instruction>
+//					| <load-instruction>
+//					| <store-instruction>
+//					| <define-instruction>
+//					| <data-instruction>
 std::unique_ptr<ASTInstruction> Parser::parse_instruction(std::vector<Token>::iterator &it)
 {
-	//std::cerr<<"parse instruction\n";
 	switch(it->id)
 	{
+		// <alu-instruction>  ::= (ADD|SUB|MUL|AND|OR|XOR|SLA|SRA|MOVE) REGISTER , REGISTER
+		//						| (ADD|SUB|MUL|AND|OR|XOR|SLA|SRA|MOVE) REGISTER , <expression>
 		case TOK::ADD:
 		case TOK::SUB:
 		case TOK::MUL:
@@ -88,7 +113,12 @@ std::unique_ptr<ASTInstruction> Parser::parse_instruction(std::vector<Token>::it
 				auto imm=parse_expression(it);
 				return std::make_unique<ASTInsRegImm>(it->linenumber,type,Rd,std::move(imm));
 			}
-		}		
+		}
+		
+		// <jp-instruction>   ::= JP <expression>
+		//						| JR REGISTER
+		//						| JAL REGISTER <expression>
+		//						| JALR REGISTER REGISTER
 		case TOK::JP:
 		{
 			TOK type=TOK::JP;
@@ -123,6 +153,7 @@ std::unique_ptr<ASTInstruction> Parser::parse_instruction(std::vector<Token>::it
 			return std::make_unique<ASTInsRegReg>(it->linenumber,type,Rd,Rb);
 		}
 		
+		// <branch-instruction> ::= (BEQ|BNE|BLT|BLTU) REGISTER , REGISTER , <expression>
 		case TOK::BEQ:
 		case TOK::BNE:
 		case TOK::BLT:
@@ -138,6 +169,8 @@ std::unique_ptr<ASTInstruction> Parser::parse_instruction(std::vector<Token>::it
 			return std::make_unique<ASTInsRegRegImm>(it->linenumber,type,Rd,Rb,std::move(imm));
 		}
 		
+		// <load-instruction> ::= (LW|LB) REGISTER , [ REGISTER ]
+		//						| (LW|LB) REGISTER , [ <expression> ]
 		case TOK::LW:
 		case TOK::LB:
 		{
@@ -159,6 +192,8 @@ std::unique_ptr<ASTInstruction> Parser::parse_instruction(std::vector<Token>::it
 				return std::make_unique<ASTInsRegImm>(it->linenumber,type,Rd,std::move(imm));
 			}
 		}
+		// <store-instruction> ::= (SW|SB) [ REGISTER ] , REGISTER 
+		//						 | (SW|SB) [ <expression> ] , REGISTER
 		case TOK::SW:
 		case TOK::SB:
 		{
@@ -182,6 +217,8 @@ std::unique_ptr<ASTInstruction> Parser::parse_instruction(std::vector<Token>::it
 				return std::make_unique<ASTInsRegImm>(it->linenumber,type,Rd,std::move(imm));
 			}
 		}
+		
+		// <data-instruction> ::= (DW|DB) <expression>
 		case TOK::DB:
 		case TOK::DW:
 		{
@@ -190,6 +227,8 @@ std::unique_ptr<ASTInstruction> Parser::parse_instruction(std::vector<Token>::it
 			auto imm=parse_expression(it);
 			return std::make_unique<ASTInsData>(it->linenumber,type,std::move(imm));
 		}
+		
+		// <define-instruction> ::= ADDRESS LABEL, <expression>
 		case TOK::ADDRESS:
 		{
 			++it;
@@ -220,6 +259,7 @@ std::unique_ptr<ASTInstruction> Parser::parse_instruction(std::vector<Token>::it
 	}
 }
 
+// parse_register parser a register and raises an error if the current token is not a register
 ASTReg Parser::parse_reg(std::vector<Token>::iterator &it)
 {
 	if(it->id==TOK::REG)
@@ -236,9 +276,11 @@ ASTReg Parser::parse_reg(std::vector<Token>::iterator &it)
 	}
 }
 
+// <expression> ::= LABEL
+// 				  | NUMBER
+// 				  | - <expression>
 std::unique_ptr<ASTExpression> Parser::parse_expression(std::vector<Token>::iterator &it)
 {
-	//std::cerr<<"Parse expression\n";
 	switch(it->id)
 	{
 		case TOK::MINUS:

@@ -7,6 +7,22 @@
 #include "symbol_table.hpp"
 #include "assembler.hpp"
 
+/*******************************************************************************
+** Assembler class implementation
+** Contains
+**	- Public method, which returns a fully assembled array of bytes
+** 	- Public callback operators, which fill the array with new instruction/data
+**	- Public helper methods
+**      - align inserts alignment bytes
+**      - tok2op returns the opcode corresponding to a specific instruction
+**      - fit_imm returns the 16-bit signed immediate version of an integer
+**      - ins_is_mem returns wether an instruction accesses memory
+**	- Public method to print the internal array 
+*******************************************************************************/
+
+// assembler(AST) -> list of bytes
+// Foreach line assemble the instruction 
+// Return byte list
 std::vector<uint8_t> Assembler::assemble(std::vector<ASTLine> &lines,SymbolTable &symtab)
 {
 	for(auto &it : lines)
@@ -16,6 +32,8 @@ std::vector<uint8_t> Assembler::assemble(std::vector<ASTLine> &lines,SymbolTable
 	return output;
 }
 
+// operator<<(byte)
+// Append byte to output array
 Assembler &Assembler::operator<<(uint8_t data)
 {
 	output.push_back(data);
@@ -23,6 +41,9 @@ Assembler &Assembler::operator<<(uint8_t data)
 	return *this;
 }
 
+// operator<<(16-bit unsigned int) 
+// Align offset two 2 bytes
+// Append bytes Little Endian to output array
 Assembler &Assembler::operator<<(uint16_t data)
 {
 	align(offset,2);
@@ -32,6 +53,9 @@ Assembler &Assembler::operator<<(uint16_t data)
 	return *this;
 }
 
+// operator<<(32-bit unsigned int) 
+// Align offset two 4 bytes
+// Append bytes Little Endian to output array
 Assembler &Assembler::operator<<(uint32_t data)
 {
 	align(offset,4);
@@ -43,16 +67,22 @@ Assembler &Assembler::operator<<(uint32_t data)
 	return *this;
 }
 
+// align(16-bit unsigned int, 16-bit unsigned int) -> 32-bit unsigned int
+// Calculate new alignment
+// Foreach byte neccessary to achieve alignment 
+//	- append 0 byte to output array
 uint16_t Assembler::align(uint16_t &loc,uint16_t alignment)
 {
 	uint16_t old_loc=loc;
 	::align(loc,alignment);
-	//std::cerr<<loc-old_loc<<"\n";
 	for(uint16_t i=0;i<(loc-old_loc);i++)
 		output.push_back(0);
 	return loc;
 }
 
+// fit_imm(32-bit signed int, instruction type) -> 16-bit unsigned int
+// If instruction does not acces memory check if value fits
+// Return first 16-bits of output
 uint16_t Assembler::fit_imm(int32_t val,TOK type)
 {
 	if(!ins_is_mem(type))
@@ -65,6 +95,8 @@ uint16_t Assembler::fit_imm(int32_t val,TOK type)
 	return val&0xffff;
 }
 
+// tok2op(token type) -> 32-bit unsigned int
+// Look up the instruction and return the corresponding opcode bit pattern
 uint32_t Assembler::tok2op(TOK tok)
 {
 	switch(tok)
@@ -93,51 +125,76 @@ uint32_t Assembler::tok2op(TOK tok)
 	}
 }
 
+// ins_is_mem(token type) -> boolean
+// If this instruction references memory return true else return false
+// For instructions that access memory, it does not matter if the immediate would not fit
+// The address space is limited to 16-bits anyway
 bool Assembler::ins_is_mem(TOK type)
 {
 	switch(type)
 	{
-		case TOK::ADD: 	return false;
-		case TOK::SUB: 	return false;
-		case TOK::MUL: 	return false;
-		case TOK::AND: 	return false;
-		case TOK::OR: 	return false;
-		case TOK::XOR: 	return false;
-		case TOK::SLA: 	return false;
-		case TOK::SRA: 	return false;
-		case TOK::BEQ:	return true;
-		case TOK::BNE:	return true;
-		case TOK::BLT: 	return true;
-		case TOK::BLTU:	return true;
-		case TOK::LW: 	return true;
-		case TOK::LB: 	return true;
-		case TOK::SW:	return true;
-		case TOK::SB:	return true;
-		case TOK::MOVE:	return false;
-		case TOK::JP: 	return true;
+		case TOK::ADD: 	
+		case TOK::SUB: 	
+		case TOK::MUL: 	
+		case TOK::AND: 	
+		case TOK::OR: 	
+		case TOK::XOR: 	
+		case TOK::SLA: 	
+		case TOK::SRA: 	
+			return false;
+			
+		case TOK::BEQ:
+		case TOK::BNE:
+		case TOK::BLT: 	
+		case TOK::BLTU:	
+		case TOK::LW: 	
+		case TOK::LB: 	
+		case TOK::SW:	
+		case TOK::SB:	
+			return true;
+			
+		case TOK::MOVE:	
+			return false;
+			
+		case TOK::JP: 	
+			return true;
+			
 		default:
 			std::cerr<<"Internal Error: Bad token\n";
 			return false;
 	}
 }
 
+// Print assembler output
+//	- Safe all output flags
+//	- Set output flags to hex
+// 	- Foreach byte 
+//	   - If word aligned print word address and new line
+//	   - Print byte
+//	- Append end line
+//	- Restore all output flags
 std::ostream &operator<<(std::ostream &stream,Assembler &assembler)
 {
 	uint16_t offset=0;
+	
 	auto flags=stream.flags();
 	auto fill=stream.fill();
 	auto width=stream.width();
+	
 	stream<<std::hex<<std::setfill('0');
+	
 	for(auto it : assembler.output)
 	{
 		if(offset%4==0)
-			stream<<"\n"<<std::setw(4)<<offset<<": "<<std::setw(2);
-		stream<<std::setw(2)<<(unsigned int)it<<" ";
+			stream << "\n" << std::setw(4) << offset << ": " << std::setw(2);
+		stream << std::setw(2) << (unsigned int)it << " ";
 		offset+=1;
 	}
-	stream<<"\n";
+	stream<<std::endl;
+	
 	stream.flags(flags);
 	stream.fill(fill);
 	stream.width(width);
+	
 	return stream;
 }

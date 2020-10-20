@@ -2,6 +2,20 @@
 #include <vector>
 #include <cctype>
 #include "lexer.hpp"
+
+/*******************************************************************************
+** Lexer class implementation
+** Contains
+**	- Private method the get a new character and advance linenumber
+** 	- Public lex method, which returns a list of tokens 
+**	- Private methods to lex specific types of tokens
+**	- Private map for string to instruction token conversion
+*******************************************************************************/
+
+// popc() -> int 
+// Gets new character and advances lexing stream
+// If the new character is a new line, we increment the line number
+// Return new character
 int Lexer::popc()
 {
 	int c=stream->get();
@@ -10,6 +24,11 @@ int Lexer::popc()
 	return c;
 }
 
+// lex() -> list of tokens
+// While we haven't reached the end of the file
+//    Append next token to list
+// Append EOF token list 
+// Return list
 std::vector<Token> Lexer::lex()
 {
 	std::vector<Token> vec;
@@ -21,6 +40,14 @@ std::vector<Token> Lexer::lex()
 	return vec;
 }
 
+// lex_token() -> token 
+// Remove leading white space
+// If end of line of end of file is reached then return token
+// If character is digit return lex digit 
+// If character is alphabetic return lex identifier
+// If character is start of register return (register : number)
+// If character is valid punctuation return punctuation
+// Else return error
 Token Lexer::lex_token()
 {
 	int c;
@@ -80,6 +107,12 @@ Token Lexer::lex_token()
 	return Token(TOK::EOL,linenumber);
 }
 
+// lex_number() -> token 
+// If number is hexadecimal
+//   foreach hex digit append it to current value
+// Else 
+//   Foreach digit append it to current value
+// Return (Number : value)
 Token Lexer::lex_number()
 {
 	uint32_t n=0;
@@ -120,6 +153,10 @@ Token Lexer::lex_number()
 	return Token(TOK::NUMBER,linenumber,n);
 }
 
+// lex_id() -> token 
+// Foreach identifier character append character to string
+// If identifier is an instruction then return corresponding instruction
+// Else return (Identifier : string)
 Token Lexer::lex_id()
 {
 	std::string str;
@@ -136,6 +173,8 @@ Token Lexer::lex_id()
 		return Token(TOK::IDENTIFIER,linenumber,str);
 }
 
+// This is a lookup table from instruction string to corresponding token. 
+// All instructions in upper and lowercase return their corresponding token type
 std::map<std::string,TOK> Lexer::string2TOK
 {
 	{"ADD",TOK::ADD},

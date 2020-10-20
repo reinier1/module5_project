@@ -7,11 +7,27 @@
 #include "ast.hpp"
 #include "symbol_table.hpp"
 
+/*******************************************************************************
+** Contains the constants for all specific instruction component location
+** Assembler class definition
+** Contains
+**	- Public method, which returns a fully assembled array of bytes
+** 	- Public callback operators, which fill the array with new instruction/data
+**	- Public helper methods
+**      - align inserts alignment bytes
+**      - tok2op returns the opcode corresponding to a specific instruction
+**      - fit_imm returns the 16-bit signed immediate version of an integer
+**      - ins_is_mem returns wether an instruction accesses memory
+**	- Public method to print the internal array 
+**	- Private byte array, which holds the output 
+**	- Private offset which holds the current offset
+*******************************************************************************/
 constexpr int OFFSET_OP		= 27;
 constexpr int OFFSET_IMM_EN	= 26;
 constexpr int OFFSET_RA		= 21;
 constexpr int OFFSET_RB		= 16;
 constexpr int OFFSET_IMM	= 0;
+
 class Assembler
 {
 	public:

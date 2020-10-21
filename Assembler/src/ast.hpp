@@ -33,6 +33,7 @@ class AST
 {
 	public:
 		AST(int linenumber) : linenumber{linenumber} {};
+		virtual ~AST()=default;
 		
 		int linenumber;
 };
@@ -42,6 +43,7 @@ class ASTLabel : public AST
 {
 	public:
 		ASTLabel(int linenumber,std::string str) : AST(linenumber) , str{str} {};
+		virtual ~ASTLabel() override=default;
 		
 		std::string str;
 };
@@ -51,6 +53,7 @@ class ASTInstruction : public AST
 {
 	public:
 		ASTInstruction(int linenumber, TOK type) : AST(linenumber) , type{type} {};
+		virtual ~ASTInstruction() override=default;
 		
 		TOK type;
 		
@@ -64,6 +67,7 @@ class ASTExpression : public AST
 {
 	public:
 		ASTExpression(int linenumber) : AST(linenumber) {};
+		virtual ~ASTExpression() override=default;
 		
 		virtual int32_t calculate(SymbolTable &symtab)=0;
 };
@@ -76,6 +80,7 @@ class ASTExpression : public AST
 class ASTLine : public AST 
 {
 	public:
+		ASTLine() : AST(0) ,  labeled(false) , label(ASTLabel(0,"")) , instruction{nullptr} {};
 		ASTLine(int linenumber,std::unique_ptr<ASTInstruction> instruction) : 
 				AST(linenumber) ,  labeled(false) , label(ASTLabel(linenumber,"")) , instruction{std::move(instruction)} {};
 		ASTLine(int linenumber,std::unique_ptr<ASTInstruction> instruction, ASTLabel label) : 
@@ -91,6 +96,7 @@ class ASTNumber : public ASTExpression
 {
 	public:
 		ASTNumber(int linenumber,uint32_t value) : ASTExpression(linenumber) , value{value} {};
+		virtual ~ASTNumber() override=default;
 		
 		uint32_t value;
 		
@@ -102,6 +108,7 @@ class ASTIdentifier : public ASTExpression
 {
 	public:
 		ASTIdentifier(int linenumber,std::string id) : ASTExpression(linenumber) , id{id} {};
+		virtual ~ASTIdentifier() override=default;
 		
 		std::string id;
 		
@@ -114,6 +121,7 @@ class ASTUnaryExpr : public ASTExpression
 {
 	public:
 		ASTUnaryExpr(int linenumber,TOK type,std::unique_ptr<ASTExpression> exp) : ASTExpression(linenumber) , type{type} , exp{std::move(exp)} {};
+		virtual ~ASTUnaryExpr() override=default;
 		
 		TOK type;
 		std::unique_ptr<ASTExpression> exp;
@@ -126,6 +134,7 @@ class ASTBadExpr : public ASTExpression
 {
 	public:
 		ASTBadExpr(int linenumber) : ASTExpression(linenumber) {};
+		virtual ~ASTBadExpr() override=default;
 		
 		int32_t calculate(SymbolTable &symtab) override;
 };
@@ -135,6 +144,7 @@ class ASTReg : public AST
 {
 	public:
 		ASTReg(int linenumber,int reg) : AST(linenumber) , reg{reg} {};
+		virtual ~ASTReg() override=default;
 		
 		int reg;
 };
@@ -144,6 +154,7 @@ class ASTInsNone : public ASTInstruction
 {
 	public:
 		ASTInsNone(int linenumber) : ASTInstruction(linenumber,TOK::NONE) {};
+		virtual ~ASTInsNone() override=default;
 		
 		uint16_t size() override;
 		void assemble(Assembler &assembler, SymbolTable &symtab) override;
@@ -156,6 +167,7 @@ class ASTInsData : public ASTInstruction
 	public:
 		ASTInsData(int linenumber, TOK tok, std::unique_ptr<ASTExpression> data) : 
 					ASTInstruction(linenumber,tok) , data{std::move(data)} {};
+		virtual ~ASTInsData() override=default;
 					
 		std::unique_ptr<ASTExpression> data;
 		
@@ -170,6 +182,7 @@ class ASTInsDefine : public ASTInstruction
 	public:
 		ASTInsDefine(int linenumber, TOK tok, std::string name, std::unique_ptr<ASTExpression> data) : 
 					ASTInstruction(linenumber,tok) , name{name} , data{std::move(data)} {};
+		virtual ~ASTInsDefine() override=default;
 					
 		std::string name;
 		std::unique_ptr<ASTExpression> data;
@@ -184,6 +197,7 @@ class ASTInsRegReg : public ASTInstruction
 {
 	public:
 		ASTInsRegReg(int linenumber, TOK tok, ASTReg dest, ASTReg source) : ASTInstruction(linenumber,tok) , dest{dest} , source{source} {};
+		virtual ~ASTInsRegReg() override=default;
 		
 		ASTReg dest;
 		ASTReg source;
@@ -198,6 +212,7 @@ class ASTInsRegImm : public ASTInstruction
 	public:
 		ASTInsRegImm(int linenumber, TOK tok, ASTReg dest, std::unique_ptr<ASTExpression> source) : 
 					ASTInstruction(linenumber,tok) , dest{dest} , source{std::move(source)} {};
+		virtual ~ASTInsRegImm() override=default;
 					
 		ASTReg dest;
 		std::unique_ptr<ASTExpression> source;
@@ -212,6 +227,7 @@ class ASTInsRegRegImm : public ASTInstruction
 	public:
 		ASTInsRegRegImm(int linenumber, TOK tok, ASTReg left, ASTReg right, std::unique_ptr<ASTExpression> target) :
 					ASTInstruction(linenumber,tok), left{left} , right{right} , target{std::move(target)} {};
+		virtual ~ASTInsRegRegImm() override=default;
 		
 		ASTReg left;
 		ASTReg right;

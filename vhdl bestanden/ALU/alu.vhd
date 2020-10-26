@@ -15,14 +15,14 @@ ENTITY alu IS
 END alu;
 ARCHITECTURE bhv OF alu IS
 	
-begin 
-	process(clk, reset) 
-	begin
-		if reset = '0' then
-			register_out <= ( others => '0');
-			flags <= (others => '0'); -- no flags set
+BEGIN 
+	PROCESS(clk, reset) 
+	BEGIN
+		IF reset = '0' THEN
+			register_out <= ( OTHERS => '0');
+			flags <= (OTHERS => '0'); -- no flags set
 			
-		elsif rising_edge(clk) then
+		ELSIF rising_edge(clk) THEN
 			CASE alu_opcode IS          
 				WHEN "0000" => register_out <= (register_a + register_b);
 				WHEN "0001" => register_out <= (register_a - register_b);
@@ -30,28 +30,28 @@ begin
 				WHEN "0011" => register_out <= (register_a and register_b);
 				WHEN "0100" => register_out <= (register_a or register_b);
 				WHEN "0101" => register_out <= (register_a xor register_b);
-				WHEN "0110" => register_out <=  (shift_left( (register_a), to_integer(register_b)));-- shift_left works a bit strange
-				WHEN "0111" => register_out <= shift_right(register_a, to_integer(register_b));
-				WHEN OTHERS => register_out <= (others => '0');	
+				WHEN "0110" => register_out <=  (shIFt_left( (register_a), to_integer(register_b)));-- shIFt_left works a bit strange
+				WHEN "0111" => register_out <= shIFt_right(register_a, to_integer(register_b));
+				WHEN OTHERS => register_out <= (OTHERS => '0');	
 			END CASE;
 			--with the following flags setting the control only has to check 1 bit at the time
-			if (register_a = register_b) then --for branch equal
+			IF (register_a = register_b) THEN --for branch equal
 				flags <= "1001";
 			
-			else
+			ELSE
 				flags(0) <= '0';
-				if (unsigned(register_a) < unsigned(register_b)) then --for branch unsigned less
+				IF (unsigned(register_a) < unsigned(register_b)) THEN --for branch unsigned less
 					flags(1) <= '1';
-				else 
+				ELSE 
 					flags(1) <= '0';
-				end if;
-				if (register_a < register_b) then --for branch signed less then
+				END IF;
+				IF (register_a < register_b) THEN --for branch signed less THEN
 					flags(2) <= '1';
-				else 
+				ELSE 
 					flags(2) <= '0';
-				end if;
-			end if; 
-		end if ;
-	end process;
+				END IF;
+			END IF; 
+		END IF ;
+	END PROCESS;
 	
 END bhv;

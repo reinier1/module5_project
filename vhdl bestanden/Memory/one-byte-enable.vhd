@@ -12,13 +12,14 @@
 
 library ieee;
 USE ieee.std_logic_1164.ALL;
-
+LIBRARY work;
+USE work.memory_package.ALL;
 ENTITY one_byte_enable_memory IS
 
 	GENERIC 
 	(
-		DATA_WIDTH : natural := 8;
-		ADDR_WIDTH : natural := 6
+		DATA_WIDTH 	: natural := 8;
+		RAM_INIT   	: memory_t
 	);
 
 	PORT 
@@ -38,12 +39,8 @@ END one_byte_enable_memory;
 
 ARCHITECTURE rtl OF one_byte_enable_memory IS
 
-	-- Build a 2-D ARRAY TYPE for the RAM
-	SUBTYPE word_t IS std_logic_vector((DATA_WIDTH-1) DOWNTO 0);
-	TYPE memory_t IS ARRAY(2**ADDR_WIDTH-1 DOWNTO 0) OF word_t;
-
 	-- Declare the RAM 
-	SHARED VARIABLE ram : memory_t;
+	SHARED VARIABLE ram : memory_t := RAM_INIT;
 
 BEGIN
  

@@ -9,3 +9,7 @@ Data address
 Data to processpr
 Output byte enable lines
 Output read memory
+
+32-bits wide input
+32-bits address in
+14-bits address out + 4 byte enable

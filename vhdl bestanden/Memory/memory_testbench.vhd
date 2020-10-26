@@ -13,8 +13,8 @@ ARCHITECTURE bhv OF testbench IS
 	SIGNAL reset 		: std_logic 								:= '0';
 	SIGNAL we_a			: std_logic 								:= '0';
 	SIGNAL byte_enable	: std_logic_vector(3 DOWNTO 0)				:= "1111";
-	SIGNAL addr_a		: natural RANGE 0 to 2**ADDR_WIDTH - 1		:= 0;
-	SIGNAL addr_b		: natural RANGE 0 to 2**ADDR_WIDTH - 1		:= 0;
+	SIGNAL addr_a		: std_logic_vector(ADDR_WIDTH-1 DOWNTO 0)	:= x"0000";
+	SIGNAL addr_b		: std_logic_vector(ADDR_WIDTH-1 DOWNTO 0)	:= x"0000";
 	SIGNAL data_a		: std_logic_vector((DATA_WIDTH-1) DOWNTO 0)	:= x"00000000";
 	SIGNAL q_a			: std_logic_vector((DATA_WIDTH -1) DOWNTO 0);
 	SIGNAL q_b			: std_logic_vector((DATA_WIDTH -1) DOWNTO 0);
@@ -46,23 +46,23 @@ BEGIN
 		we_a<='0';
 		WAIT FOR 4 ms;
 		
-		addr_a<=19;
+		addr_a<=x"0013";
 		we_a<='1';
 		data_a<=x"f0f0f0f0";
 		WAIT FOR 4 ms;
 		we_a<='0';
 		WAIT FOR 4 ms;
-		addr_b<=19;
+		addr_b<=x"0013";
 		WAIT FOR 4 ms;
 		
-		addr_a<=0;
+		addr_a<=x"0000";
 		we_a<='1';
 		byte_enable<="1010";
 		data_a<=x"f0f0f0f0";
 		WAIT FOR 4 ms;
 		we_a<='0';
 		WAIT FOR 4 ms;
-		addr_b<=0;
+		addr_b<=x"0000";
 		
 		WAIT FOR 10 ms;
 		ASSERT FALSE REPORT "done" SEVERITY note;

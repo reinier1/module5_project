@@ -12,8 +12,8 @@ ENTITY four_byte_enable_memory IS
 	PORT 
 	(
 		clk		: IN std_logic;
-		addr_a	: IN natural RANGE 0 to 2**ADDR_WIDTH - 1;
-		addr_b	: IN natural RANGE 0 to 2**ADDR_WIDTH - 1;
+		addr_a	: IN std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
+		addr_b	: IN std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
 		data_a	: IN std_logic_vector((DATA_WIDTH-1) DOWNTO 0);
 		--data_b: IN std_logic_vector((DATA_WIDTH-1) DOWNTO 0);
 		we_a	: IN std_logic := '1';
@@ -26,9 +26,12 @@ ENTITY four_byte_enable_memory IS
 END four_byte_enable_memory;
 
 ARCHITECTURE kerst OF four_byte_enable_memory IS
-	SIGNAL we_a_intern : std_logic_vector(3 DOWNTO 0); 
-
+	SIGNAL we_a_intern 	: std_logic_vector(3 DOWNTO 0); 
+	SIGNAL addr_a_i	: IN natural RANGE 0 to 2**ADDR_WIDTH - 1;
+	SIGNAL addr_b_i	: IN natural RANGE 0 to 2**ADDR_WIDTH - 1;
 BEGIN
+	addr_a_i <= to_integer(unsigned(addr_a));
+	addr_b_i <= to_integer(unsigned(addr_b));
 	one_byte_enable_zero: ENTITY work.one_byte_enable_memory
 		GENERIC MAP ( RAM_INIT=>ROM0 )
 		PORT MAP 

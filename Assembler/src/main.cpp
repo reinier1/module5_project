@@ -4,6 +4,7 @@
 #include "parser.hpp"
 #include "symbol_table.hpp"
 #include "assembler.hpp"
+#include "codegen.hpp"
 
 /*************************************************************
 ** Program entry point main. Calls all other routines.
@@ -46,6 +47,9 @@ int main(int argc,char **argv)
 	auto data=assembler.assemble(assembly,symbol_table);
 	
 	std::cerr<<assembler;
+	
+	VHDLGenerator VHDLGen(output);
+	VHDLGen.generate(data);
 	
 	return 0;
 }

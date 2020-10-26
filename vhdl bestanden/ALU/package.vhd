@@ -9,7 +9,7 @@ PACKAGE alu_package IS
 		alu_and,
 		alu_xor,
 		alu_sra,
-		alu_sla,
+		alu_sll,
 		
 		alu_move,
 		

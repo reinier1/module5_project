@@ -151,7 +151,7 @@ ARCHITECTURE bhv OF testbench IS
 			ASSERT to_signed(c, register_out'length) = (to_signed(a, register_out'length) xor to_signed(b, register_out'length)) REPORT "or went wrong" severity error;
 		END check_xor;
 		
-	PROCEDURE check_sla (
+	PROCEDURE check_sll	(
 		  SIGNAL  a  : IN integer; -- variable a
 		  SIGNAL  b  : IN integer; -- variable b
 		  
@@ -166,11 +166,11 @@ ARCHITECTURE bhv OF testbench IS
 			register_a <= to_signed(a, register_a'length );
 			register_b <= to_signed(b, register_b'length);
 			wait for 1 ms;
-			alu_opcode <= alu_sla; --alu opcode for sla
+			alu_opcode <= alu_sll; --alu opcode for sll
 			wait for 3 ms; --gives time to get output back 2 ms for clock time and 1 ms to update everything
 			c  := to_integer(register_out);
 			ASSERT to_signed(c, register_out'length) = (shift_left( (to_signed(a, register_out'length)), b)) REPORT "or went wrong" severity error;
-		END check_sla;
+		END check_sll;
 		
 	PROCEDURE check_sra (
 		  SIGNAL  a  : IN integer; -- variable a
@@ -339,13 +339,23 @@ BEGIN
 			
 			WAIT FOR 4 ms;
 			input1 <= 1;
-			input2 <= 2;
-			check_sla(input1, input2, register_a, register_b, alu_opcode, register_out);
+			input2 <= 7;
+			check_sll(input1, input2, register_a, register_b, alu_opcode, register_out);
+			
+			WAIT FOR 4 ms;
+			input1 <= -1;
+			input2 <= 7;
+			check_sll(input1, input2, register_a, register_b, alu_opcode, register_out);
 			
 			
 			wait for 4 ms;
-			input1 <= 1;
+			input1 <= 16;
 			input2 <= 2;
+			check_sra(input1, input2, register_a, register_b, alu_opcode, register_out);
+			
+			wait for 4 ms;
+			input1 <= 16;
+			input2 <= -2;
 			check_sra(input1, input2, register_a, register_b, alu_opcode, register_out);
 			
 			

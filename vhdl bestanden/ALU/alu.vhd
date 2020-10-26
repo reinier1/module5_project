@@ -18,13 +18,15 @@ END alu;
 ARCHITECTURE bhv OF alu IS
 	
 BEGIN 
-	PROCESS (register_a, register_b, alu_opcode, reset) 
+	PROCESS (register_a, register_b, alu_opcode, reset)
+		
 	BEGIN
 		IF reset = '0' THEN
 			register_out <= ( OTHERS => '0');
 			flags <= (OTHERS => '0'); -- no flags set
 			
 		ELSE
+			
 			CASE alu_opcode IS          
 				WHEN alu_add => register_out <= (register_a + register_b);
 				WHEN alu_sub => register_out <= (register_a - register_b);
@@ -32,7 +34,7 @@ BEGIN
 				WHEN alu_and => register_out <= (register_a and register_b);
 				WHEN alu_or => register_out <= (register_a or register_b);
 				WHEN alu_xor => register_out <= (register_a xor register_b);
-				WHEN alu_sla => register_out <=  (shIFt_left( (register_a), to_integer(register_b)));-- shIFt_left works a bit strange
+				WHEN alu_sll => register_out <=  signed(shIFt_left((  unsigned(register_a)), to_integer(register_b)));-- shIFt_left works a bit strange
 				WHEN alu_sra => register_out <= shIFt_right(register_a, to_integer(register_b));
 				WHEN alu_set_flag => register_out <= register_a;
 				WHEN alu_move => register_out <= register_b;

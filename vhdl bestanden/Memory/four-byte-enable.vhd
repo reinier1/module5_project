@@ -1,4 +1,4 @@
-library ieee;
+LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 LIBRARY work;
 USE work.memory_package.ALL;

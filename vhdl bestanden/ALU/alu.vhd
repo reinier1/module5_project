@@ -1,5 +1,5 @@
-library work;
-use work.alu_package.all;
+LIBRARY work;
+USE work.alu_package.ALL;
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
 USE IEEE.math_real.ALL;
@@ -8,10 +8,10 @@ ENTITY alu IS
 	PORT ( 
 		reset                   : IN std_logic;
 		alu_opcode              : IN alu_op;  --there are on this moment 3 bits necessary but the fourth when is for extra comments
-		register_a			     : IN signed(31 DOWNTO 0);
-		register_b			     : IN signed(31 DOWNTO 0);
-		register_out			 : OUT signed(31 DOWNTO 0);
-		flags					 : OUT std_logic_vector(3 downto 0) -- on this moment 4 flags are enough but for futher expansion 4 bits are reserved
+		register_a			  	: IN signed(31 DOWNTO 0);
+		register_b			    : IN signed(31 DOWNTO 0);
+		register_out			: OUT signed(31 DOWNTO 0);
+		flags					: OUT std_logic_vector(3 downto 0) -- on this moment 4 flags are enough but for futher expansion 4 bits are reserved
 	); 
 END alu;
 ARCHITECTURE bhv OF alu IS

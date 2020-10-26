@@ -1,12 +1,12 @@
 library ieee;
 USE ieee.std_logic_1164.ALL;
-
+LIBRARY work;
+USE work.memory_package.ALL;
 ENTITY four_byte_enable_memory IS
 
 	GENERIC 
 	(
-		DATA_WIDTH : natural := 32;
-		ADDR_WIDTH : natural := 14
+		DATA_WIDTH : natural := 32
 	);
 
 	PORT 
@@ -30,58 +30,62 @@ ARCHITECTURE kerst OF four_byte_enable_memory IS
 
 BEGIN
 	one_byte_enable_zero: ENTITY work.one_byte_enable_memory
+		GENERIC MAP ( RAM_INIT=>ROM0 )
 		PORT MAP 
 		(
-			clk	=> clk;
-			addr_a	=> addr_a;
-			addr_b	=> addr_b;
-			data_a	=> data_a(7 DOWNTO 0);
-			--data_b => data_b;
-			we_a	=> we_a_intern(0);
-			-- we_b	=> we_b;
-			q_a		=> q_a(7 DOWNTO 0);
+			clk	=> clk,
+			addr_a	=> addr_a,
+			addr_b	=> addr_b,
+			data_a	=> data_a(7 DOWNTO 0),
+			--data_b => data_b,
+			we_a	=> we_a_intern(0),
+			-- we_b	=> we_b,
+			q_a		=> q_a(7 DOWNTO 0),
 			q_b		=> q_b(7 DOWNTO 0)
 		);
 		
 	one_byte_enable_one: ENTITY work.one_byte_enable_memory
+		GENERIC MAP ( RAM_INIT=>ROM1 )
 		PORT MAP 
 		(
-			clk	=> clk;
-			addr_a	=> addr_a;
-			addr_b	=> addr_b;
-			data_a	=> data_a(15 DOWNTO 8);
-			--data_b => data_b;
-			we_a	=> we_a_intern(1);
-			-- we_b	=> we_b;
-			q_a		=> q_a(15 DOWNTO 8);
-			q_b		=> q_b(15 DOWNTO 8
+			clk	=> clk,
+			addr_a	=> addr_a,
+			addr_b	=> addr_b,
+			data_a	=> data_a(15 DOWNTO 8),
+			--data_b => data_b,
+			we_a	=> we_a_intern(1),
+			-- we_b	=> we_b,
+			q_a		=> q_a(15 DOWNTO 8),
+			q_b		=> q_b(15 DOWNTO 8)
 		);
 		
 	one_byte_enable_two: ENTITY work.one_byte_enable_memory
+		GENERIC MAP ( RAM_INIT=>ROM2 )
 		PORT MAP 
 		(
-			clk	=> clk;
-			addr_a	=> addr_a;
-			addr_b	=> addr_b;
-			data_a	=> data_a(23 DOWNTO 16);
-			--data_b => data_b;
-			we_a	=> we_a_intern(2);
-			-- we_b	=> we_b;
-			q_a		=> q_a(23 DOWNTO 16);
+			clk	=> clk,
+			addr_a	=> addr_a,
+			addr_b	=> addr_b,
+			data_a	=> data_a(23 DOWNTO 16),
+			--data_b => data_b,
+			we_a	=> we_a_intern(2),
+			-- we_b	=> we_b,
+			q_a		=> q_a(23 DOWNTO 16),
 			q_b		=> q_b(23 DOWNTO 16)
 		);
 
 	one_byte_enable_three: ENTITY work.one_byte_enable_memory
+		GENERIC MAP ( RAM_INIT=>ROM3 )
 		PORT MAP 
 		(
-			clk	=> clk;
-			addr_a	=> addr_a;
-			addr_b	=> addr_b;
-			data_a	=> data_a(31 DOWNTO 24);
-			--data_b => data_b;
-			we_a	=> we_a_intern(3);
-			-- we_b	=> we_b;
-			q_a		=> q_a(31 DOWNTO 24);
+			clk	=> clk,
+			addr_a	=> addr_a,
+			addr_b	=> addr_b,
+			data_a	=> data_a(31 DOWNTO 24),
+			--data_b => data_b,
+			we_a	=> we_a_intern(3),
+			-- we_b	=> we_b,
+			q_a		=> q_a(31 DOWNTO 24),
 			q_b		=> q_b(31 DOWNTO 24)
 		);
 	

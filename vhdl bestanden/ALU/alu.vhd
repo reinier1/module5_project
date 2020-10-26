@@ -1,6 +1,6 @@
 LIBRARY IEEE;
 USE IEEE.std_logic_1164.ALL;
-use IEEE.math_real.all;
+USE IEEE.math_real.ALL;
 USE ieee.numeric_std.ALL; 
 ENTITY alu IS
   
@@ -10,10 +10,10 @@ ENTITY alu IS
 	     register_a			     : IN signed(31 DOWNTO 0);
 		 register_b			     : IN signed(31 DOWNTO 0);
 	     register_out			 : OUT signed(31 DOWNTO 0);
-		 flags					 : OUT std_logic_vector(3 downto 0) -- on this moment 4 flags are enough but fur futher expansion 4 bits are reserved
+		 flags					 : OUT std_logic_vector(3 downto 0) -- on this moment 4 flags are enough but for futher expansion 4 bits are reserved
 	      ); 
 END alu;
-ARCHITECTURE bhv of alu IS
+ARCHITECTURE bhv OF alu IS
 	
 begin 
 	process(clk, reset) 

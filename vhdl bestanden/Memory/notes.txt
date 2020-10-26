@@ -1,0 +1,7 @@
+dual port memory
+32-bits wide
+16-bits address space
+byte enable 
+byte enable only for data 
+one port is only for reading
+4 times 1-byte wide

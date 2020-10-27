@@ -17,9 +17,9 @@ ENTITY debug IS
 		key2	: IN std_logic;
 		key3	: IN std_logic;
 		byte_in	: IN std_logic_vector(7 DOWNTO 0);
-		byte_out: OUT std_logic_vector(7 DOWNTO 0);
-		b_read	: OUT std_logic;
-		b_write	: OUT std_logic;
+		byte_out: OUT std_logic_vector(7 DOWNTO 0);				-- byte to be written into the memory
+		b_read	: OUT std_logic;								-- byte read enable
+		b_write	: OUT std_logic;								-- byte write enable
 		address	: OUT std_logic_vector(15 DOWNTO 0);
 		hex0	: OUT std_logic_vector(6 DOWNTO 0);
 		hex1	: OUT std_logic_vector(6 DOWNTO 0);
@@ -62,7 +62,6 @@ ARCHITECTURE salade OF debug IS
 	SIGNAL instr_write_byte_next_address: std_logic := '0';
 	SIGNAL instr_execute_and_wait 		: std_logic := '0';
 	SIGNAL byte							: std_logic_vector(7 DOWNTO 0);
-	SIGNAL counter_key2					: integer 	:= 0;
 	SIGNAL part							: integer 	:= 0;
 	SIGNAL byte_signal					: std_logic_vector(7 DOWNTO 0);
 	SIGNAL wait_for_byte				: integer 	:= 5;
@@ -75,8 +74,8 @@ BEGIN
 PROCESS(clk)
 BEGIN
 	
-	IF rising_edge(clk) THEN
-		dipswitches(0) <= dip0;
+	IF rising_edge(clk) THEN 									-- synchrone
+		dipswitches(0) <= dip0;									-- making one byte of the input of dipswitches
 		dipswitches(1) <= dip1;
 		dipswitches(2) <= dip2;
 		dipswitches(3) <= dip3;
@@ -85,93 +84,87 @@ BEGIN
 		dipswitches(6) <= dip6;
 		dipswitches(7) <= dip7;
 		wait_for_byte  <= wait_for_byte+1;
-		IF wait_for_byte = 2 THEN
-			IF b_read_intern = '1' THEN
+		IF wait_for_byte = 2 THEN								-- the write to or read from memory can now take up to three clockcycles
+			IF b_read_intern = '1' THEN							-- when the byte is read from memory
 				byte_signal 	<= byte_in;
 				b_read 			<= '0';
 				b_read_intern 	<= '0';
-			ELSIF b_write_intern = '1' THEN
+			ELSIF b_write_intern = '1' THEN						-- when the byte is written to the memory
 				byte_signal 	<= byte_out_intern;
 				b_write 		<= '0';
 				b_write_intern 	<= '0';
 			END IF;
 		END IF;
-		hex0 <= hex2display(byte_signal(3 DOWNTO 0));
-		hex1 <= hex2display(byte_signal(7 DOWNTO 4));
-		hex2 <= hex2display(address_intern(3 DOWNTO 0));
+		hex0 <= hex2display(byte_signal(3 DOWNTO 0));			-- the byte (that is written to memory or collected from memory) is shown on the hexadecimal displays
+		hex1 <= hex2display(byte_signal(7 DOWNTO 4));			
+		hex2 <= hex2display(address_intern(3 DOWNTO 0));		-- the address is shown on the hexadecimal displays
 		hex3 <= hex2display(address_intern(7 DOWNTO 4));
 		hex4 <= hex2display(address_intern(11 DOWNTO 8));
 		hex5 <= hex2display(address_intern(15 DOWNTO 12));
-		IF (key3 = '0') THEN
+		IF (key3 = '0') THEN									-- key3 is used to specify the instruction of the debug
 			IF dipswitches = "00000000" THEN
-				instr_view_byte_on_address 		<= '1';
+				instr_view_byte_on_address 		<= '1';			-- view byte on address is accessed with 00000000 on dip0 to dip7
 			ELSIF dipswitches = "00000001" THEN
-				instr_write_byte_on_address 	<= '1';
+				instr_write_byte_on_address 	<= '1';			-- write byte on address is accessed with 00000001 on dip0 to dip7
 			ELSIF dipswitches = "00000010" THEN
-				instr_view_byte_next_address 	<= '1';
+				instr_view_byte_next_address 	<= '1';			-- view byte on the next address is accessed with 00000010 on dip0 to dip7
 			ELSIF dipswitches = "00000011" THEN
-				instr_write_byte_next_address 	<= '1';
+				instr_write_byte_next_address 	<= '1';			-- write byte on the next address is accessed with 00000011 on dip0 to dip7
 			ELSIF dipswitches = "00000100" THEN
-				instr_execute_and_wait  		<= '1';
+				instr_execute_and_wait  		<= '1';			-- execute one instruction and wait is accessed with 00000100 on dip0 to dip7
 			END IF;
-		ELSIF key2 = '1' THEN
-			counter_key2 <= 0;
-		ELSIF key2 /= '1' THEN
-			counter_key2 <= counter_key2+1;
-			IF counter_key2 = 5 THEN
-				counter_key2 <= 0;
-				IF instr_view_byte_on_address = '1' THEN
-					IF part = 0 THEN
-						address(7 DOWNTO 0) 		<= dipswitches;
-						address_intern(7 DOWNTO 0) 	<= dipswitches;
-						part 						<= 1;
-					ELSIF part = 1 THEN
-						address(15 DOWNTO 8) 		<= dipswitches;
-						address_intern(15 DOWNTO 8) <= dipswitches;
-						b_read 						<= '1';
-						b_read_intern 				<= '1';
-						wait_for_byte 				<= 0;
-						instr_view_byte_on_address 	<= '0';
-						part 						<= 0;
-					END IF;
-				ELSIF instr_write_byte_on_address = '1' THEN	
-					IF part = 0 THEN
-						address(7 DOWNTO 0) 		<= dipswitches;
-						address_intern(7 DOWNTO 0) 	<= dipswitches;
-						part 						<= 1;
-					ELSIF part = 1 THEN
-						address(15 DOWNTO 8) 		<= dipswitches;
-						address_intern(15 DOWNTO 8) <= dipswitches;
-						part 						<= 2;
-					ELSIF part = 2 THEN
-						byte_out 					<= dipswitches;
-						byte_out_intern 			<= dipswitches;
-						b_write 					<='1';
-						b_write_intern 				<= '1';
-						wait_for_byte 				<= 0;
-						instr_write_byte_on_address <= '0';
-						part 						<= 0;
-					END IF;
-				ELSIF instr_view_byte_next_address = '1' THEN
-					address 		<= std_logic_vector(unsigned(address_intern) + to_unsigned(integer(4), address'length));
-					address_intern 	<= std_logic_vector(unsigned(address_intern) + to_unsigned(integer(4), address_intern'length));
-					b_read 			<= '1';
-					b_read_intern 	<= '1';
-					wait_for_byte 	<= 0;
-					instr_view_byte_next_address <= '0';
-				ELSIF instr_write_byte_next_address = '1' THEN
-					address 		<= std_logic_vector(unsigned(address_intern) + to_unsigned(integer(4), address'length));
-					address_intern 	<= std_logic_vector(unsigned(address_intern) + to_unsigned(integer(4), address_intern'length));
-					byte_out 		<= dipswitches;
-					byte_out_intern <= dipswitches;
-					b_write 		<= '1';
-					b_write_intern 	<= '1';
-					wait_for_byte 	<= 0;
-					instr_write_byte_on_address <= '0';
-				ELSIF instr_execute_and_wait = '1' THEN
-					null;
-					-- still to be made
+		ELSIF key2 = '0' THEN									-- key2 is used to specify the address (and the input for the address)
+			IF instr_view_byte_on_address = '1' THEN			-- instruction view byte on address
+				IF part = 0 THEN									-- key2 is pressed
+					address(7 DOWNTO 0) 		<= dipswitches;		-- the dipswitches will be transferred to bit 7 downto 0 of the address
+					address_intern(7 DOWNTO 0) 	<= dipswitches;
+					part 						<= 1;
+				ELSIF part = 1 THEN									-- key2 is pressed again
+					address(15 DOWNTO 8) 		<= dipswitches;		-- the dipswitches will be transferred to bit 15 downto 0 of the address
+					address_intern(15 DOWNTO 8) <= dipswitches;
+					b_read 						<= '1';				-- byte read is be enabled (this is necesary for memory access)
+					b_read_intern 				<= '1';
+					wait_for_byte 				<= 0;				-- so that the program will wait for 2 rising edges for the byte to be accessed from memory
+					instr_view_byte_on_address 	<= '0';
+					part 						<= 0;
 				END IF;
+			ELSIF instr_write_byte_on_address = '1' THEN		-- instruction write byte on address
+				IF part = 0 THEN									-- key2 is pressed
+					address(7 DOWNTO 0) 		<= dipswitches;		-- the dipswitches will be transferred to bit 7 downto 0 of the address
+					address_intern(7 DOWNTO 0) 	<= dipswitches;
+					part 						<= 1;
+				ELSIF part = 1 THEN									-- key2 is pressed again
+					address(15 DOWNTO 8) 		<= dipswitches;		-- the dipswitches will be transferred to bit 15 downto 0 of the address
+					address_intern(15 DOWNTO 8) <= dipswitches;
+					part 						<= 2;
+				ELSIF part = 2 THEN									-- key2 is pressed again
+					byte_out 					<= dipswitches;		-- the byte that will be written into the memory
+					byte_out_intern 			<= dipswitches;
+					b_write 					<='1';				-- byte write is enabled (which is necesary for writing to memory)
+					b_write_intern 				<= '1';
+					wait_for_byte 				<= 0;				-- so that the program will wait for 2 rising edges for the byte to be accessed from memory
+					instr_write_byte_on_address <= '0';
+					part 						<= 0;
+				END IF;
+			ELSIF instr_view_byte_next_address = '1' THEN																			-- instruction view byte on the next address
+				address 		<= std_logic_vector(unsigned(address_intern) + to_unsigned(integer(1), address'length));				-- the previous address will be added with 1 to get the next byte
+				address_intern 	<= std_logic_vector(unsigned(address_intern) + to_unsigned(integer(1), address_intern'length));
+				b_read 			<= '1';																									-- byte read is be enabled (this is necesary for memory access)
+				b_read_intern 	<= '1';
+				wait_for_byte 	<= 0;																									-- so that the program will wait for 2 rising edges for the byte to be accessed from memory
+				instr_view_byte_next_address <= '0';
+			ELSIF instr_write_byte_next_address = '1' THEN																			-- instruction write byte on the next address
+				address 		<= std_logic_vector(unsigned(address_intern) + to_unsigned(integer(1), address'length));				-- the previous address will be added with 1 to get the next byte
+				address_intern 	<= std_logic_vector(unsigned(address_intern) + to_unsigned(integer(1), address_intern'length));			
+				byte_out 		<= dipswitches;																							-- the byte that will be written into the memory
+				byte_out_intern <= dipswitches;
+				b_write 		<= '1';																									-- byte write is enabled (which is necesary for writing to memory)
+				b_write_intern 	<= '1';
+				wait_for_byte 	<= 0;																									-- so that the program will wait for 2 rising edges for the byte to be accessed from memory
+				instr_write_byte_on_address <= '0';
+			ELSIF instr_execute_and_wait = '1' THEN
+				null;
+				-- still to be made
 			END IF;
 		END IF;
 	END IF;

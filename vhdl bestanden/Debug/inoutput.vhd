@@ -4,14 +4,14 @@ USE ieee.numeric_std.ALL;
 --this code is the inoutput for normal operation. For debug mode an outer input output file is used.
 ENTITY inoutput IS
 	PORT (
-		reset : IN std_logic; 
-		write_enable: IN std_logic;
-		read_enable: IN std_logic;
-		clk : IN std_logic; -- 50MHz clock
-		data_in: IN std_logic_vector(31 DOWNTO 0); --get 64 bits in probaly not all are used.
-		data_out: OUT std_logic_vector(31 DOWNTO 0);
+		reset 			: IN std_logic; 
+		write_enable	: IN std_logic;
+		read_enable		: IN std_logic;
+		clk 			: IN std_logic; -- 50MHz clock
+		data_in			: IN std_logic_vector(31 DOWNTO 0); --get 64 bits in probaly not all are used.
+		data_out		: OUT std_logic_vector(31 DOWNTO 0);
 		byte0_enable, byte1_enable, byte2_enable, byte3_enable : IN std_logic;  --come from the memory controller select the byte in a word
-		adress_lines : IN std_logic_vector(7 DOWNTO 0); --lowest 8 bits of the adress line
+		adress_lines 	: IN std_logic_vector(7 DOWNTO 0); --lowest 8 bits of the adress line
 		hex0, hex1, hex2, hex3 : OUT std_logic_vector(7 DOWNTO 0); --the 7 segment hex display has a point
 		button1, button2, button3 : IN std_logic; -- button 0 is the reset
 		dip0, dip1, dip2, dip3, dip4, dip5, dip6, dip7, dip8 : IN std_logic; -- dip9 is set debug

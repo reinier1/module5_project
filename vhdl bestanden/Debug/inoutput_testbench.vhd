@@ -18,6 +18,7 @@ ARCHITECTURE bhv OF testbench IS
 	SIGNAL hex0, hex1, hex2, hex3 : std_logic_vector(7 DOWNTO 0); --the 7 segment hex display has a point
 	SIGNAL button1, button2, button3 : std_logic; -- button 0 is the reset
 	SIGNAL dip_switches:  std_logic_vector(8 DOWNTO 0); -- dip9 is set debug
+	SIGNAL dip_switches_internal : std_logic_vector(8 DOWNTO 0); --
 	SIGNAL leds:  std_logic_vector (9 DOWNTO 0);
 	SIGNAL leds_internal : std_logic_vector (9 DOWNTO 0);
 	SIGNAL hex0_internal, hex1_internal, hex2_internal, hex3_internal : std_logic_vector (7 DOWNTO 0);
@@ -49,6 +50,39 @@ ARCHITECTURE bhv OF testbench IS
 		ASSERT button3_internal = button3 REPORT "button3 went wrong" severity error;
 		
 	END check_read_buttons;
+	
+	PROCEDURE check_read_dip_switches(
+		SIGNAL data_out: IN std_logic_vector(31 DOWNTO 0);		
+		SIGNAL dip_switches : INOUT std_logic_vector(8 DOWNTO 0);
+		SIGNAL dip_switches_internal : INOUT std_logic_vector(8 DOWNTO 0);
+		SIGNAL byte0_enable : INOUT std_logic;
+		SIGNAL byte1_enable : INOUT std_logic;
+		SIGNAL byte2_enable : INOUT std_logic;
+		SIGNAL byte3_enable : INOUT std_logic;		
+		SIGNAL adress_lines : INOUT std_logic_vector(7 DOWNTO 0) --this are the last 8 bits of the addres line
+	)
+	IS
+	BEGIN
+		wait for 1 ms; 
+		adress_lines <=  "00000100"; --FF04
+		wait for 1 ms; 
+		byte0_enable <= '1';
+		dip_switches_internal(0) <= data_out(0);
+		dip_switches_internal(1) <= data_out(1);
+		dip_switches_internal(2) <= data_out(2);
+		dip_switches_internal(3) <= data_out(3);
+		dip_switches_internal(4) <= data_out(4);
+		dip_switches_internal(5) <= data_out(5);
+		dip_switches_internal(6) <= data_out(6);
+		dip_switches_internal(7) <= data_out(7);
+		wait for 5 ms;
+		byte3_enable <= '1';
+		adress_lines <=  "00001000"; --FF08
+		dip_switches_internal(8) <= data_out(31);
+		wait for 1 ms; 
+		ASSERT dip_switches_internal = dip_switches REPORT "dipswitches went wrong" severity error;
+		
+	END check_read_dip_switches;
 	
 	PROCEDURE check_write_to_leds(
 		  SIGNAL data_in   : INOUT std_logic_vector(31 DOWNTO 0);
@@ -299,8 +333,11 @@ BEGIN
 			button1 <= '0';
 			button2 <= '1';
 			button3 <= '0';
-			wait for 4 ms; --give time to go through the metastability filter
+			dip_switches <= "000000000";
+			wait for 6 ms; --give time to go through the metastability filter
 			check_read_buttons( data_out , button1, button2, button3, button1_internal, button2_internal, button3_internal, byte0_enable, byte1_enable, byte2_enable, byte3_enable, adress_lines);
+			wait for 4 ms;
+			check_read_dip_switches(data_out, dip_switches, dip_switches_internal, byte0_enable, byte1_enable, byte2_enable, byte3_enable, adress_lines);
 			finished <= TRUE;
 			WAIT;
 		END PROCESS;

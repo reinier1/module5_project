@@ -167,7 +167,7 @@ BEGIN
 					b_write 		<= '1';
 					b_write_intern 	<= '1';
 					wait_for_byte 	<= 0;
-					instr_write_byte_on_address 	<= '0';
+					instr_write_byte_on_address <= '0';
 				ELSIF instr_execute_and_wait = '1' THEN
 					null;
 					-- still to be made

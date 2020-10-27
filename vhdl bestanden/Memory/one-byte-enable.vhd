@@ -10,7 +10,7 @@
 -- need a read-durINg-write between PORTs to return the old data, you
 -- must INstantiate the altsyncram Megafunction directly.
 
-library ieee;
+LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 LIBRARY work;
 USE work.memory_package.ALL;
@@ -18,19 +18,18 @@ ENTITY one_byte_enable_memory IS
 
 	GENERIC 
 	(
-		DATA_WIDTH 	: natural := 8;
-		RAM_INIT   	: memory_t
+		DATA_WIDTH 	: natural 	:= 8;
+		RAM_INIT   	: memory_t	:= (OTHERS=>x"00");
 	);
 
 	PORT 
 	(
-		clk		: IN std_logic;
-		addr_a	: IN natural RANGE 0 to 2**ADDR_WIDTH - 1;
-		addr_b	: IN natural RANGE 0 to 2**ADDR_WIDTH - 1;
-		data_a	: IN std_logic_vector((DATA_WIDTH-1) DOWNTO 0);
-		--data_b: IN std_logic_vector((DATA_WIDTH-1) DOWNTO 0);
-		we_a	: IN std_logic := '1';
-		-- we_b	: IN std_logic := '1';
+		clk		: IN  std_logic;
+		addr_a	: IN  natural RANGE 0 to 2**ADDR_WIDTH - 1;
+		addr_b	: IN  natural RANGE 0 to 2**ADDR_WIDTH - 1;
+		data_a	: IN  std_logic_vector((DATA_WIDTH-1) DOWNTO 0);
+		we_a	: IN  std_logic;
+		
 		q_a		: OUT std_logic_vector((DATA_WIDTH -1) DOWNTO 0);
 		q_b		: OUT std_logic_vector((DATA_WIDTH -1) DOWNTO 0)
 	);
@@ -38,33 +37,27 @@ ENTITY one_byte_enable_memory IS
 END one_byte_enable_memory;
 
 ARCHITECTURE rtl OF one_byte_enable_memory IS
-
-	-- Declare the RAM 
+	-- Shared variable, because it is accesible from two different ports simultaniously
 	SHARED VARIABLE ram : memory_t := RAM_INIT;
-
 BEGIN
  
-
-	-- Port A
+	-- Port A for Data
 	PROCESS(clk)
 	BEGIN
-	IF(rising_edge(clk)) THEN 
-		IF(we_a = '1') THEN
-			ram(addr_a) := data_a;
+		IF(rising_edge(clk)) THEN 
+			IF(we_a = '1') THEN
+				ram(addr_a) := data_a;
+			END IF;
+			q_a <= ram(addr_a);
 		END IF;
-		q_a <= ram(addr_a);
-	END IF;
 	END PROCESS;
 
-	-- Port B 
+	-- Port B for instructions
 	PROCESS(clk)
 	BEGIN
-	IF(rising_edge(clk)) THEN 
-		-- IF(we_b = '1') THEN
-			-- ram(addr_b) := data_b;
-		-- END IF;
-  	    q_b <= ram(addr_b);
-	END IF;
+		IF(rising_edge(clk)) THEN 
+			q_b <= ram(addr_b);
+		END IF;
 	END PROCESS;
 
 END rtl;

@@ -4,7 +4,7 @@ CXXFLAGS=-I$(IDIR) -Wall  -Werror
 ODIR=./obj
 DIR =./src
 
-_OBJ = tokens.o lexer.o main.o parser.o ast.o symbol_table.o assembler.o arguments.o
+_OBJ = tokens.o lexer.o main.o parser.o ast.o symbol_table.o assembler.o arguments.o codegen.o
 OBJ = $(patsubst %,$(ODIR)/%,$(_OBJ))
 
 vpath %.hpp $(IDIR)
@@ -32,6 +32,9 @@ $(ODIR)/parser.o: parser.cpp parser.hpp lexer.hpp tokens.hpp ast.hpp
 	
 $(ODIR)/assembler.o: assembler.cpp assembler.hpp tokens.hpp ast.hpp
 	$(CXX) -c $(CXXFLAGS) -o $@ $< 
+
+$(ODIR)/codegen.o: codegen.cpp codegen.hpp
+	$(CXX) -c $(CXXFLAGS) -o $@ $<
 	
 $(ODIR)/main.o: main.cpp lexer.hpp parser.hpp
 	$(CXX) -c $(CXXFLAGS) -o $@ $< 

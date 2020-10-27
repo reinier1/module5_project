@@ -1,0 +1,4 @@
+If the testbench is ran 5 errors are shown, which are not really errors, but are actually notes to show correct behaviour
+Error 1 shows that storing to register 0 does not result in register 0 changing as per our design
+Error 2 and 4 show that this also works when recalled later
+Error 3 and 5 show that an intermittent store has also given correct results as per our testbench

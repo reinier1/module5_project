@@ -35,7 +35,7 @@ BEGIN
 		WAIT FOR 10 ms;
 		
 		WAIT UNTIL  rising_edge(clk);
-		reset				<= '0';
+		reset				<= '1';
 		write_enable		<= '0';
 		register_in			<= x"12345678";
 		select_register_a	<= "00001";
@@ -43,7 +43,7 @@ BEGIN
 		WAIT FOR 10 ms;
 		
 		WAIT UNTIL  rising_edge(clk);
-		reset				<= '0';
+		reset				<= '1';
 		write_enable		<= '1';
 		register_in			<= x"12345678";
 		select_register_a	<= "01100";
@@ -51,7 +51,7 @@ BEGIN
 		WAIT FOR 10 ms;
 		
 		WAIT UNTIL  rising_edge(clk);
-		reset				<= '0';
+		reset				<= '1';
 		write_enable		<= '0';
 		register_in			<= x"FF04BA56";
 		select_register_a	<= "10101";
@@ -59,7 +59,7 @@ BEGIN
 		WAIT FOR 10 ms;
 		
 		WAIT UNTIL  rising_edge(clk);
-		reset				<= '0';
+		reset				<= '1';
 		write_enable		<= '0';
 		register_in			<= x"12345678";
 		select_register_a	<= "00000";

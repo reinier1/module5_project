@@ -16,7 +16,7 @@ ARCHITECTURE bhv OF testbench IS
 	SIGNAL byte0_enable, byte1_enable, byte2_enable, byte3_enable : std_logic;  --come from the memory controller select the byte in a word
 	SIGNAL adress_lines :  std_logic_vector(7 DOWNTO 0); --lowest 8 bits of the adress line
 	SIGNAL hex0, hex1, hex2, hex3 : std_logic_vector(7 DOWNTO 0); --the 7 segment hex display has a point
-	SIGNAL button1, button2, button3 : std_logic; -- button 0 is the reset
+	SIGNAL buttons: std_logic_vector(2 DOWNTO 0); -- button 0 is the reset
 	SIGNAL dip_switches:  std_logic_vector(8 DOWNTO 0); -- dip9 is set debug
 	SIGNAL dip_switches_internal : std_logic_vector(8 DOWNTO 0); --
 	SIGNAL leds:  std_logic_vector (9 DOWNTO 0);
@@ -27,7 +27,7 @@ ARCHITECTURE bhv OF testbench IS
 	
 	PROCEDURE check_read_buttons(
 		SIGNAL data_out: IN std_logic_vector(31 DOWNTO 0);
-		SIGNAL button1, button2, button3 : IN std_logic;
+		SIGNAL buttons : IN std_logic_vector(2 DOWNTO 0);
 		SIGNAL button1_internal, button2_internal, button3_internal :  INOUT std_logic;
 		SIGNAL byte0_enable : INOUT std_logic;
 		SIGNAL byte1_enable : INOUT std_logic;
@@ -45,9 +45,9 @@ ARCHITECTURE bhv OF testbench IS
 		button2_internal <= data_out(1);
 		button3_internal <= data_out(2);
 		wait for 1 ms;
-		ASSERT button1_internal = button1 REPORT "button1 went wrong" severity error;
-		ASSERT button2_internal = button2 REPORT "button2 went wrong" severity error;
-		ASSERT button3_internal = button3 REPORT "button3 went wrong" severity error;
+		ASSERT button1_internal = buttons(0) REPORT "button1 went wrong" severity error;
+		ASSERT button2_internal = buttons(1) REPORT "button2 went wrong" severity error;
+		ASSERT button3_internal = buttons(2) REPORT "button3 went wrong" severity error;
 		
 	END check_read_buttons;
 	
@@ -65,7 +65,7 @@ ARCHITECTURE bhv OF testbench IS
 	BEGIN
 		wait for 1 ms; 
 		adress_lines <=  "00000100"; --FF04
-		wait for 1 ms; 
+		wait for 3 ms; 
 		byte0_enable <= '1';
 		dip_switches_internal(0) <= data_out(0);
 		dip_switches_internal(1) <= data_out(1);
@@ -78,8 +78,9 @@ ARCHITECTURE bhv OF testbench IS
 		wait for 5 ms;
 		byte3_enable <= '1';
 		adress_lines <=  "00001000"; --FF08
+		wait for 3 ms;
 		dip_switches_internal(8) <= data_out(31);
-		wait for 1 ms; 
+		wait for 1 ms;
 		ASSERT dip_switches_internal = dip_switches REPORT "dipswitches went wrong" severity error;
 		
 	END check_read_dip_switches;
@@ -264,28 +265,9 @@ BEGIN
 			hex1 => hex1,
 			hex2 => hex2,
 			hex3 =>  hex3,
-			button1 => button1,
-			button2 => button2,
-			button3 => button3,
-			dip0 => dip_switches(0),
-			dip1 => dip_switches(1),
-			dip2 => dip_switches(2),
-			dip3 => dip_switches(3),
-			dip4 => dip_switches(4),
-			dip5 => dip_switches(5),
-			dip6 => dip_switches(6),
-			dip7 => dip_switches(7),
-			dip8 => dip_switches(8),
-			led0 => leds(0) ,
-			led1 => leds(1),
-			led2 =>leds(2) ,
-			led3 =>leds(3) ,
-			led4 =>leds(4) ,
-			led5 =>leds(5) ,
-			led6 =>leds(6) ,
-			led7 =>leds(7) ,
-			led8 =>leds(8) ,
-			led9 => leds(9)
+			buttons => buttons,
+			dip_switches => dip_switches,
+			leds => leds
 			
 		);
 		
@@ -330,12 +312,12 @@ BEGIN
 			
 			write_enable <= '0';
 			read_enable <=  '1';
-			button1 <= '0';
-			button2 <= '1';
-			button3 <= '0';
+			buttons(0) <= '0';
+			buttons(1) <= '1';
+			buttons(2) <= '0';
 			dip_switches <= "000000000";
 			wait for 6 ms; --give time to go through the metastability filter
-			check_read_buttons( data_out , button1, button2, button3, button1_internal, button2_internal, button3_internal, byte0_enable, byte1_enable, byte2_enable, byte3_enable, adress_lines);
+			check_read_buttons( data_out , buttons, button1_internal, button2_internal, button3_internal, byte0_enable, byte1_enable, byte2_enable, byte3_enable, adress_lines);
 			wait for 4 ms;
 			check_read_dip_switches(data_out, dip_switches, dip_switches_internal, byte0_enable, byte1_enable, byte2_enable, byte3_enable, adress_lines);
 			finished <= TRUE;

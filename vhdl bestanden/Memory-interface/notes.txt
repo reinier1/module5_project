@@ -1,11 +1,15 @@
 Before signals are passed to the memory they are passed through a controller, 
-which will make create the right byte enable signals and shift the lower 8-bits 
+which will create the right byte enable signals and shift the lower 8-bits 
 to the correct location when writing a byte. 
 Signals are then intercepted so debug can also read and write memory and IO can be used.
 
 Input byte or word
 Input write enable or read enable
 Data address
-Data to processpr
+Data to processor
 Output byte enable lines
 Output read memory
+
+32-bits wide input
+32-bits address in
+14-bits address out + 4 byte enable

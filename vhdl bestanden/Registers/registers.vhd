@@ -20,8 +20,8 @@ ARCHITECTURE bhv of registers IS
 	TYPE register_t IS ARRAY(31 DOWNTO 0) OF word_t;
 	SHARED VARIABLE register_i : register_t;
 BEGIN
-	register_a_out <= register_i(to_integer(unsigned(select_register_a)));
-	register_b_out <= register_i(to_integer(unsigned(select_register_b)));
+	register_a_out <= register_i(to_integer(unsigned(select_register_a))) WHEN select_register_a/="00000" ELSE x"00000000";
+	register_b_out <= register_i(to_integer(unsigned(select_register_b))) WHEN select_register_b/="00000" ELSE x"00000000";
 	
 	PROCESS(clk)
 	BEGIN

@@ -24,16 +24,16 @@ BEGIN
 			flags <= (OTHERS => '0'); -- no flags set
 		ELSE
 			CASE alu_opcode IS          
-				WHEN alu_add => register_out <= (register_a + register_b);
-				WHEN alu_sub => register_out <= (register_a - register_b);
-				WHEN alu_mul => register_out <= (resize((register_a * register_b), 32));
-				WHEN alu_and => register_out <= (register_a and register_b);
-				WHEN alu_or => register_out <= (register_a or register_b);
-				WHEN alu_xor => register_out <= (register_a xor register_b);
-				WHEN alu_sll => register_out <=  signed(shIFt_left((  unsigned(register_a)), to_integer(register_b)));-- shIFt_left works a bit strange
-				WHEN alu_sra => register_out <= shIFt_right(register_a, to_integer(register_b));
-				WHEN alu_set_flag => register_out <= register_a;
-				WHEN alu_move => register_out <= register_b;
+				WHEN alu_add 		=>	register_out <= (register_a + register_b);
+				WHEN alu_sub 		=>	register_out <= (register_a - register_b);
+				WHEN alu_mul 		=>	register_out <= (resize((register_a * register_b), 32));
+				WHEN alu_and 		=>	register_out <= (register_a and register_b);
+				WHEN alu_or 		=>	register_out <= (register_a or register_b);
+				WHEN alu_xor 		=>	register_out <= (register_a xor register_b);
+				WHEN alu_sll 		=>	register_out <= signed(shift_left((  unsigned(register_a)), to_integer(register_b)));-- shift_left works a bit strange
+				WHEN alu_sra 		=> 	register_out <= shift_right(register_a, to_integer(register_b));
+				WHEN alu_set_flag 	=> 	register_out <= register_a;
+				WHEN alu_move 		=> 	register_out <= register_b;
 			END CASE;
 			--with the following flags setting the control only has to check 1 bit at the time
 			IF (register_a = register_b) THEN --for branch equal

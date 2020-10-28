@@ -11,13 +11,13 @@ ENTITY debug IS
 		reset					: IN std_logic;
 		debug					: IN std_logic;
 		
-		alu_flags				: IN std_logic_vector(3 DOWNTO 0);
+		alu_flags				: IN std_logic_vector(3 DOWNTO 0);	--<<<<TODO
 		
 		jump_address			: IN std_logic_vector(31 DOWNTO 0);
 		instruction_in			: IN std_logic_vector(31 DOWNTO 0);
 		
 		--ALU control
-		alu_opcode              : OUT alu_op;
+		alu_opcode              : OUT alu_op;						--<<<<TODO
 		
 		--Register control
 		register_write_enable	: OUT std_logic;
@@ -29,7 +29,7 @@ ENTITY debug IS
 		memory_write_enable		: OUT std_logic;
 		read_enable_data		: OUT std_logic;
 		read_enable_instruction	: OUT std_logic;
-		instruction_address_out	: OUT std_logic_vector(31 DOWNTO 0);
+		instruction_address_out	: OUT std_logic_vector(31 DOWNTO 0); --<<<<TODO
 		
 		--Mux control
 		select_bmux				: OUT std_logic;

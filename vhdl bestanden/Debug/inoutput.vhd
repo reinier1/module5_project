@@ -51,7 +51,7 @@ ARCHITECTURE bhv of inoutput IS
 			hex2 <= hex2_internal;
 			hex3 <= hex3_internal;
 			leds <= leds_internal;
-			dip_switches_internal <= dip_switches;
+			dip_switches_internal <= dip_switches; --to prevent metastability
 			buttons_internal <= buttons;
 			
 						

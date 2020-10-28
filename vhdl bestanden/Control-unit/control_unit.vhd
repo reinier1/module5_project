@@ -91,7 +91,9 @@ BEGIN
 	--Memory output signals
 	read_enable_instruction	<= '1' WHEN instruction_finished | state=state_reset ELSE '0';
 	read_enable_data		<= '1' WHEN instruction_load and state=state_instruction ELSE '0';
-	write_enable			<= '1' WHEN instruction_store and state=state_instruction ELSE '0';
+	memory_write_enable		<= '1' WHEN instruction_store and state=state_instruction ELSE '0';
+	byte_operation			<= '1' WHEN ins_op=OP_LB | ins_op=OP_SB ELSE '0';
+	
 	--Internal instruction is normally directly taken from memory. This can be faster then storing it first
 	instruction				<= instruction_in WHEN state=state_instruction ELSE 
 								instruction_register WHEN state=state_store_load ELSE
@@ -100,12 +102,16 @@ BEGIN
 	--The Bmux aka operand B select is normally directly affected by immediate enable, accept for branching
 	--The input to the registers is either the alu output, the memory output or the program_counter depending on the instruction
 	select_bmux				<= ins_imm_en WHEN not instruction_branch ELSE '0';
-	select_dmux				<= mux_alu WHEN instruction_alu ELSE 
+	select_dmux				<= mux_alu WHEN instruction_alu | ins_op=OP_MOV ELSE 
 								mux_mem WHEN instruction_load ELSE
-								mux_pc WHEN ins_op==OP_JAL ELSE
+								mux_pc WHEN ins_op=OP_JAL ELSE
 								mux_alu;
 	
-	register_write_enable	<= 
+	register_write_enable	<= '1' WHEN (instruction_load and state=state_store_load) |
+										instruction_alu |
+										ins_op=OP_JAL |
+										ins_op=OP_MOV 
+									ELSE '0';
 	
 	--Advance state
 	PROCESS(clk,reset)
@@ -120,7 +126,7 @@ BEGIN
 	--Create next state
 	PROCESS
 	BEGIN 
-		IF debug='1' and ( instruction_finished | state=state_debug THEN
+		IF debug='1' and ( instruction_finished | state=state_debug ) THEN
 			next_state<=state_debug;
 		ELSE
 			CASE state IS 

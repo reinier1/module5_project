@@ -185,32 +185,32 @@ BEGIN
 		ELSIF state_signal = state_debug THEN
 			IF write_enable_debug_int = '1' THEN
 				IF address_debug(1 DOWNTO 0) = "00" THEN
-					byte_enable_outm	<= "0001";
-					data_a_outm(7 DOWNTO 0) <= byte_out_debug_int;
+					byte_enable_outm			<= "0001";
+					data_a_outm(7 DOWNTO 0) 	<= byte_out_debug_int;
 				ELSIF address_debug(1 DOWNTO 0) = "01" THEN
-					byte_enable_outm	<= "0010";
-					data_a_outm(15 DOWNTO 8) <= byte_out_debug_int;
+					byte_enable_outm			<= "0010";
+					data_a_outm(15 DOWNTO 8) 	<= byte_out_debug_int;
 				ELSIF address_debug(1 DOWNTO 0) = "10" THEN
-					byte_enable_outm	<= "0100";
-					data_a_outm(23 DOWNTO 16) <= byte_out_debug_int;
+					byte_enable_outm			<= "0100";
+					data_a_outm(23 DOWNTO 16) 	<= byte_out_debug_int;
 				ELSIF address_debug(1 DOWNTO 0) = "11" THEN
-					byte_enable_outm	<= "1000";
-					data_a_outm(31 DOWNTO 24) <= byte_out_debug_int;
+					byte_enable_outm			<= "1000";
+					data_a_outm(31 DOWNTO 24) 	<= byte_out_debug_int;
 				END IF;
-				addr_a_outm				<= address_debug(15 DOWNTO 2);
+				addr_a_outm						<= address_debug(15 DOWNTO 2);
 			ELSIF read_enable_debug_int = '1' THEN
 				IF address_debug(1 DOWNTO 0) = "00" THEN
 					byte_enable_outm	<= "0001";
-					byte_in_debug_int <= q_b_inm(7 DOWNTO 0);	
+					byte_in_debug_int 	<= q_b_inm(7 DOWNTO 0);	
 				ELSIF address_debug(1 DOWNTO 0) = "01" THEN
 					byte_enable_outm	<= "0010";
-					byte_in_debug_int <= q_b_inm(15 DOWNTO 8);
+					byte_in_debug_int 	<= q_b_inm(15 DOWNTO 8);
 				ELSIF address_debug(1 DOWNTO 0) = "10" THEN
 					byte_enable_outm	<= "0100";
-					byte_in_debug_int <= q_b_inm(23 DOWNTO 16);
+					byte_in_debug_int 	<= q_b_inm(23 DOWNTO 16);
 				ELSIF address_debug(1 DOWNTO 0) = "11" THEN
 					byte_enable_outm	<= "1000";
-					byte_in_debug_int <= q_b_inm(31 DOWNTO 24);
+					byte_in_debug_int 	<= q_b_inm(31 DOWNTO 24);
 				END IF;
 				addr_b_outm <= address_debug(15 DOWNTO 2);
 			END IF;

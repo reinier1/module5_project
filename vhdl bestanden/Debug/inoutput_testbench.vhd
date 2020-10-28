@@ -18,9 +18,9 @@ ARCHITECTURE bhv OF testbench IS
 	SIGNAL hex0, hex1, hex2, hex3 : std_logic_vector(7 DOWNTO 0); --the 7 segment hex display has a point
 	SIGNAL buttons: std_logic_vector(2 DOWNTO 0); -- button 0 is the reset
 	SIGNAL dip_switches:  std_logic_vector(8 DOWNTO 0); -- dip9 is set debug
-	SIGNAL dip_switches_internal : std_logic_vector(8 DOWNTO 0); --
+	SIGNAL dip_switches_internal : std_logic_vector(8 DOWNTO 0); --necessary to compare expected and read values
 	SIGNAL leds:  std_logic_vector (9 DOWNTO 0);
-	SIGNAL leds_internal : std_logic_vector (9 DOWNTO 0);
+	SIGNAL leds_internal : std_logic_vector (9 DOWNTO 0); --necessary to compare expected and read values
 	SIGNAL hex0_internal, hex1_internal, hex2_internal, hex3_internal : std_logic_vector (7 DOWNTO 0);
 	SIGNAL finished	: boolean 	:= FALSE;
 	SIGNAL button1_internal, button2_internal, button3_internal : std_logic;
@@ -104,35 +104,20 @@ ARCHITECTURE bhv OF testbench IS
 		byte2_enable <= '0';
 		byte3_enable <= '0';
 		
-		wait for 1 ms; --gives time to update a. if this stament is remove a is not defined
+		wait for 2 ms; --to prevent problems from other procedures
 		adress_lines <=  "00010100";
 		data_in(31) <= leds_internal(8);
 		byte3_enable <= '1'; 
-		wait for 3 ms;
-		byte0_enable <= '0';
-		byte1_enable <= '0';
-		byte2_enable <= '0';
-		byte3_enable <= '0';
 		wait for 3 ms;
 		adress_lines <=  "00010000";
 		data_in(31) <= leds_internal(9);
 		byte3_enable <= '1'; 
 		wait for 3 ms;
-		byte0_enable <= '0';
-		byte1_enable <= '0';
-		byte2_enable <= '0';
-		byte3_enable <= '0';
-		wait for 3 ms ;
 		adress_lines <=  "00000000";
 		data_in(7 DOWNTO 0) <= leds_internal(7 DOWNTO 0 );
 		byte0_enable <= '1'; 
-		wait for 3 ms;
-		byte0_enable <= '0';
-		byte1_enable <= '0';
-		byte2_enable <= '0';
-		byte3_enable <= '0';
-		wait for 3 ms;
-		
+		wait for 5 ms;
+				
 		ASSERT leds = leds_internal REPORT "the leds went wrong" severity error;
 		END check_write_to_leds; 
 	

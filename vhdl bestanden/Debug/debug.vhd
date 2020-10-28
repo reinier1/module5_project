@@ -4,29 +4,22 @@ USE ieee.numeric_std.ALL;
 ENTITY debug IS
 	PORT 
 	(
-		clk		: IN std_logic;
-		dip0	: IN std_logic;
-		dip1	: IN std_logic;
-		dip2	: IN std_logic;
-		dip3	: IN std_logic;
-		dip4	: IN std_logic;
-		dip5	: IN std_logic;
-		dip6	: IN std_logic;
-		dip7	: IN std_logic;
-		key1	: IN std_logic;
-		key2	: IN std_logic;
-		key3	: IN std_logic;
-		byte_in	: IN std_logic_vector(7 DOWNTO 0);
-		byte_out: OUT std_logic_vector(7 DOWNTO 0);				-- byte to be written into the memory
-		b_read	: OUT std_logic;								-- byte read enable
-		b_write	: OUT std_logic;								-- byte write enable
-		address	: OUT std_logic_vector(15 DOWNTO 0);
-		hex0	: OUT std_logic_vector(6 DOWNTO 0);
-		hex1	: OUT std_logic_vector(6 DOWNTO 0);
-		hex2	: OUT std_logic_vector(6 DOWNTO 0);
-		hex3	: OUT std_logic_vector(6 DOWNTO 0);
-		hex4	: OUT std_logic_vector(6 DOWNTO 0);
-		hex5	: OUT std_logic_vector(6 DOWNTO 0)
+		clk			: IN std_logic;
+		dipswitches	: IN std_logic_vector(7 DOWNTO 0);
+		key1		: IN std_logic;
+		key2		: IN std_logic;
+		key3		: IN std_logic;
+		byte_in		: IN std_logic_vector(7 DOWNTO 0);
+		byte_out	: OUT std_logic_vector(7 DOWNTO 0);				-- byte to be written into the memory
+		b_read		: OUT std_logic;								-- byte read enable
+		b_write		: OUT std_logic;								-- byte write enable
+		address		: OUT std_logic_vector(15 DOWNTO 0);
+		hex0		: OUT std_logic_vector(6 DOWNTO 0);
+		hex1		: OUT std_logic_vector(6 DOWNTO 0);
+		hex2		: OUT std_logic_vector(6 DOWNTO 0);
+		hex3		: OUT std_logic_vector(6 DOWNTO 0);
+		hex4		: OUT std_logic_vector(6 DOWNTO 0);
+		hex5		: OUT std_logic_vector(6 DOWNTO 0)
 	);
 END debug;
 
@@ -75,14 +68,6 @@ PROCESS(clk)
 BEGIN
 	
 	IF rising_edge(clk) THEN 									-- synchrone
-		dipswitches(0) <= dip0;									-- making one byte of the input of dipswitches
-		dipswitches(1) <= dip1;
-		dipswitches(2) <= dip2;
-		dipswitches(3) <= dip3;
-		dipswitches(4) <= dip4;
-		dipswitches(5) <= dip5;
-		dipswitches(6) <= dip6;
-		dipswitches(7) <= dip7;
 		wait_for_byte  <= wait_for_byte+1;
 		IF wait_for_byte = 2 THEN								-- the write to or read from memory can now take up to three clockcycles
 			IF b_read_intern = '1' THEN							-- when the byte is read from memory

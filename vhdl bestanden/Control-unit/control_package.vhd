@@ -1,3 +1,5 @@
+library ieee;
+USE ieee.std_logic_1164.ALL;
 PACKAGE control_package IS
 	
 	CONSTANT OP_LW   : std_logic_vector(4 DOWNTO 0) := "10000";
@@ -28,7 +30,7 @@ PACKAGE control_package IS
 		mux_alu,
 		mux_pc,
 		mux_mem
-	)
+	);
 	
 END PACKAGE control_package;
 

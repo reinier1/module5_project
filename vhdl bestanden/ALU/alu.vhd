@@ -10,19 +10,16 @@ USE ieee.numeric_std.ALL;
  -- flag(1) high means absolute value of A is smaller then the absolute value of B
  -- flag(2) high means A is smaller then B
  -- flag(3) low means Alu not working
- 
-
 
 ENTITY alu IS
-  
-  PORT ( 
+  PORT( 
          reset                   : IN std_logic;
          alu_opcode              : IN alu_op;  --there are on this moment 3 bits necessary but the fourth when is for extra comments
 	     register_a			     : IN signed(31 DOWNTO 0);
 		 register_b			     : IN signed(31 DOWNTO 0);
 	     register_out			 : OUT signed(31 DOWNTO 0);
 		 flags					 : OUT std_logic_vector(3 downto 0) -- on this moment 4 flags are enough but for futher expansion 4 bits are reserved
-	      ); 
+	  ); 
 END alu;
 ARCHITECTURE bhv OF alu IS
 	

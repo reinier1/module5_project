@@ -32,7 +32,7 @@ BEGIN
 	write_enable_out 	<= write_enable;
 	output_address	 	<=	address(15 DOWNTO 2);
 
-	PROCESS(byte,data_from_processor,data_from_memory,integer_address)
+	PROCESS(byte,data_from_processor,data_from_memory,integer_address,write_enable,read_enable)
 	BEGIN 
 		IF write_enable = '1' THEN
 			IF byte = '1' THEN				-- If byte is active a byte is stored, otherwise a word is stored

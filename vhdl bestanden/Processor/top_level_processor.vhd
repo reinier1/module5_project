@@ -22,53 +22,25 @@ ENTITY top_level_processor IS
 		data_to_memory 			: OUT std_logic_vector(31 DOWNTO 0);--
 		
 		read_enable_instruction	: OUT std_logic;					--
-		instruction_address_out	: OUT std_logic_vector(31 DOWNTO 0);--
+		instruction_address_out	: OUT std_logic_vector(31 DOWNTO 0)	--
 	);
 END top_level_processor;
 
 ARCHITECTURE bhv OF top_level_processor IS
 
-	SIGNAL 	read_enable_out			: std_logic;
-	SIGNAL 	output_address			: std_logic_vector(13 DOWNTO 0);
-
-	SIGNAL	byte_enable 			: std_logic_vector( 3 DOWNTO 0);
-
-	SIGNAL	read_enable_instruction	: std_logic;
-	SIGNAL	instruction_address_out	: std_logic_vector(31 DOWNTO 0);
-	
-	SIGNAL clk 						: std_logic := '0';
-	SIGNAL reset 					: std_logic := '0';
 	SIGNAL register_in				: std_logic_vector(31 DOWNTO 0);
 	SIGNAL select_register_a 		: std_logic_vector(4 DOWNTO 0);
 	SIGNAL select_register_b 		: std_logic_vector(4 DOWNTO 0);
-	SIGNAL register_a_out			: std_logic_vector(31 DOWNTO 0);
 	SIGNAL register_b_out			: std_logic_vector(31 DOWNTO 0);
-		
-	SIGNAL byte 					: std_logic						:= '0';
-	SIGNAL write_enable 			: std_logic						:= '0';
-	SIGNAL read_enable 				: std_logic						:= '0';
-	SIGNAL address 					: std_logic_vector(31 DOWNTO 0)	:= x"00000000";
-	SIGNAL data_from_processor 		: std_logic_vector(31 DOWNTO 0)	:= x"00000000";
-	SIGNAL data_from_memory			: std_logic_vector(31 DOWNTO 0)	:= x"00000000";
-		  
-
-	SIGNAL write_enable_out 		: std_logic;
 				
 	SIGNAL data_to_processor 		: std_logic_vector(31 DOWNTO 0);
-	SIGNAL data_to_memory 			: std_logic_vector(31 DOWNTO 0);
 	
 	SIGNAL alu_opcode              	: alu_op;  --defined in alu_testbench
-	SIGNAL register_a			   	: signed(31 DOWNTO 0);
-	SIGNAL register_b			   	: signed(31 DOWNTO 0);
-	SIGNAL register_out			   	: signed(31 DOWNTO 0);
-	SIGNAL flags				   	: std_logic_vector(3 downto 0); -- on this moment 4 flags are enough but fur futher expansion 4 bits are reserved	
+	SIGNAL register_a			   	: std_logic_vector(31 DOWNTO 0);
+	SIGNAL register_b			   	: std_logic_vector(31 DOWNTO 0);
+	SIGNAL register_out			   	: std_logic_vector(31 DOWNTO 0);
 
-	SIGNAL debug					: std_logic						:='0';
-
-	SIGNAL alu_flags				: std_logic_vector(3 DOWNTO 0)	:="0000";
-
-	SIGNAL jump_address				: std_logic_vector(31 DOWNTO 0)	:=x"00000000";
-	SIGNAL instruction_in			: std_logic_vector(31 DOWNTO 0)	:=x"00000000";
+	SIGNAL alu_flags				: std_logic_vector(3 DOWNTO 0);
 
 	--Register control
 	SIGNAL register_write_enable	: std_logic;
@@ -84,7 +56,7 @@ ARCHITECTURE bhv OF top_level_processor IS
 	SIGNAL immediate_out			: std_logic_vector(31 DOWNTO 0);
 	SIGNAL program_counter_out		: std_logic_vector(31 DOWNTO 0);
 	
-BEGIN bhv OF top_level_processor
+BEGIN
 
 cu: ENTITY work.control_unit
 		PORT MAP
@@ -123,12 +95,12 @@ cu: ENTITY work.control_unit
 al: ENTITY work.alu 
 		PORT MAP 
 		(
-			reset			=> reset,						--
-			alu_opcode		=> alu_opcode,					--
-			register_a		=> register_a,					--
-			register_b 		=> register_b,					--
-			register_out 	=> register_out,				--
-			flags			=> alu_flags					--
+			reset							=> reset,				--
+			alu_opcode						=> alu_opcode,			--
+			register_a						=> signed(register_a),	--
+			register_b 						=> signed(register_b),	--
+			std_logic_vector(register_out) 	=> register_out,		--
+			flags							=> alu_flags			--
 		);
 		
 mc: ENTITY work.memory_controller

@@ -23,7 +23,7 @@ BEGIN
 	register_a_out <= register_i(to_integer(unsigned(select_register_a))) WHEN select_register_a/="00000" ELSE x"00000000";
 	register_b_out <= register_i(to_integer(unsigned(select_register_b))) WHEN select_register_b/="00000" ELSE x"00000000";
 	
-	PROCESS(clk)
+	PROCESS(clk,reset)
 	BEGIN
 		IF reset='0' THEN
 			register_i <= (OTHERS=>x"00000000");

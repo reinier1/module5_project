@@ -26,7 +26,7 @@ PACKAGE control_package IS
 	TYPE mux_t IS 
 	(
 		mux_alu,
-		mux_cu,
+		mux_pc,
 		mux_mem
 	)
 	

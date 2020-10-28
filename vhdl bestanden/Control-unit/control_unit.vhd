@@ -95,7 +95,7 @@ BEGIN
 	read_enable_instruction	<= '1' WHEN instruction_finished OR (state=state_reset AND reset='1') ELSE '0';
 	read_enable_data		<= '1' WHEN instruction_load and state=state_instruction ELSE '0';
 	memory_write_enable		<= '1' WHEN instruction_store and state=state_instruction ELSE '0';
-	byte_operation			<= '1' WHEN ins_op=OP_LB OR ins_op=OP_SB ELSE '0';
+	byte_operation			<= '1' WHEN (ins_op=OP_LB OR ins_op=OP_SB) ELSE '0';
 	
 	--Internal instruction is normally directly taken from memory. This can be faster then storing it first
 	instruction				<= instruction_in WHEN state=state_instruction ELSE 
@@ -112,9 +112,9 @@ BEGIN
 								mux_alu;
 	--Write to register when ALU instruction, jump and link instruction, move instruction and second cycle of load instruction
 	register_write_enable	<= '1' WHEN (instruction_load and state=state_store_load) OR
-										instruction_alu OR
-										ins_op=OP_JAL OR
-										ins_op=OP_MOV 
+										(instruction_alu and state=state_instruction) OR
+										(ins_op=OP_JAL and state=state_instruction) OR
+										(ins_op=OP_MOV and state=state_instruction)
 									ELSE '0';
 	--Internal flags. These line up directly with the branch instruction flags
 	internal_flags			<= (alu_flags(3) , alu_flags(2) , not alu_flags(0) , alu_flags(0));

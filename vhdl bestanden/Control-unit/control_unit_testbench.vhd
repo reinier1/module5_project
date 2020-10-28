@@ -96,7 +96,12 @@ BEGIN
 		instruction_in	<= x"a4200080"; --sw [128],%r1		
 		WAIT FOR 1 ms;
 		instruction_in	<= x"8c20ff00"; --lb %r1,[0xff00]	
-		WAIT FOR 2 ms;
+		WAIT FOR 500 us;
+		debug<='1';
+		WAIT FOR 5 ms;
+		debug<='0';
+		WAIT UNTIL rising_edge(clk);
+		WAIT FOR 1 ms;
 		instruction_in	<= x"ac000001"; --sb [1],%r0		
 		WAIT FOR 1 ms;
 

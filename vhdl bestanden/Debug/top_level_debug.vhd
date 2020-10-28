@@ -113,7 +113,7 @@ BEGIN
 	debug_label: ENTITY work.debug
 	PORT MAP 
 		(
-			clk	=> clk,
+			clk			=> clk,
 			dipswitches => dipswitches_debug,
 			key1 		=> buttons(0),
 			key2		=> buttons(1),

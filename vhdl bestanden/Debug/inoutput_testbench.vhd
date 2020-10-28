@@ -7,7 +7,7 @@ END testbench;
 
 ARCHITECTURE bhv OF testbench IS 
 	
-	SIGNAL reset 		: std_logic; 
+	SIGNAL reset : std_logic; 
 	SIGNAL write_enable: std_logic;
 	SIGNAL read_enable:  std_logic;
 	SIGNAL clk : std_logic := '1'; -- 50MHz clock
@@ -245,7 +245,7 @@ BEGIN
 			byte1_enable => byte1_enable,
 			byte2_enable => byte2_enable,
 			byte3_enable => byte3_enable,
-			adress_lines => adress_lines,
+			address_lines => adress_lines,
 			hex0 => hex0,
 			hex1 => hex1,
 			hex2 => hex2,

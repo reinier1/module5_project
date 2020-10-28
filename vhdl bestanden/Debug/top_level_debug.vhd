@@ -1,9 +1,13 @@
 LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
-USE ieee.numeric_std.ALL
-LIBRARY work;
-USE work.memory_package.ALL;
+USE ieee.numeric_std.ALL;
+
 ENTITY top_level_debug IS
+	GENERIC 
+	(
+		DATA_WIDTH : natural := 32;	--this only update the output and input ports no the rest if changed
+		ADDR_WIDTH : natural := 16
+	);
 
 	PORT
 	(
@@ -36,7 +40,7 @@ ENTITY top_level_debug IS
 		leds				: OUT std_logic_vector(9 DOWNTO 0);
 		buttons				: IN std_logic_vector(2 DOWNTO 0);  -- buttons does not include reset button
 		
-		debug_onof			: OUT std_logic;
+		debug_on_of			: OUT std_logic
 		
 	);
 END top_level_debug;
@@ -47,7 +51,6 @@ ARCHITECTURE plof OF top_level_debug IS
 	( 
 		state_normal, 				-- just normal operation
 		state_inoutput, 			-- inoutput is used
-		state_beginning_debug, 		-- debug state
 		state_debug					-- debug 		
 	);
 
@@ -80,6 +83,7 @@ ARCHITECTURE plof OF top_level_debug IS
 	SIGNAL dipswitches_inout		: std_logic_vector(8 DOWNTO 0);
 	SIGNAL leds_internal			: std_logic_vector(9 DOWNTO 0);
 	SIGNAL state_signal				: state_t;
+	SIGNAL clock_cycles_passed		: std_logic;
 	
 
 BEGIN
@@ -104,8 +108,7 @@ BEGIN
 			hex1			=> hex1_inout_int,
 			hex2			=> hex2_inout_int,
 			hex3			=> hex3_inout_int,
-			hex4			=> hex4_inout_int,
-			hex5			=> hex5_inout_int,
+			
 			buttons			=> buttons,
 			dip_switches	=> dipswitches_inout,
 			leds			=> leds_internal
@@ -132,11 +135,26 @@ BEGIN
 			hex4		=> hex4_debug_int,
 			hex5		=> hex5_debug_int		
 		);
+debug_on_of	 		<= dipswitches(9)	;		
+PROCESS(clk, reset)
+	BEGIN
+	IF reset = '0' THEN
+		clock_cycles_passed <= '0';
+	ELSIF rising_edge(clk) THEN
+		IF dipswitches(9) = '1' then 
+			IF clock_cycles_passed = '0' THEN 
+				clock_cycles_passed <= '1';
 			
-	
+			END IF;
+		ELSE
+			clock_cycles_passed <= '0';
+		END IF;
+	END IF;
+END PROCESS;
 PROCESS
 BEGIN
-	IF state_signal = state_normal THEN
+
+	IF state_signal = state_normal THEN		
 		addr_a_outm 		<= addr_a_inm;
 		addr_b_outm 		<= addr_b_inm;
 		we_a_outm 			<= we_a_inm;
@@ -144,7 +162,12 @@ BEGIN
 		q_a_outm			<= q_a_inm;
 		q_b_outm			<= q_b_inm;
 		byte_enable_outm	<= byte_enable_inm;
-		
+		IF ((addr_a_inm(15 DOWNTO 8) = "11111111" )or (addr_b_inm(15 DOWNTO 8) = "11111111")) then --if one of both adress is higher then FF00 then it is for in output
+			state_signal <= state_inoutput;
+		END IF;
+		IF clock_cycles_passed = '1' and dipswitches(9) = '1' THEN
+			state_signal <= state_normal;
+		END IF;
 	ELSIF state_signal = state_inoutput THEN
 		we_a_outm <= '0';
 		IF we_a_inm = '1' THEN
@@ -159,23 +182,51 @@ BEGIN
 			write_enable_inout_int	<= '0';
 		END IF;
 		byte_enable_inout_int		<= byte_enable_inm;
-		
-	ELSIF state_signal = state_beginning_debug THEN
+		IF ((addr_a_inm(15 DOWNTO 8) /= "11111111" )and (addr_b_inm(15 DOWNTO 8) /= "11111111")) then --if one of both adress is higher then FF00 then it is for in output
+			state_signal <= state_inoutput;
+		END IF;
+		IF clock_cycles_passed = '1' and dipswitches(9) = '1' THEN
+			state_signal <= state_normal;
+		END IF;
+	ELSIF state_signal = state_debug THEN
 		IF write_enable_debug_int = '1' THEN
 			IF address_debug(1 DOWNTO 0) = "00" THEN
 				byte_enable_outm	<= "0001";
+				data_a_outm(7 DOWNTO 0) <= byte_out_debug_int;
 			ELSIF address_debug(1 DOWNTO 0) = "01" THEN
 				byte_enable_outm	<= "0010";
+				data_a_outm(15 DOWNTO 8) <= byte_out_debug_int;
 			ELSIF address_debug(1 DOWNTO 0) = "10" THEN
 				byte_enable_outm	<= "0100";
+				data_a_outm(23 DOWNTO 16) <= byte_out_debug_int;
 			ELSIF address_debug(1 DOWNTO 0) = "11" THEN
 				byte_enable_outm	<= "1000";
+				data_a_outm(31 DOWNTO 24) <= byte_out_debug_int;
 			END IF;
-			addr_a_outm				<= address_debug(31 DOWNTO 2) & "00";
-	
-	
-	
-	
+			addr_a_outm				<= address_debug(15 DOWNTO 2) & "00";
+		ELSIF read_enable_debug_int = '1' THEN
+			IF address_debug(1 DOWNTO 0) = "00" THEN
+				byte_enable_outm	<= "0001";
+				byte_in_debug_int <= q_b_inm(7 DOWNTO 0);	
+			ELSIF address_debug(1 DOWNTO 0) = "01" THEN
+				byte_enable_outm	<= "0010";
+				byte_in_debug_int <= q_b_inm(15 DOWNTO 8);
+			ELSIF address_debug(1 DOWNTO 0) = "10" THEN
+				byte_enable_outm	<= "0100";
+				byte_in_debug_int <= q_b_inm(23 DOWNTO 16);
+			ELSIF address_debug(1 DOWNTO 0) = "11" THEN
+				byte_enable_outm	<= "1000";
+				byte_in_debug_int <= q_b_inm(31 DOWNTO 24);
+			END IF;
+			addr_b_outm <= address_debug(15 DOWNTO 2) & "00" ;
+		END IF;
+		IF dipswitches(9) = '1' THEN
+			state_signal <= state_normal;
+		END IF;
+		
+	END IF;
+END PROCESS;	
+END plof;	
 	
 	
 	
@@ -197,8 +248,5 @@ BEGIN
 	
 	
 
-PROCESS(clk, reset)
 
---process on clk or reset
 
-BEGIN

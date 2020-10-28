@@ -48,7 +48,7 @@ ARCHITECTURE salade OF debug IS
     END CASE;
   END hex2display;
 
-	SIGNAL dipswitches 					: std_logic_vector(7 DOWNTO 0);
+	
 	SIGNAL instr_view_byte_on_address 	: std_logic := '0';
 	SIGNAL instr_write_byte_on_address 	: std_logic := '0';
 	SIGNAL instr_view_byte_next_address : std_logic := '0';

@@ -4,7 +4,7 @@ USE ieee.numeric_std.ALL;
 LIBRARY work;
 USE work.alu_package.ALL;
 USE work.control_package.ALL;
-ENTITY debug IS
+ENTITY control_unit IS
 	PORT 
 	(
 		clk						: IN std_logic;
@@ -37,9 +37,9 @@ ENTITY debug IS
 		immediate_out			: OUT std_logic_vector(31 DOWNTO 0);
 		program_counter_out		: OUT std_logic_vector(31 DOWNTO 0)
 	);
-END debug;
+END control_unit;
 
-ARCHITECTURE bhv OF debug IS
+ARCHITECTURE bhv OF control_unit IS
 	TYPE state_t IS 
 	( 
 		state_reset, 		-- At startup: load new instruction and go to instruction
@@ -92,7 +92,7 @@ BEGIN
 	select_register_b		<= ins_reg_b;
 	
 	--Memory output signals
-	read_enable_instruction	<= '1' WHEN instruction_finished OR state=state_reset ELSE '0';
+	read_enable_instruction	<= '1' WHEN instruction_finished OR (state=state_reset AND reset='1') ELSE '0';
 	read_enable_data		<= '1' WHEN instruction_load and state=state_instruction ELSE '0';
 	memory_write_enable		<= '1' WHEN instruction_store and state=state_instruction ELSE '0';
 	byte_operation			<= '1' WHEN ins_op=OP_LB OR ins_op=OP_SB ELSE '0';

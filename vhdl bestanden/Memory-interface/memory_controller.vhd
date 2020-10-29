@@ -30,7 +30,7 @@ BEGIN
 
 	read_enable_out		<= read_enable;	-- Values are constant
 	write_enable_out 	<= write_enable;
-	output_address	 	<=	address(15 DOWNTO 2);
+	output_address	 	<= address(15 DOWNTO 2);
 
 	PROCESS(byte,data_from_processor,data_from_memory,integer_address,write_enable,read_enable)
 	BEGIN 
@@ -45,7 +45,7 @@ BEGIN
 				data_to_processor 	<= data_from_memory;
 			END IF;
 		ELSIF read_enable = '1' THEN
-			IF byte = '1' THEN				-- If byte is active a byte is stored, otherwise a word is stored
+			IF byte = '1' THEN				-- If byte is active a byte is read, otherwise a word is read
 				byte_enable 		<= std_logic_vector(SHIFT_LEFT(K_ONE, integer_address));				
 				data_to_processor 	<= std_logic_vector(resize(signed(data_from_memory((8 * integer_address + 7) DOWNTO (8 * integer_address))), 32));				
 				data_to_memory 		<= data_from_processor;
@@ -55,9 +55,9 @@ BEGIN
 				data_to_memory 		<= data_from_processor;
 			END IF;
 		ELSE
-			data_to_processor 	<= data_from_memory;
-			data_to_memory 		<= data_from_processor;
-			byte_enable 		<= "0000";
+			data_to_processor 		<= data_from_memory;
+			data_to_memory 			<= data_from_processor;
+			byte_enable 			<= "0000";
 		END IF;
 	END PROCESS;
 END bhv;

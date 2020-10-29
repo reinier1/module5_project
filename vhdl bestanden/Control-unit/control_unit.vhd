@@ -86,7 +86,7 @@ BEGIN
 								(not instruction_load and state=state_instruction);
 	
 	--Outputs constructed from internal signals
-	program_counter_out		<= std_logic_vector(x"0000" & program_counter & "00");
+	program_counter_out		<= std_logic_vector(x"0000" & (program_counter + to_unsigned(1,14)) & "00");
 	immediate_out			<= std_logic_vector(resize(signed(ins_imm16),32));
 	select_register_a		<= ins_reg_a;
 	select_register_b		<= ins_reg_b;
@@ -165,7 +165,7 @@ BEGIN
 		IF  instruction_branch AND internal_flags(to_integer(unsigned(ins_op(1 DOWNTO 0))))='1' THEN	
 			--If we are executing a branch we want to branch only if the condition is true
 			next_pc<=unsigned(ins_imm16(15 DOWNTO 2));
-		ELSIF ins_op = OP_JAL THEN --IF we jump we want to get the jump address from the bus
+		ELSIF ins_op = OP_JAL THEN --If we jump we want to get the jump address from the bus
 			next_pc<=unsigned(jump_address(15 DOWNTO 2));
 		ELSE --Under normal circumstances we just fetch a new instruction
 			IF instruction_finished THEN 

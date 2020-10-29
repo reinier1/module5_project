@@ -22,7 +22,7 @@ ARCHITECTURE bhv OF processor_testbench IS
 	SIGNAL data_to_memory 			: std_logic_vector(31 DOWNTO 0);
 
 	SIGNAL read_enable_instruction	: std_logic;
-	SIGNAL instruction_address_out	: std_logic_vector(31 DOWNTO 0);
+	SIGNAL instruction_address_out	: std_logic_vector(13 DOWNTO 0);
 
 	SIGNAL finished				: boolean 	:= FALSE;
 BEGIN

@@ -122,7 +122,7 @@ BEGIN
 			byte_out	=> byte_out_debug_int,
 			b_read		=> read_enable_debug_int,
 			b_write		=> write_enable_debug_int,
-			address		=> address_debug,					-- keihard negeren voor debug hardware
+			address		=> address_debug,					
 			hex0		=> hex0_debug_int,
 			hex1		=> hex1_debug_int,
 			hex2		=> hex2_debug_int,
@@ -160,7 +160,7 @@ BEGIN
 				state_signal <= state_inoutput;
 			END IF;
 			IF clock_cycles_passed = '1' and dipswitches(9) = '1' THEN
-				state_signal <= state_normal;
+				state_signal <= state_debug;
 			END IF;
 			leds <= leds_internal; --it can take some time to update the leds so it is for the updated leds from inoutput
 			hex0 <= hex0_inout_int;
@@ -188,10 +188,10 @@ BEGIN
 			hex3 					<= hex3_inout_int;
 			byte_enable_inout_int	<= byte_enable_inm;
 			IF ((addr_a_inm(13 DOWNTO 6) /= "11111111" )and (addr_b_inm(13 DOWNTO 6) /= "11111111")) then --if one of both adress is higher then FF00 then it is for in output
-				state_signal <= state_inoutput;
+				state_signal <= state_normal;
 			END IF;
 			IF clock_cycles_passed = '1' and dipswitches(9) = '1' THEN
-				state_signal <= state_normal;
+				state_signal <= state_inoutput;
 			END IF;
 		ELSIF state_signal = state_debug THEN
 			hex0		<= '0'& hex0_debug_int;
@@ -202,34 +202,34 @@ BEGIN
 			hex5		<= '0'& hex5_debug_int;
 			IF write_enable_debug_int = '1' THEN
 				IF address_debug(1 DOWNTO 0) = "00" THEN
-					byte_enable_outm	<= "0001";
-					data_a_outm(7 DOWNTO 0) <= byte_out_debug_int;
+					byte_enable_outm			<= "0001";
+					data_a_outm(7 DOWNTO 0) 	<= byte_out_debug_int;
 				ELSIF address_debug(1 DOWNTO 0) = "01" THEN
-					byte_enable_outm	<= "0010";
-					data_a_outm(15 DOWNTO 8) <= byte_out_debug_int;
+					byte_enable_outm			<= "0010";
+					data_a_outm(15 DOWNTO 8) 	<= byte_out_debug_int;
 				ELSIF address_debug(1 DOWNTO 0) = "10" THEN
-					byte_enable_outm	<= "0100";
-					data_a_outm(23 DOWNTO 16) <= byte_out_debug_int;
+					byte_enable_outm			<= "0100";
+					data_a_outm(23 DOWNTO 16) 	<= byte_out_debug_int;
 				ELSIF address_debug(1 DOWNTO 0) = "11" THEN
-					byte_enable_outm	<= "1000";
-					data_a_outm(31 DOWNTO 24) <= byte_out_debug_int;
+					byte_enable_outm			<= "1000";
+					data_a_outm(31 DOWNTO 24) 	<= byte_out_debug_int;
 				END IF;
 				addr_a_outm				<= address_debug(15 DOWNTO 2);
 			ELSIF read_enable_debug_int = '1' THEN
 				IF address_debug(1 DOWNTO 0) = "00" THEN
 					byte_enable_outm	<= "0001";
-					byte_in_debug_int <= q_b_inm(7 DOWNTO 0);	
+					byte_in_debug_int 	<= q_b_inm(7 DOWNTO 0);	
 				ELSIF address_debug(1 DOWNTO 0) = "01" THEN
 					byte_enable_outm	<= "0010";
-					byte_in_debug_int <= q_b_inm(15 DOWNTO 8);
+					byte_in_debug_int 	<= q_b_inm(15 DOWNTO 8);
 				ELSIF address_debug(1 DOWNTO 0) = "10" THEN
 					byte_enable_outm	<= "0100";
-					byte_in_debug_int <= q_b_inm(23 DOWNTO 16);
+					byte_in_debug_int 	<= q_b_inm(23 DOWNTO 16);
 				ELSIF address_debug(1 DOWNTO 0) = "11" THEN
 					byte_enable_outm	<= "1000";
-					byte_in_debug_int <= q_b_inm(31 DOWNTO 24);
+					byte_in_debug_int 	<= q_b_inm(31 DOWNTO 24);
 				END IF;
-				addr_b_outm <= address_debug(15 DOWNTO 2);
+				addr_b_outm 			<= address_debug(15 DOWNTO 2);
 			END IF;
 			IF dipswitches(9) = '0' THEN
 				state_signal <= state_normal;

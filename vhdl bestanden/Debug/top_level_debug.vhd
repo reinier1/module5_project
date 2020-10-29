@@ -2,6 +2,7 @@ LIBRARY ieee;
 USE ieee.std_logic_1164.ALL;
 USE ieee.numeric_std.ALL;
 
+--top level debug vhdl file
 ENTITY top_level_debug IS
 	GENERIC 
 	(

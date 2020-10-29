@@ -130,7 +130,9 @@ BEGIN
 			hex4		=> hex4_debug_int,
 			hex5		=> hex5_debug_int		
 		);
-	debug_on_of	 		<= dipswitches(9)	;		
+	debug_on_of	 		<= dipswitches(9)	;	 --selects debug mode
+	dipswitches_inout  	<=dipswitches(8 downto 0); -- inoutput uses 9 dip switches
+	dipswitches_debug	<=dipswitches(7 DOWNTO 0); --debug uses 8 dip switches
 	PROCESS(clk, reset)
 		BEGIN
 		IF reset = '0' THEN

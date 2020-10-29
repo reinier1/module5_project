@@ -68,7 +68,8 @@ BEGIN
 	);
 	PROCESS		
 		BEGIN
-		dipswitches <=(others => '0');
+		dipswitches(9) <= '0';
+		dipswitches(8 DOWNTO 0) <= (others => '1');
 		
 		WAIT FOR 10 ms;
 		reset			<='1';
@@ -102,11 +103,14 @@ BEGIN
 		data_a_inm 		<=x"FFFFFFFF";
 		addr_a_inm 		<=x"FF00";
 		byte_enable_inm	<="1111";
+		buttons <= (others => '1');
 		WAIT FOR 4 MS;
-		buttons <= (others => '0');
-		we_a_inm		<='1';
+		
+		we_a_inm		<='0';
 		addr_b_inm <= x"FF08";
-		WAIT FOR 10 ms;
+		WAIT FOR 6 ms;
+		addr_b_inm <= x"FF04";
+		WAIT FOR 6 ms;
 		ASSERT FALSE REPORT "done" SEVERITY note;
 		finished<=TRUE;
 		WAIT;

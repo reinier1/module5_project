@@ -40,8 +40,7 @@ ENTITY top_level_debug IS
 		hex5				: OUT std_logic_vector(7 DOWNTO 0);
 		leds				: OUT std_logic_vector(9 DOWNTO 0);
 		buttons				: IN  std_logic_vector(2 DOWNTO 0);  -- buttons does not include reset button		
-		debug_on_of_out		: OUT std_logic
-		
+		debug_on_of_out		: OUT std_logic		
 		
 	);
 END top_level_debug;
@@ -269,6 +268,7 @@ BEGIN
 	WITH state_signal SELECT q_a_outm <=
 		q_a_inm WHEN state_normal,
 		(OTHERS => '0') WHEN OTHERS;
+	
 	WITH state_signal SELECT q_b_outm <=
 		q_b_inm WHEN state_normal,
 		data_out_inout_int WHEN state_inoutput,

@@ -54,7 +54,7 @@ BEGIN
 			data_a_inm			=>data_a_inm,
 			we_a_inm			=>we_a_inm,
 			q_a_outm			=>q_a_outm,
-			q_b_outm			=>q_b_inm,
+			q_b_outm			=>q_b_outm,
 			byte_enable_inm		=>byte_enable_inm,
 			debug_on_of_out	    =>  debug_on_of_out, 
 			dipswitches			=>dipswitches,

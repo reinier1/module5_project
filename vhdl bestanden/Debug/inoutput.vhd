@@ -45,6 +45,7 @@ ARCHITECTURE bhv of inoutput IS
 			hex3_internal <=(others => '0');
 			leds_internal <=(others => '0');
 			leds <= (others => '0');
+			data_out <= (others => '0');
 		ELSIF rising_edge(clk) THEN					-- the hexadecimal displays, leds and dipswitches and buttons will be 1 clockcycle later
 			hex0 <= hex0_internal; 					-- this is nececcary to return the value when it is read.
 			hex1 <= hex1_internal;

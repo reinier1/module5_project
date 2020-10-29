@@ -22,7 +22,7 @@ ENTITY top_level_processor IS
 		data_to_memory 			: OUT std_logic_vector(31 DOWNTO 0);--
 		
 		read_enable_instruction	: OUT std_logic;					--
-		instruction_address_out	: OUT std_logic_vector(31 DOWNTO 0)	--
+		instruction_address_out	: OUT std_logic_vector(13 DOWNTO 0)	--
 	);
 END top_level_processor;
 
@@ -56,40 +56,42 @@ ARCHITECTURE bhv OF top_level_processor IS
 	SIGNAL immediate_out			: std_logic_vector(31 DOWNTO 0);
 	SIGNAL program_counter_out		: std_logic_vector(31 DOWNTO 0);
 	
+	SIGNAL instruction_address_i	: std_logic_vector(31 DOWNTO 0);
+	
 BEGIN
-
+	instruction_address_out<=instruction_address_i(15 DOWNTO 2);
 cu: ENTITY work.control_unit
 		PORT MAP
 		(
-			clk						=> clk,					--
-			reset					=> reset,				--
-			debug					=> debug,				--
+			clk						=> clk,						--
+			reset					=> reset,					--
+			debug					=> debug,					--
 
-			alu_flags				=> alu_flags,			--
+			alu_flags				=> alu_flags,				--
 
-			jump_address			=> register_b,			--
-			instruction_in			=> instruction_in,		--
+			jump_address			=> register_b,				--
+			instruction_in			=> instruction_in,			--
 
 			--ALU control
-			alu_opcode              => alu_opcode,			--
+			alu_opcode              => alu_opcode,				--
 
 			--Register control
-			register_write_enable	=> register_write_enable,--
-			select_register_a 		=> select_register_a,	--
-			select_register_b 		=> select_register_b,	--
+			register_write_enable	=> register_write_enable,	--
+			select_register_a 		=> select_register_a,		--
+			select_register_b 		=> select_register_b,		--
 
 			--Memory control
-			byte_operation			=> byte_operation,		--
-			memory_write_enable		=> memory_write_enable,	--
-			read_enable_data		=> read_enable_data,	--
-			read_enable_instruction	=> read_enable_instruction,--
-			instruction_address_out	=> instruction_address_out,--
+			byte_operation			=> byte_operation,			--
+			memory_write_enable		=> memory_write_enable,		--
+			read_enable_data		=> read_enable_data,		--
+			read_enable_instruction	=> read_enable_instruction,	--
+			instruction_address_out	=> instruction_address_i,	--
 
 			--Mux control
-			select_bmux				=> select_bmux,			--
-			select_dmux				=> select_dmux,			--
-			immediate_out			=> immediate_out,		--
-			program_counter_out		=> program_counter_out	--
+			select_bmux				=> select_bmux,				--
+			select_dmux				=> select_dmux,				--
+			immediate_out			=> immediate_out,			--
+			program_counter_out		=> program_counter_out		--
 		);
 
 al: ENTITY work.alu 

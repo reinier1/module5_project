@@ -19,7 +19,9 @@ ENTITY debug IS
 		hex2		: OUT std_logic_vector(6 DOWNTO 0);
 		hex3		: OUT std_logic_vector(6 DOWNTO 0);
 		hex4		: OUT std_logic_vector(6 DOWNTO 0);
-		hex5		: OUT std_logic_vector(6 DOWNTO 0)
+		hex5		: OUT std_logic_vector(6 DOWNTO 0);
+		debug_in	: IN std_logic; 								-- gets debug in
+		debug_out	: OUT std_logic									--gives debug out. Usefull for the do one instr_execute_and_wait
 	);
 END debug;
 
@@ -80,6 +82,12 @@ BEGIN
 				b_write_intern 	<= '0';
 			END IF;
 		END IF;
+		IF instr_execute_and_wait = '1' THEN --debug_out is zero for one clock cycle 
+			debug_out <= '0';
+			instr_execute_and_wait <= '0';
+		ELSE 
+			debug_out <= debug_in; --normally debug_out = debug_in
+		END IF;
 		hex0 <= hex2display(byte_signal(3 DOWNTO 0));			-- the byte (that is written to memory or collected from memory) is shown on the hexadecimal displays
 		hex1 <= hex2display(byte_signal(7 DOWNTO 4));			
 		hex2 <= hex2display(address_intern(3 DOWNTO 0));		-- the address is shown on the hexadecimal displays
@@ -98,6 +106,7 @@ BEGIN
 			ELSIF dipswitches = "00000100" THEN
 				instr_execute_and_wait  		<= '1';			-- execute one instruction and wait is accessed with 00000100 on dip0 to dip7
 			END IF;
+		--this count assumes that fingers are slower then 3 clockcycles
 		ELSIF key2 = '0' THEN									-- key2 is used to specify the address (and the input for the address)
 			IF instr_view_byte_on_address = '1' THEN			-- instruction view byte on address
 				IF part = 0 THEN									-- key2 is pressed
@@ -147,10 +156,8 @@ BEGIN
 				b_write_intern 	<= '1';
 				wait_for_byte 	<= 0;																									-- so that the program will wait for 2 rising edges for the byte to be accessed from memory
 				instr_write_byte_on_address <= '0';
-			ELSIF instr_execute_and_wait = '1' THEN
-				null;
-				-- still to be made
 			END IF;
+			
 		END IF;
 	END IF;
 END PROCESS;

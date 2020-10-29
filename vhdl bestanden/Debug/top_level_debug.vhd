@@ -84,6 +84,7 @@ ARCHITECTURE plof OF top_level_debug IS
 	SIGNAL leds_internal			: std_logic_vector(9 DOWNTO 0);
 	SIGNAL state_signal				: state_t;
 	SIGNAL clock_cycles_passed		: std_logic;
+	SIGNAL debug_on_of_internal	: std_logic;
 BEGIN
 	inoutput_label: ENTITY work.inoutput
 	PORT MAP
@@ -128,11 +129,13 @@ BEGIN
 			hex2		=> hex2_debug_int,
 			hex3		=> hex3_debug_int,
 			hex4		=> hex4_debug_int,
-			hex5		=> hex5_debug_int		
+			hex5		=> hex5_debug_int,
+			debug_out	=> debug_on_of_internal,
+			debug_in	=> dipswitches(9)
 		);
-	debug_on_of	 		<= dipswitches(9)	;	 --selects debug mode
-	dipswitches_inout  	<=dipswitches(8 downto 0); -- inoutput uses 9 dip switches
-	dipswitches_debug	<=dipswitches(7 DOWNTO 0); --debug uses 8 dip switches
+	debug_on_of	 		<= debug_on_of_internal;	 	--selects debug mode. Most of the time this value is the same as debug. 
+	dipswitches_inout  	<=dipswitches(8 downto 0); 	-- inoutput uses 9 dip switches
+	dipswitches_debug	<=dipswitches(7 DOWNTO 0); 	--debug uses 8 dip switches
 	PROCESS(clk, reset)
 		BEGIN
 		IF reset = '0' THEN
@@ -161,7 +164,7 @@ BEGIN
 			IF ((addr_a_inm(13 DOWNTO 6) = "11111111" )or (addr_b_inm(13 DOWNTO 6) = "11111111")) then --if one of both adress is higher then FF00 then it is for in output
 				state_signal <= state_inoutput;
 			END IF;
-			IF clock_cycles_passed = '1' and dipswitches(9) = '1' THEN
+			IF clock_cycles_passed = '1' and debug_on_of_internal = '1' THEN
 				state_signal <= state_debug;
 			END IF;
 			leds <= leds_internal; --it can take some time to update the leds so it is for the updated leds from inoutput
@@ -196,7 +199,7 @@ BEGIN
 			IF ((addr_a_inm(13 DOWNTO 6) /= "11111111" )and (addr_b_inm(13 DOWNTO 6) /= "11111111")) then --if one of both adress is higher then FF00 then it is for in output
 				state_signal <= state_normal;
 			END IF;
-			IF clock_cycles_passed = '1' and dipswitches(9) = '1' THEN
+			IF clock_cycles_passed = '1' and debug_on_of_internal = '1' THEN
 				state_signal <= state_debug;
 			END IF;
 		ELSIF state_signal = state_debug THEN

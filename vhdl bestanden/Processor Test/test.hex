@@ -1,0 +1,4 @@
+// memory data file (do not edit the following line - required for mem load use)
+// instance=/processor_testbench/cpu/rg/register_i(8)
+// format=hex addressradix=h dataradix=h version=1.0 wordsperline=8
+@8 00000008 

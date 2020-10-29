@@ -19,7 +19,7 @@ ENTITY one_byte_enable_memory IS
 	GENERIC 
 	(
 		DATA_WIDTH 	: natural 	:= 8;
-		RAM_INIT   	: memory_t	:= (OTHERS=>x"00");
+		RAM_INIT   	: memory_t	:= (OTHERS=>x"00")
 	);
 
 	PORT 

@@ -122,7 +122,7 @@ BEGIN
 						address(7 DOWNTO 0) 		<= dipswitches;		-- the dipswitches will be transferred to bit 7 downto 0 of the address
 						address_intern(7 DOWNTO 0) 	<= dipswitches;
 						part 						<= 1;
-						counter <= 0;
+						--counter <= 0;
 					ELSIF part = 1 THEN									-- key2 is pressed again
 						address(15 DOWNTO 8) 		<= dipswitches;		-- the dipswitches will be transferred to bit 15 downto 0 of the address
 						address_intern(15 DOWNTO 8) <= dipswitches;
@@ -131,7 +131,7 @@ BEGIN
 						wait_for_byte 				<= 0;				-- so that the program will wait for 2 rising edges for the byte to be accessed from memory
 						instr_view_byte_on_address 	<= '0';
 						part 						<= 0;
-						counter <= 0;
+						--counter <= 0;
 					END IF;
 					
 				ELSIF instr_write_byte_on_address = '1' THEN		-- instruction write byte on address
@@ -139,12 +139,12 @@ BEGIN
 						address(7 DOWNTO 0) 		<= dipswitches;		-- the dipswitches will be transferred to bit 7 downto 0 of the address
 						address_intern(7 DOWNTO 0) 	<= dipswitches;
 						part 						<= 1;
-						counter <= 0;
+						--counter <= 0;
 					ELSIF part = 1 THEN									-- key2 is pressed again
 						address(15 DOWNTO 8) 		<= dipswitches;		-- the dipswitches will be transferred to bit 15 downto 0 of the address
 						address_intern(15 DOWNTO 8) <= dipswitches;
 						part 						<= 2;
-						counter <= 0;
+						--counter <= 0;
 					ELSIF part = 2 THEN									-- key2 is pressed again
 						byte_out 					<= dipswitches;		-- the byte that will be written into the memory
 						byte_out_intern 			<= dipswitches;
@@ -153,7 +153,7 @@ BEGIN
 						wait_for_byte 				<= 0;				-- so that the program will wait for 2 rising edges for the byte to be accessed from memory
 						instr_write_byte_on_address <= '0';
 						part 						<= 0;
-						counter <= 0;
+						--counter <= 0;
 					END IF;
 					
 				ELSIF instr_view_byte_next_address = '1' THEN																			-- instruction view byte on the next address
@@ -163,7 +163,7 @@ BEGIN
 					b_read_intern 	<= '1';
 					wait_for_byte 	<= 0;																									-- so that the program will wait for 2 rising edges for the byte to be accessed from memory
 					instr_view_byte_next_address <= '0';
-					counter <= 0;
+					--counter <= 0;
 					
 				ELSIF instr_write_byte_next_address = '1' THEN																			-- instruction write byte on the next address
 					address 		<= std_logic_vector(unsigned(address_intern) + to_unsigned(integer(1), address'length));				-- the previous address will be added with 1 to get the next byte
@@ -174,7 +174,7 @@ BEGIN
 					b_write_intern 	<= '1';
 					wait_for_byte 	<= 0;																									-- so that the program will wait for 2 rising edges for the byte to be accessed from memory
 					instr_write_byte_on_address <= '0';
-					counter <= 0;
+					--counter <= 0;
 				END IF;
 			END IF;
 		END IF;

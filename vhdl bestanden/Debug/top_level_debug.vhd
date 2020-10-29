@@ -84,7 +84,10 @@ ARCHITECTURE plof OF top_level_debug IS
 	SIGNAL leds_internal			: std_logic_vector(9 DOWNTO 0);
 	SIGNAL state_signal				: state_t;
 	SIGNAL clock_cycles_passed		: std_logic;
-	SIGNAL debug_on_of_internal	: std_logic;
+	SIGNAL debug_on_of_internal		: std_logic;
+	SIGNAL data_a_imn_debug			: std_logic_vector(31 DOWNTO 0);
+	SIGNAL byte_enable_intern 		: std_logic_vector(3 DOWNTO 0);
+	SIGNAL byte_in_debug_int_extra  : std_logic_vector(7 DOWNTO 0);
 BEGIN
 	inoutput_label: ENTITY work.inoutput
 	PORT MAP
@@ -150,102 +153,150 @@ BEGIN
 			END IF;
 		END IF;
 	END PROCESS;
-	PROCESS(addr_a_inm, addr_b_inm, q_a_inm, q_b_inm, byte_enable_inm, data_a_inm, state_signal, we_a_inm, data_out_inout_int, clk )
-	BEGIN
-
-		IF state_signal = state_normal THEN		
-			addr_a_outm 		<= addr_a_inm;
-			addr_b_outm 		<= addr_b_inm;
-			we_a_outm 			<= we_a_inm;
-			data_a_outm 		<= data_a_inm;
-			q_a_outm			<= q_a_inm;
-			q_b_outm			<= q_b_inm;
-			byte_enable_outm	<= byte_enable_inm;
-			IF ((addr_a_inm(13 DOWNTO 6) = "11111111" )or (addr_b_inm(13 DOWNTO 6) = "11111111")) then --if one of both adress is higher then FF00 then it is for in output
-				state_signal <= state_inoutput;
-			END IF;
-			IF clock_cycles_passed = '1' and debug_on_of_internal = '1' THEN
-				state_signal <= state_debug;
-			END IF;
-			leds <= leds_internal; --it can take some time to update the leds so it is for the updated leds from inoutput
-			hex0 <= hex0_inout_int;
-			hex1 <= hex1_inout_int;
-			hex2 <= hex2_inout_int;
-			hex3 <= hex3_inout_int;
-			hex4					<= (others => '0');
-			hex5					<= (others => '0');
-		ELSIF state_signal = state_inoutput THEN
-			we_a_outm <= '0';
-			IF we_a_inm = '1' THEN
-				write_enable_inout_int				<= '1';
-				address_lines_inout(7 DOWNTO 0)		<= addr_a_inm(5 DOWNTO 0)& "00" ;				-- if write enable is one, then use port a
-				
-				data_in_inout_int					<= data_a_inm;
-				read_enable_inout_int				<= '0';
-			ELSE 			
-				read_enable_inout_int				<= '1';
-				address_lines_inout	(7 DOWNTO 0)	<= addr_b_inm(5 DOWNTO 0) &"00";				-- for reading from memory, port b is used
-				q_b_outm							<= data_out_inout_int;
-				write_enable_inout_int				<= '0';
-			END IF;
-			leds 					<= leds_internal;
-			hex0 					<= hex0_inout_int;
-			hex1 					<= hex1_inout_int;
-			hex2 					<= hex2_inout_int;
-			hex3 					<= hex3_inout_int;
-			hex4					<= (others => '0');
-			hex5					<= (others => '0');
-			byte_enable_inout_int	<= byte_enable_inm;
-			IF ((addr_a_inm(13 DOWNTO 6) /= "11111111" )and (addr_b_inm(13 DOWNTO 6) /= "11111111")) then --if one of both adress is higher then FF00 then it is for in output
-				state_signal <= state_normal;
-			END IF;
-			IF clock_cycles_passed = '1' and debug_on_of_internal = '1' THEN
-				state_signal <= state_debug;
-			END IF;
-		ELSIF state_signal = state_debug THEN
-			hex0		<= '0'& hex0_debug_int;
-			hex1		<= '0'& hex1_debug_int;
-			hex2		<= '0'& hex2_debug_int;
-			hex3		<= '0'& hex3_debug_int;
-			hex4		<= '0'& hex4_debug_int;
-			hex5		<= '0'& hex5_debug_int;
-			IF write_enable_debug_int = '1' THEN
-				IF address_debug(1 DOWNTO 0) = "00" THEN
-					byte_enable_outm			<= "0001";
-					data_a_outm(7 DOWNTO 0) 	<= byte_out_debug_int;
-				ELSIF address_debug(1 DOWNTO 0) = "01" THEN
-					byte_enable_outm			<= "0010";
-					data_a_outm(15 DOWNTO 8) 	<= byte_out_debug_int;
-				ELSIF address_debug(1 DOWNTO 0) = "10" THEN
-					byte_enable_outm			<= "0100";
-					data_a_outm(23 DOWNTO 16) 	<= byte_out_debug_int;
-				ELSIF address_debug(1 DOWNTO 0) = "11" THEN
-					byte_enable_outm			<= "1000";
-					data_a_outm(31 DOWNTO 24) 	<= byte_out_debug_int;
-				END IF;
-				addr_a_outm				<= address_debug(15 DOWNTO 2);
-			ELSIF read_enable_debug_int = '1' THEN
-				IF address_debug(1 DOWNTO 0) = "00" THEN
-					byte_enable_outm	<= "0001";
-					byte_in_debug_int 	<= q_b_inm(7 DOWNTO 0);	
-				ELSIF address_debug(1 DOWNTO 0) = "01" THEN
-					byte_enable_outm	<= "0010";
-					byte_in_debug_int 	<= q_b_inm(15 DOWNTO 8);
-				ELSIF address_debug(1 DOWNTO 0) = "10" THEN
-					byte_enable_outm	<= "0100";
-					byte_in_debug_int 	<= q_b_inm(23 DOWNTO 16);
-				ELSIF address_debug(1 DOWNTO 0) = "11" THEN
-					byte_enable_outm	<= "1000";
-					byte_in_debug_int 	<= q_b_inm(31 DOWNTO 24);
-				END IF;
-				addr_b_outm 			<= address_debug(15 DOWNTO 2);
-			END IF;
-			IF dipswitches(9) = '0' THEN
-				state_signal <= state_normal;
+	
+	PROCESS(byte_out_debug_int, write_enable_debug_int, address_debug)
+		BEGIN
+		IF write_enable_debug_int = '1' THEN
+			IF address_debug(1 DOWNTO 0) = "00" THEN
+				byte_enable_outm			<= "0001";
+				data_a_imn_debug(7 DOWNTO 0) <= byte_out_debug_int;
+			ELSE 
+				data_a_imn_debug(7 DOWNTO 0) <= (others => '0');
 			END IF;
 			
+			IF address_debug(1 DOWNTO 0) = "01" THEN
+				byte_enable_outm			<= "0010";
+				data_a_imn_debug(15 DOWNTO 8) 	<= byte_out_debug_int;
+			ELSE 
+				data_a_imn_debug(15 DOWNTO 8) <=  (others  => '0');
+			END If;
+			
+			IF address_debug(1 DOWNTO 0) = "10" THEN
+				byte_enable_outm			<= "0010";
+				data_a_imn_debug(23 DOWNTO 16) 	<= byte_out_debug_int;
+			ELSE 
+				data_a_imn_debug(23 DOWNTO 16) <=  (others  => '0');
+			END IF;
+			
+			IF address_debug(1 DOWNTO 0) = "11" THEN
+				byte_enable_outm			<= "0010";
+				data_a_imn_debug(31 DOWNTO 24) 	<= byte_out_debug_int;
+			ELSE 
+				data_a_imn_debug(31 DOWNTO 24) <=  (others  => '0');
+				byte_enable_outm			<= (others => '0');
+			END IF;
+			
+			
+		ELSE 
+			data_a_imn_debug <= (others => '0');		
 		END IF;
-	END PROCESS;	
+	END PROCESS;
+	
+	PROCESS(read_enable_debug_int, q_b_inm, address_debug)
+		BEGIN 
+		
+		IF read_enable_debug_int = '1' THEN
+			IF address_debug(1 DOWNTO 0) = "00" THEN
+				byte_enable_intern 	<= "0001";
+				byte_in_debug_int_extra 	<= q_b_inm(7 DOWNTO 0);	
+			ELSIF address_debug(1 DOWNTO 0) = "01" THEN
+				byte_enable_intern 	<= "0010";
+				byte_in_debug_int_extra 	<= q_b_inm(15 DOWNTO 8);
+			ELSIF address_debug(1 DOWNTO 0) = "10" THEN
+				byte_enable_intern 	<= "0100";
+				byte_in_debug_int_extra 	<= q_b_inm(23 DOWNTO 16);
+			ELSIF address_debug(1 DOWNTO 0) = "11" THEN
+				byte_enable_intern 	<= "1000";
+				byte_in_debug_int_extra 	<= q_b_inm(31 DOWNTO 24);
+			ELSE 
+				byte_in_debug_int_extra	<= (others => '0');
+				byte_enable_intern 	<= "0000";
+			END IF;
+			addr_b_outm 			<= address_debug(15 DOWNTO 2);
+		ELSE
+			byte_in_debug_int_extra <= (others=> '0');
+			byte_enable_intern  <= (others => '0');
+			addr_b_outm <= (others => '0');
+		END IF;	
+	END PROCESS;
+	
+	PROCESS(addr_a_inm, addr_b_inm, debug_on_of_internal, clock_cycles_passed)
+	BEGIN
+		IF ((clock_cycles_passed = '1') and (debug_on_of_internal = '1')) THEN
+			state_signal <= state_debug;
+		ELSIF ((addr_a_inm(13 DOWNTO 6) = "11111111" )or (addr_b_inm(13 DOWNTO 6) = "11111111")) then --if one of both adress is higher then FF00 then it is for in output
+			state_signal <= state_inoutput;
+		ELSE
+			state_signal <= state_normal;
+		END IF;
+	END PROCESS;
+	
+	with state_signal select addr_a_outm <=
+	  addr_a_inm when state_normal,
+	  address_debug(15 DOWNTO 2) when state_debug,
+	  (others => '0') when others;
+	 with state_signal select addr_b_outm <=
+	  addr_b_inm when state_normal,
+	  address_debug(15 DOWNTO 2) when state_debug,
+	  (others => '0') when others;
+	 with state_signal select we_a_outm <=
+		we_a_inm when state_normal,
+		write_enable_debug_int when state_debug,
+		'0' when others;
+	 with state_signal select data_a_outm <= --
+		data_a_inm when state_normal,
+		data_a_imn_debug when state_debug,  --comes from a process
+		(others => '0') when others;
+	 with state_signal select q_a_outm <=
+		q_a_inm when state_normal,
+		(others => '0') when others;
+	with state_signal select q_b_outm <=
+		q_b_inm when state_normal,
+		data_out_inout_int when state_inoutput,
+		(others => '0') when others;
+	with state_signal select byte_enable_outm <=
+		byte_enable_inm when state_normal,
+		byte_enable_intern when state_debug, --comes from a process
+		(others => '0') when others;
+	with state_signal select leds <=
+		leds_internal when state_normal,
+		leds_internal when state_inoutput,
+		(others => '0') when others;
+	with state_signal select hex0 <=
+		hex0_inout_int when state_normal,
+		hex0_inout_int when state_inoutput,
+		'0'& hex0_debug_int when others;
+	with state_signal select hex1 <=
+		hex1_inout_int when state_normal,
+		hex1_inout_int when state_inoutput,
+		'0'& hex1_debug_int when others;
+	with state_signal select hex2 <=
+		hex2_inout_int when state_normal,
+		hex2_inout_int when state_inoutput,
+		'0'& hex2_debug_int when others;
+	with state_signal select hex3 <=
+		hex3_inout_int when state_normal,
+		hex3_inout_int when state_inoutput,
+		'0'& hex3_debug_int when others;
+	with state_signal select hex4 <=
+		(others => '0') when state_normal,
+		(others => '0') when state_inoutput,
+		'0'& hex4_debug_int when others;
+	with state_signal select hex5 <=
+		(others => '0') when state_normal,
+		(others => '0') when state_inoutput,
+		'0'& hex5_debug_int when others;
+	with state_signal select byte_in_debug_int <=
+		(others => '0') when state_normal,
+		(others => '0') when state_inoutput,
+		byte_in_debug_int_extra when others; -- byte_in_debug_int_extra is specified in a process. And it is better
+
+	
+	
+
+	
+	
+	
 END plof;	
 	
 	

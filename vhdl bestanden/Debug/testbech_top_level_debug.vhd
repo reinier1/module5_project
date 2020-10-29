@@ -32,8 +32,9 @@ ARCHITECTURE appel OF testbench_top_level_debug IS
 	SIGNAL hex5				:  std_logic_vector(7 DOWNTO 0);
 	SIGNAL leds				:  std_logic_vector(9 DOWNTO 0);
 	SIGNAL buttons				:  std_logic_vector(2 DOWNTO 0);  -- buttons does not include reset button	
-	SIGNAL debug_on_of			:  std_logic;
+	SIGNAL debug_on_of_out			:  std_logic;
 	SIGNAL finished			:  boolean 	:= FALSE;
+	
 BEGIN
 	clk <= not clk AFTER 1 ms when not finished; 
 	mem: ENTITY work.top_level_debug
@@ -55,7 +56,7 @@ BEGIN
 			q_a_outm			=>q_a_outm,
 			q_b_outm			=>q_b_inm,
 			byte_enable_inm		=>byte_enable_inm,
-			
+			debug_on_of_out	    =>  debug_on_of_out, 
 			dipswitches			=>dipswitches,
 			hex0				=>hex0,
 			hex1				=>hex1,
@@ -65,6 +66,7 @@ BEGIN
 			hex5				=>hex5,
 			leds				=>leds,
 			buttons				=> buttons  -- buttons does not include reset button
+			
 	);
 	PROCESS		
 		BEGIN

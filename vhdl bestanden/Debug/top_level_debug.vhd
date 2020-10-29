@@ -39,9 +39,9 @@ ENTITY top_level_debug IS
 		hex4				: OUT std_logic_vector(7 DOWNTO 0);
 		hex5				: OUT std_logic_vector(7 DOWNTO 0);
 		leds				: OUT std_logic_vector(9 DOWNTO 0);
-		buttons				: IN  std_logic_vector(2 DOWNTO 0);  -- buttons does not include reset button
+		buttons				: IN  std_logic_vector(2 DOWNTO 0);  -- buttons does not include reset button		
+		debug_on_of_out		: OUT std_logic
 		
-		debug_on_of			: OUT std_logic
 		
 	);
 END top_level_debug;
@@ -138,15 +138,23 @@ BEGIN
 			debug_out	=> debug_on_of_internal,
 			debug_in	=> dipswitches(9)
 		);
-	debug_on_of	 		<= debug_on_of_internal;	 	-- SELECTs debug mode. Most of the time this value is the same as debug. 
-	dipswitches_inout  	<=dipswitches(8 DOWNTO 0); 		-- inoutput uses 9 dip switches
-	dipswitches_debug	<=dipswitches(7 DOWNTO 0); 		-- debug uses 8 dip switches
+		 	-- SELECTs debug mode. Most of the time this value is the same as debug. 
+	dipswitches_inout  		<=dipswitches(8 DOWNTO 0); 		-- inoutput uses 9 dip switches
+	dipswitches_debug		<=dipswitches(7 DOWNTO 0); 		-- debug uses 8 dip switches
+	debug_on_of_out			<= debug_on_of_internal;
 	
+	--putting lines together for the inoutput file
+	byte_enable_inout_int	<=byte_enable_inm;	
+	WITH we_a_inm SELECT address_lines_inout <=
+		addr_b_inm(5 DOWNTO 0)&"00" WHEN '0',
+		addr_a_inm(5 DOWNTO 0)&"00" WHEN OTHERS;
+	data_in_inout_int <= data_a_inm;	
 	-- the processor should be able to finish the instruction before going to debug mode
 	PROCESS(clk, reset)
 	BEGIN
 		IF reset = '0' THEN
 			clock_cycles_passed <= '0';
+			
 		ELSIF rising_edge(clk) THEN
 			IF dipswitches(9) = '1' then 
 				IF clock_cycles_passed = '0' THEN 
@@ -191,8 +199,13 @@ BEGIN
 		END IF;
 	END PROCESS;
 	
+	PROCESS(we_a_inm)
+	BEGIN
+		read_enable_inout_int <= not we_a_inm;
+		write_enable_inout_int <= we_a_inm;			
+	END PROCESS;
 	
-	-- 
+	
 	PROCESS(read_enable_debug_int, q_b_inm, address_debug)
 	BEGIN 		
 		IF read_enable_debug_int = '1' THEN
@@ -224,10 +237,13 @@ BEGIN
 	BEGIN
 		IF ((clock_cycles_passed = '1') and (debug_on_of_internal = '1')) THEN
 			state_signal <= state_debug;
+			
 		ELSIF ((addr_a_inm(13 DOWNTO 6) = "11111111" )or (addr_b_inm(13 DOWNTO 6) = "11111111")) then --if one of both adress is higher then FF00 then it is for in output
 			state_signal <= state_inoutput;
+			
 		ELSE
 			state_signal <= state_normal;
+			
 		END IF;
 	END PROCESS;
 	

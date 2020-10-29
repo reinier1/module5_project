@@ -1,0 +1,3 @@
+[submodule "Compiler/dcc"]
+	path = Compiler/dcc
+	url = https://github.com/lotrbuilders/dcc.git

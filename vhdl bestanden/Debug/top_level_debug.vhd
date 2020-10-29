@@ -167,6 +167,8 @@ BEGIN
 			hex1 <= hex1_inout_int;
 			hex2 <= hex2_inout_int;
 			hex3 <= hex3_inout_int;
+			hex4					<= (others => '0');
+			hex5					<= (others => '0');
 		ELSIF state_signal = state_inoutput THEN
 			we_a_outm <= '0';
 			IF we_a_inm = '1' THEN
@@ -186,12 +188,14 @@ BEGIN
 			hex1 					<= hex1_inout_int;
 			hex2 					<= hex2_inout_int;
 			hex3 					<= hex3_inout_int;
+			hex4					<= (others => '0');
+			hex5					<= (others => '0');
 			byte_enable_inout_int	<= byte_enable_inm;
 			IF ((addr_a_inm(13 DOWNTO 6) /= "11111111" )and (addr_b_inm(13 DOWNTO 6) /= "11111111")) then --if one of both adress is higher then FF00 then it is for in output
 				state_signal <= state_normal;
 			END IF;
 			IF clock_cycles_passed = '1' and dipswitches(9) = '1' THEN
-				state_signal <= state_inoutput;
+				state_signal <= state_debug;
 			END IF;
 		ELSIF state_signal = state_debug THEN
 			hex0		<= '0'& hex0_debug_int;

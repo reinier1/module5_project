@@ -208,7 +208,7 @@ BEGIN
 	END PROCESS;
 	
 	
-	PROCESS(read_enable_debug_int, q_b_inm, address_debug)
+	PROCESS(read_enable_debug_int,write_enable_debug_int, q_b_inm, address_debug)
 	BEGIN 		
 		IF read_enable_debug_int = '1' OR write_enable_debug_int = '1' THEN
 			IF address_debug(1 DOWNTO 0) = "00" THEN
@@ -273,10 +273,11 @@ BEGIN
 		q_a_inm WHEN state_normal,
 		(OTHERS => '0') WHEN OTHERS;
 	
-	WITH state_signal SELECT q_b_outm <=
-		q_b_inm WHEN state_normal,
-		data_out_inout_int WHEN state_inoutput,
-		(OTHERS => '0') WHEN OTHERS;
+	--WITH state_signal SELECT q_b_outm <=
+	--	q_b_inm WHEN state_normal,
+	--	data_out_inout_int WHEN state_inoutput,
+	--	(OTHERS => '0') WHEN OTHERS;
+	q_b_outm <= q_b_inm;
 		
 	WITH state_signal SELECT byte_enable_outm <=
 		byte_enable_inm WHEN state_normal,

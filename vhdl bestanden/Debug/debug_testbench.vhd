@@ -6,7 +6,8 @@ END debug_testbench;
 ARCHITECTURE koe_of_paard OF debug_testbench IS 
 	
 	SIGNAL clk 			: std_logic 								:= '0';
-	SIGNAL dipswithces_i: std_logic_vector(7 DOWNTO 0);
+	SIGNAL reset		: std_logic									:= '0';
+	SIGNAL dipswithces_i: std_logic_vector(7 DOWNTO 0)				:= x"00";
 	SIGNAL key1			: std_logic 								:= '1';
 	SIGNAL key2			: std_logic 								:= '1';
 	SIGNAL key3			: std_logic 								:= '1';
@@ -21,7 +22,7 @@ ARCHITECTURE koe_of_paard OF debug_testbench IS
 	SIGNAL hex3			: std_logic_vector(6 DOWNTO 0)	;			
 	SIGNAL hex4			: std_logic_vector(6 DOWNTO 0)	;			
 	SIGNAL hex5			: std_logic_vector(6 DOWNTO 0)	;	
-	SIGNAL debug_in		: std_logic;
+	SIGNAL debug_in		: std_logic									:= '1';
 	SIGNAL debug_out	: std_logic;
 	
 	SIGNAL finished		: boolean 	:= FALSE;
@@ -31,6 +32,7 @@ BEGIN
 		PORT MAP 
 		(
 		clk			=> clk,
+		reset		=> reset,
 		dipswitches	=> dipswithces_i,
 		key1		=> key1,
 		key2		=> key2,
@@ -51,6 +53,8 @@ BEGIN
 		);
 	PROCESS
 	BEGIN
+		WAIT FOR 10 ms;
+		reset <='1';
 		WAIT FOR 10 ms;
 		key3 <= '0';
 		WAIT FOR 10 ms;

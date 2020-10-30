@@ -8,16 +8,15 @@ loop:
 	sb [0xff13],%r1
 	
 	lb %r8,[0xff04]
-	jal %r28,fibonacci
+	jal %r28,factorial
 	sb [0xff00],%r8
 	mov %r1,-1
 	sb [0xff17],%r1
 end:jp loop
 
-fibonacci:
+factorial:
 	mov %r1,2
-	blt %r8,%r1,return_zero
-	beq %r8,%r1,return_one
+	blt %r8,%r1,return_one
 	
 	sub %r31,4
 	sw [%r31],%r28
@@ -33,26 +32,7 @@ fibonacci:
 	lw %r28,[%r31]
 	add %r31,4
 	
-	sub %r31,4
-	sw [%r31],%r28
-	sub %r31,4
-	sw [%r31],%r8
-	sub %r31,4
-	sw [%r31],%r9
-	
-	sub %r8,2
-	jal %r28,fibonacci
-	mov %r10,%r8
-	
-	lw %r9,[%r31]
-	add %r31,4
-	lw %r8,[%r31]
-	add %r31,4
-	lw %r28,[%r31]
-	add %r31,4
-	
-	mov %r8,%r10
-	add %r8,%r9
+	mul %r8,%r9
 	jr %r28
 	
 return_zero:

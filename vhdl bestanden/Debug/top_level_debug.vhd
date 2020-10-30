@@ -147,9 +147,7 @@ BEGIN
 	byte_enable_inout_int	<= byte_enable_inm;	
 	data_in_inout_int 		<= data_a_inm;	
 	
-	WITH we_a_inm SELECT address_lines_inout <=
-		addr_b_inm(5 DOWNTO 0)&"00" WHEN '0',
-		addr_a_inm(5 DOWNTO 0)&"00" WHEN OTHERS;
+	address_lines_inout <= addr_a_inm(5 DOWNTO 0) & "00";
 	
 	-- the processor should be able to finish the instruction before going to debug mode
 	PROCESS(clk, reset)
@@ -208,7 +206,7 @@ BEGIN
 	END PROCESS;
 	
 	
-	PROCESS(read_enable_debug_int, q_b_inm, address_debug)
+	PROCESS(read_enable_debug_int,write_enable_debug_int, q_b_inm, address_debug)
 	BEGIN 		
 		IF read_enable_debug_int = '1' OR write_enable_debug_int = '1' THEN
 			IF address_debug(1 DOWNTO 0) = "00" THEN
@@ -240,7 +238,7 @@ BEGIN
 		IF ((clock_cycles_passed = '1') and (debug_on_of_internal = '1')) THEN
 			state_signal <= state_debug;
 			
-		ELSIF ((addr_a_inm(13 DOWNTO 6) = "11111111" )or (addr_b_inm(13 DOWNTO 6) = "11111111")) then --if one of both adress is higher then FF00 then it is for in output
+		ELSIF ((addr_a_inm(13 DOWNTO 6) = "11111111" )) then --if one of both adress is higher then FF00 then it is for in output
 			state_signal <= state_inoutput;
 			
 		ELSE
@@ -257,7 +255,7 @@ BEGIN
 	WITH state_signal SELECT addr_b_outm <=
 		addr_b_inm WHEN state_normal,
 		addr_b_outm_intern WHEN state_debug,
-		(OTHERS => '0') WHEN OTHERS;
+		addr_b_inm WHEN OTHERS;
 		
 	WITH state_signal SELECT we_a_outm <=
 		we_a_inm WHEN state_normal,
@@ -271,12 +269,14 @@ BEGIN
 		
 	WITH state_signal SELECT q_a_outm <=
 		q_a_inm WHEN state_normal,
-		(OTHERS => '0') WHEN OTHERS;
-	
-	WITH state_signal SELECT q_b_outm <=
-		q_b_inm WHEN state_normal,
 		data_out_inout_int WHEN state_inoutput,
 		(OTHERS => '0') WHEN OTHERS;
+	
+	--WITH state_signal SELECT q_b_outm <=
+	--	q_b_inm WHEN state_normal,
+	--	data_out_inout_int WHEN state_inoutput,
+	--	(OTHERS => '0') WHEN OTHERS;
+	q_b_outm <= q_b_inm;
 		
 	WITH state_signal SELECT byte_enable_outm <=
 		byte_enable_inm WHEN state_normal,

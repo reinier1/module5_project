@@ -282,11 +282,9 @@ BEGIN
 		byte_enable_inm WHEN state_normal,
 		byte_enable_intern WHEN state_debug, --comes from a process
 		(OTHERS => '0') WHEN OTHERS;
-		
-	WITH state_signal SELECT leds <=
-		leds_internal WHEN state_normal,
-		leds_internal WHEN state_inoutput,
-		(OTHERS => '0') WHEN OTHERS;
+	
+	leds <= leds_internal;
+	
 		
 	-- hexadecimal displays	
 	WITH state_signal SELECT hex0 <=

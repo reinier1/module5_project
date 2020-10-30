@@ -96,6 +96,7 @@ BEGIN
 		byte_out                        <= x"00";
 		byte_out_intern					<= x"00";
 		counter							<= 0;
+		counter3						<= 0;
 		debug_out						<= debug_in;
 	ELSIF rising_edge(clk) THEN 								-- synchrone
 		IF debug_in='1' THEN
@@ -121,9 +122,9 @@ BEGIN
 			
 			IF key3 = '1' THEN
 				counter3 <= 0;
-			ELSIF key3 = '0' THEN										-- key2 is used to specify the address (and the input for the address)
+			ELSIF key3 = '0' THEN										-- key3 is used for specifion the instruction
 				counter3 <= counter3 +1;
-				IF counter = 2 THEN
+				IF counter3 = 2 THEN
 			-- key3 is used to specify the instruction of the debug
 					IF dipswitches = "00000000" THEN
 						instr_view_byte_on_address 		<= '1';			-- view byte on address is accessed with 00000000 on dip0 to dip7
@@ -137,9 +138,10 @@ BEGIN
 						instr_execute_and_wait  		<= '1';			-- execute one instruction and wait is accessed with 00000100 on dip0 to dip7
 					END IF;
 				END IF;
-				
+			END IF;	
+			
 			-- this count assumes that fingers are slower then 2 clockcycles
-			ELSIF key2 = '1' THEN
+			IF key2 = '1' THEN
 				counter <= 0;
 			ELSIF key2 = '0' THEN										-- key2 is used to specify the address (and the input for the address)
 				counter <= counter +1;

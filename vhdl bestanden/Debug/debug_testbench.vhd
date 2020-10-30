@@ -10,8 +10,8 @@ ARCHITECTURE koe_of_paard OF debug_testbench IS
 	SIGNAL key1			: std_logic 								:= '1';
 	SIGNAL key2			: std_logic 								:= '1';
 	SIGNAL key3			: std_logic 								:= '1';
-	SIGNAL b_read		: std_logic 								;
-	SIGNAL b_write		: std_logic 								;
+	SIGNAL b_read		: std_logic;
+	SIGNAL b_write		: std_logic;
 	SIGNAL byte_in		: std_logic_vector(7 DOWNTO 0)				:= X"DA";
 	SIGNAL byte_out		: std_logic_vector(7 DOWNTO 0);	
 	SIGNAL address		: std_logic_vector(15 DOWNTO 0)				:= X"DADA";

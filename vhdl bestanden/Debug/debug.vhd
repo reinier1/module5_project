@@ -95,6 +95,7 @@ BEGIN
 		byte_out                        <= x"00";
 		byte_out_intern					<= x"00";
 		counter							<= 0;
+		debug_out						<= '0';
 	ELSIF rising_edge(clk) THEN 								-- synchrone
 		IF debug_in='1' THEN
 			wait_for_byte  <= wait_for_byte+1;

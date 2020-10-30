@@ -18,7 +18,7 @@ ENTITY top_level_debug IS
 		addr_a_outm			: OUT std_logic_vector(ADDR_WIDTH-1 DOWNTO 0); -- address to memory
 		addr_b_outm			: OUT std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
 		data_a_outm			: OUT std_logic_vector((DATA_WIDTH-1) DOWNTO 0);
-		we_a_outm			: OUT std_logic := '1';
+		we_a_outm			: OUT std_logic;
 		q_a_inm				: IN  std_logic_vector((DATA_WIDTH -1) DOWNTO 0); -- input from memory
 		q_b_inm				: IN  std_logic_vector((DATA_WIDTH -1) DOWNTO 0);
 		byte_enable_outm	: OUT std_logic_vector(3 DOWNTO 0);
@@ -26,7 +26,7 @@ ENTITY top_level_debug IS
 		addr_a_inm			: IN  std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
 		addr_b_inm			: IN  std_logic_vector(ADDR_WIDTH-1 DOWNTO 0);
 		data_a_inm			: IN  std_logic_vector((DATA_WIDTH-1) DOWNTO 0);
-		we_a_inm			: IN  std_logic := '1';
+		we_a_inm			: IN  std_logic;
 		q_a_outm			: OUT std_logic_vector((DATA_WIDTH -1) DOWNTO 0);
 		q_b_outm			: OUT std_logic_vector((DATA_WIDTH -1) DOWNTO 0);
 		byte_enable_inm		: IN  std_logic_vector(3 DOWNTO 0);
@@ -118,7 +118,8 @@ BEGIN
 	debug_label: ENTITY work.debug
 	PORT MAP 
 		(
-			clk	=> clk,
+			clk			=> clk,
+			reset		=> reset,
 			dipswitches => dipswitches_debug,
 			key1 		=> buttons(0),
 			key2		=> buttons(1),
@@ -138,16 +139,18 @@ BEGIN
 			debug_in	=> dipswitches(9)
 		);
 		 	-- SELECTs debug mode. Most of the time this value is the same as debug. 
-	dipswitches_inout  		<=dipswitches(8 DOWNTO 0); 		-- inoutput uses 9 dip switches
-	dipswitches_debug		<=dipswitches(7 DOWNTO 0); 		-- debug uses 8 dip switches
+	dipswitches_inout  		<= dipswitches(8 DOWNTO 0); 		-- inoutput uses 9 dip switches
+	dipswitches_debug		<= dipswitches(7 DOWNTO 0); 		-- debug uses 8 dip switches
 	debug_on_of_out			<= debug_on_of_internal;
 	
 	--putting lines together for the inoutput file
-	byte_enable_inout_int	<=byte_enable_inm;	
+	byte_enable_inout_int	<= byte_enable_inm;	
+	data_in_inout_int 		<= data_a_inm;	
+	
 	WITH we_a_inm SELECT address_lines_inout <=
 		addr_b_inm(5 DOWNTO 0)&"00" WHEN '0',
 		addr_a_inm(5 DOWNTO 0)&"00" WHEN OTHERS;
-	data_in_inout_int <= data_a_inm;	
+	
 	-- the processor should be able to finish the instruction before going to debug mode
 	PROCESS(clk, reset)
 	BEGIN
@@ -171,64 +174,64 @@ BEGIN
 	BEGIN
 		IF write_enable_debug_int = '1' THEN
 			IF address_debug(1 DOWNTO 0) = "00" THEN
-				data_a_imn_debug(7 DOWNTO 0) <= byte_out_debug_int;
+				data_a_imn_debug(7 DOWNTO 0) 	<= byte_out_debug_int;
 			ELSE 
-				data_a_imn_debug(7 DOWNTO 0) <= (OTHERS => '0');
+				data_a_imn_debug(7 DOWNTO 0) 	<= (OTHERS => '0');
 			END IF;
 			
 			IF address_debug(1 DOWNTO 0) = "01" THEN				
 				data_a_imn_debug(15 DOWNTO 8) 	<= byte_out_debug_int;
 			ELSE 
-				data_a_imn_debug(15 DOWNTO 8) <=  (OTHERS  => '0');
+				data_a_imn_debug(15 DOWNTO 8) 	<=  (OTHERS  => '0');
 			END If;
 			
 			IF address_debug(1 DOWNTO 0) = "10" THEN				
 				data_a_imn_debug(23 DOWNTO 16) 	<= byte_out_debug_int;
 			ELSE 
-				data_a_imn_debug(23 DOWNTO 16) <=  (OTHERS  => '0');
+				data_a_imn_debug(23 DOWNTO 16) 	<=  (OTHERS  => '0');
 			END IF;
 			
 			IF address_debug(1 DOWNTO 0) = "11" THEN				
 				data_a_imn_debug(31 DOWNTO 24) 	<= byte_out_debug_int;
 			ELSE 
-				data_a_imn_debug(31 DOWNTO 24) <=  (OTHERS  => '0');				
+				data_a_imn_debug(31 DOWNTO 24) 	<=  (OTHERS  => '0');				
 			END IF;
 		ELSE
-			data_a_imn_debug <= (OTHERS => '0');
+			data_a_imn_debug 					<= (OTHERS => '0');
 		END IF;
 	END PROCESS;
 	
 	PROCESS(we_a_inm)
 	BEGIN
-		read_enable_inout_int <= not we_a_inm;
-		write_enable_inout_int <= we_a_inm;			
+		read_enable_inout_int 	<= not we_a_inm;
+		write_enable_inout_int 	<= we_a_inm;			
 	END PROCESS;
 	
 	
 	PROCESS(read_enable_debug_int, q_b_inm, address_debug)
 	BEGIN 		
-		IF read_enable_debug_int = '1' THEN
+		IF read_enable_debug_int = '1' OR write_enable_debug_int = '1' THEN
 			IF address_debug(1 DOWNTO 0) = "00" THEN
-				byte_enable_intern 	<= "0001";
+				byte_enable_intern 			<= "0001";
 				byte_in_debug_int_extra 	<= q_b_inm(7 DOWNTO 0);	
 			ELSIF address_debug(1 DOWNTO 0) = "01" THEN
-				byte_enable_intern 	<= "0010";
+				byte_enable_intern 			<= "0010";
 				byte_in_debug_int_extra 	<= q_b_inm(15 DOWNTO 8);
 			ELSIF address_debug(1 DOWNTO 0) = "10" THEN
-				byte_enable_intern 	<= "0100";
+				byte_enable_intern 			<= "0100";
 				byte_in_debug_int_extra 	<= q_b_inm(23 DOWNTO 16);
 			ELSIF address_debug(1 DOWNTO 0) = "11" THEN
-				byte_enable_intern 	<= "1000";
+				byte_enable_intern 			<= "1000";
 				byte_in_debug_int_extra 	<= q_b_inm(31 DOWNTO 24);
 			ELSE 
-				byte_in_debug_int_extra	<= (OTHERS => '0');
-				byte_enable_intern 	<= "0000";
+				byte_in_debug_int_extra		<= (OTHERS => '0');
+				byte_enable_intern 			<= "0000";
 			END IF;
-			addr_b_outm_intern 			<= address_debug(15 DOWNTO 2);
+			addr_b_outm_intern 				<= address_debug(15 DOWNTO 2);
 		ELSE
-			byte_in_debug_int_extra <= (OTHERS=> '0');
-			byte_enable_intern  <= (OTHERS => '0');
-			addr_b_outm_intern <= (OTHERS => '0');
+			byte_in_debug_int_extra 		<= (OTHERS=> '0');
+			byte_enable_intern  			<= (OTHERS => '0');
+			addr_b_outm_intern 				<= (OTHERS => '0');
 		END IF;	
 	END PROCESS;
 	
@@ -250,6 +253,7 @@ BEGIN
 		addr_a_inm WHEN state_normal,
 		address_debug(15 DOWNTO 2) WHEN state_debug,
 		(OTHERS => '0') WHEN OTHERS;
+		
 	WITH state_signal SELECT addr_b_outm <=
 		addr_b_inm WHEN state_normal,
 		addr_b_outm_intern WHEN state_debug,
@@ -289,22 +293,27 @@ BEGIN
 		hex0_inout_int WHEN state_normal,
 		hex0_inout_int WHEN state_inoutput,
 		'0'& hex0_debug_int WHEN OTHERS;
+		
 	WITH state_signal SELECT hex1 <=
 		hex1_inout_int WHEN state_normal,
 		hex1_inout_int WHEN state_inoutput,
 		'0'& hex1_debug_int WHEN OTHERS;
+		
 	WITH state_signal SELECT hex2 <=
 		hex2_inout_int WHEN state_normal,
 		hex2_inout_int WHEN state_inoutput,
 		'0'& hex2_debug_int WHEN OTHERS;
+		
 	WITH state_signal SELECT hex3 <=
 		hex3_inout_int WHEN state_normal,
 		hex3_inout_int WHEN state_inoutput,
 		'0'& hex3_debug_int WHEN OTHERS;
+		
 	WITH state_signal SELECT hex4 <=
 		(OTHERS => '0') WHEN state_normal,
 		(OTHERS => '0') WHEN state_inoutput,
 		'0'& hex4_debug_int WHEN OTHERS;
+		
 	WITH state_signal SELECT hex5 <=
 		(OTHERS => '0') WHEN state_normal,
 		(OTHERS => '0') WHEN state_inoutput,
@@ -314,34 +323,4 @@ BEGIN
 		(OTHERS => '0') WHEN state_normal,
 		(OTHERS => '0') WHEN state_inoutput,
 		byte_in_debug_int_extra WHEN OTHERS; -- byte_in_debug_int_extra is specified in a process. And it is better
-
-	
-	
-
-	
-	
-	
 END plof;	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
-

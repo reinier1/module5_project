@@ -4,17 +4,23 @@ USE ieee.numeric_std.ALL;
 --this code is the inoutput for normal operation. For debug mode an outer input output file is used.
 ENTITY inoutput IS
 	PORT (
-		reset 			: IN std_logic; 
-		clk 			: IN std_logic; 							-- 50MHz clock
-		write_enable	: IN std_logic;
-		read_enable		: IN std_logic;
-		data_in			: IN std_logic_vector(31 DOWNTO 0); 		-- get 32 bits in probaly not all are used.
+		reset 			: IN  std_logic; 
+		clk 			: IN  std_logic; 							-- 50MHz clock
+		write_enable	: IN  std_logic;
+		read_enable		: IN  std_logic;
+		data_in			: IN  std_logic_vector(31 DOWNTO 0); 		-- get 32 bits in probaly not all are used.
 		data_out		: OUT std_logic_vector(31 DOWNTO 0);
-		byte0_enable, byte1_enable, byte2_enable, byte3_enable : IN std_logic;  --come from the memory controller select the byte in a word
-		address_lines 	: IN std_logic_vector(7 DOWNTO 0); 			-- lowest 8 bits of the address line
-		hex0, hex1, hex2, hex3 : OUT std_logic_vector(7 DOWNTO 0); 	-- the 7 segment hex display has a point
-		buttons			: IN std_logic_vector(2 downto 0); 			-- button 0 is the reset
-		dip_switches 	: IN std_logic_vector(8 downto 0); 			-- dip9 is set debug
+		byte0_enable 	: IN  std_logic; 
+		byte1_enable 	: IN  std_logic; 
+		byte2_enable 	: IN  std_logic;
+		byte3_enable 	: IN  std_logic;  							--come from the memory controller select the byte in a word
+		address_lines 	: IN  std_logic_vector(7 DOWNTO 0); 		-- lowest 8 bits of the address line
+		hex0 			: OUT std_logic_vector(7 DOWNTO 0);
+		hex1 			: OUT std_logic_vector(7 DOWNTO 0);
+		hex2 			: OUT std_logic_vector(7 DOWNTO 0);
+		hex3 			: OUT std_logic_vector(7 DOWNTO 0); 		-- the 7 segment hex display has a point
+		buttons			: IN  std_logic_vector(2 downto 0); 		-- button 0 is the reset
+		dip_switches 	: IN  std_logic_vector(8 downto 0); 		-- dip9 is set debug
 		leds 			: OUT std_logic_vector(9 DOWNTO 0)
 	);
 END inoutput;

@@ -24,7 +24,7 @@ factorial:
 	sw [%r31],%r8
 	
 	sub %r8,1
-	jal %r28,fibonacci
+	jal %r28,factorial
 	mov %r9,%r8
 	
 	lw %r8,[%r31]

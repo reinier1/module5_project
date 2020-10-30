@@ -66,6 +66,7 @@ ARCHITECTURE salade OF debug IS
 	SIGNAL address_intern				: std_logic_vector(15 DOWNTO 0);
 	SIGNAL byte_out_intern				: std_logic_vector(7 DOWNTO 0);
 	SIGNAL counter						: integer	:= 0;
+	SIGNAL counter3						: integer 	:= 0;
 
 BEGIN
 	hex0 <= hex2display(byte_signal(3 DOWNTO 0));			-- the byte (that is written to memory or collected from memory) is shown on the hexadecimal displays
@@ -118,17 +119,23 @@ BEGIN
 				debug_out <= debug_in; 								-- normally debug_out is equal to debug_in
 			END IF;
 			
-			IF (key3 = '0') THEN									-- key3 is used to specify the instruction of the debug
-				IF dipswitches = "00000000" THEN
-					instr_view_byte_on_address 		<= '1';			-- view byte on address is accessed with 00000000 on dip0 to dip7
-				ELSIF dipswitches = "00000001" THEN
-					instr_write_byte_on_address 	<= '1';			-- write byte on address is accessed with 00000001 on dip0 to dip7
-				ELSIF dipswitches = "00000010" THEN
-					instr_view_byte_next_address 	<= '1';			-- view byte on the next address is accessed with 00000010 on dip0 to dip7
-				ELSIF dipswitches = "00000011" THEN
-					instr_write_byte_next_address 	<= '1';			-- write byte on the next address is accessed with 00000011 on dip0 to dip7
-				ELSIF dipswitches = "00000100" THEN
-					instr_execute_and_wait  		<= '1';			-- execute one instruction and wait is accessed with 00000100 on dip0 to dip7
+			IF key3 = '1' THEN
+				counter3 <= 0;
+			ELSIF key3 = '0' THEN										-- key2 is used to specify the address (and the input for the address)
+				counter3 <= counter3 +1;
+				IF counter = 2 THEN
+			-- key3 is used to specify the instruction of the debug
+					IF dipswitches = "00000000" THEN
+						instr_view_byte_on_address 		<= '1';			-- view byte on address is accessed with 00000000 on dip0 to dip7
+					ELSIF dipswitches = "00000001" THEN
+						instr_write_byte_on_address 	<= '1';			-- write byte on address is accessed with 00000001 on dip0 to dip7
+					ELSIF dipswitches = "00000010" THEN
+						instr_view_byte_next_address 	<= '1';			-- view byte on the next address is accessed with 00000010 on dip0 to dip7
+					ELSIF dipswitches = "00000011" THEN
+						instr_write_byte_next_address 	<= '1';			-- write byte on the next address is accessed with 00000011 on dip0 to dip7
+					ELSIF dipswitches = "00000100" THEN
+						instr_execute_and_wait  		<= '1';			-- execute one instruction and wait is accessed with 00000100 on dip0 to dip7
+					END IF;
 				END IF;
 				
 			-- this count assumes that fingers are slower then 2 clockcycles

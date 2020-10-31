@@ -148,13 +148,13 @@ BEGIN
 				IF counter = 2 THEN
 					IF instr_view_byte_on_address = '1' THEN			-- instruction view byte on address
 						IF part = 0 THEN									-- key2 is pressed
-							address(7 DOWNTO 0) 		<= dipswitches;		-- the dipswitches will be transferred to bit 7 downto 0 of the address
-							address_intern(7 DOWNTO 0) 	<= dipswitches;
+							address(15 DOWNTO 8) 		<= dipswitches;		-- the dipswitches will be transferred to bit 7 downto 0 of the address
+							address_intern(15 DOWNTO 8) 	<= dipswitches;
 							part 						<= 1;
 							--counter <= 0;
 						ELSIF part = 1 THEN									-- key2 is pressed again
-							address(15 DOWNTO 8) 		<= dipswitches;		-- the dipswitches will be transferred to bit 15 downto 0 of the address
-							address_intern(15 DOWNTO 8) <= dipswitches;
+							address(7 DOWNTO 0) 		<= dipswitches;		-- the dipswitches will be transferred to bit 15 downto 0 of the address
+							address_intern(7 DOWNTO 0) 	<= dipswitches;
 							b_read 						<= '1';				-- byte read is be enabled (this is necesary for memory access)
 							b_read_intern 				<= '1';
 							wait_for_byte 				<= 0;				-- so that the program will wait for 2 rising edges for the byte to be accessed from memory
@@ -165,13 +165,13 @@ BEGIN
 						
 					ELSIF instr_write_byte_on_address = '1' THEN		-- instruction write byte on address
 						IF part = 0 THEN									-- key2 is pressed
-							address(7 DOWNTO 0) 		<= dipswitches;		-- the dipswitches will be transferred to bit 7 downto 0 of the address
-							address_intern(7 DOWNTO 0) 	<= dipswitches;
+							address(15 DOWNTO 8) 		<= dipswitches;		-- the dipswitches will be transferred to bit 7 downto 0 of the address
+							address_intern(15 DOWNTO 8) 	<= dipswitches;
 							part 						<= 1;
 							--counter <= 0;
 						ELSIF part = 1 THEN									-- key2 is pressed again
-							address(15 DOWNTO 8) 		<= dipswitches;		-- the dipswitches will be transferred to bit 15 downto 0 of the address
-							address_intern(15 DOWNTO 8) <= dipswitches;
+							address(7 DOWNTO 0) 		<= dipswitches;		-- the dipswitches will be transferred to bit 15 downto 0 of the address
+							address_intern(7 DOWNTO 0) 	<= dipswitches;
 							part 						<= 2;
 							--counter <= 0;
 						ELSIF part = 2 THEN									-- key2 is pressed again

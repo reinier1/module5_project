@@ -94,6 +94,13 @@ Token Lexer::lex_token()
 				}
 
 			}
+			case '#':
+			{
+				popc();
+				for(int c=peekc();(c!='\n')&&(c!=EOF);c=peekc()) popc();
+				popc();
+				return {TOK::EOL,linenumber};
+			}
 			default:
 				error++;
 				std::cerr<<"Error: Unkown punctuation '"; std::cerr.put(c); std::cerr<<"' on line "<<linenumber<<"\n";

@@ -15,7 +15,7 @@ loop:
 end:jp loop
 
 fibonacci:
-	mov %r1,2
+	mov %r1,1
 	blt %r8,%r1,return_zero
 	beq %r8,%r1,return_one
 	

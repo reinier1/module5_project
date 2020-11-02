@@ -75,7 +75,7 @@ BEGIN
 	hex3 <= hex2display(address_intern(7 DOWNTO 4));
 	hex4 <= hex2display(address_intern(11 DOWNTO 8));
 	hex5 <= hex2display(address_intern(15 DOWNTO 12));
-PROCESS(clk)
+PROCESS(clk,reset)
 BEGIN
 	IF reset='0' THEN 
 		instr_view_byte_on_address		<= '0';
@@ -97,7 +97,7 @@ BEGIN
 		byte_out_intern					<= x"00";
 		counter							<= 0;
 		counter3						<= 0;
-		debug_out						<= debug_in;
+		debug_out						<= 0;
 	ELSIF rising_edge(clk) THEN 								-- synchrone
 		IF debug_in='1' THEN
 			wait_for_byte  <= wait_for_byte+1;

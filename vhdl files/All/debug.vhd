@@ -98,7 +98,14 @@ BEGIN
 		counter							<= 0;
 		counter3						<= 0;
 		debug_out						<= 0;
-	ELSIF rising_edge(clk) THEN 								-- synchrone
+	ELSIF rising_edge(clk) THEN -- synchrone
+		IF instr_execute_and_wait = '1' THEN 					-- debug_out is zero for one clock cycle 
+			debug_out <= '0';
+			instr_execute_and_wait <= '0';
+		ELSE 
+			debug_out <= debug_in; 								-- normally debug_out is equal to debug_in
+		END IF;
+			
 		IF debug_in='1' THEN
 			wait_for_byte  <= wait_for_byte+1;
 			IF wait_for_byte = 2 THEN								-- the write to or read from memory can now take up to three clockcycles
@@ -111,13 +118,6 @@ BEGIN
 					b_write 		<= '0';
 					b_write_intern 	<= '0';
 				END IF;
-			END IF;
-			
-			IF instr_execute_and_wait = '1' THEN 					-- debug_out is zero for one clock cycle 
-				debug_out <= '0';
-				instr_execute_and_wait <= '0';
-			ELSE 
-				debug_out <= debug_in; 								-- normally debug_out is equal to debug_in
 			END IF;
 			
 			IF key3 = '1' THEN

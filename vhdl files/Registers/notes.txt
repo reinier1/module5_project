@@ -1,0 +1,11 @@
+Registers 
+32 registers
+32-bits wide
+Safe one register Synchronous
+Output register A and Output register B Asynchronously
+Input
+	Select register A <= Store to register A
+	Select register B
+	Write enable 
+	reset 
+	clk

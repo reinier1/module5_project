@@ -97,7 +97,7 @@ BEGIN
 		byte_out_intern					<= x"00";
 		counter							<= 0;
 		counter3						<= 0;
-		debug_out						<= 0;
+		debug_out						<= '0';
 	ELSIF rising_edge(clk) THEN -- synchrone
 		IF instr_execute_and_wait = '1' THEN 					-- debug_out is zero for one clock cycle 
 			debug_out <= '0';

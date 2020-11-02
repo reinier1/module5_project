@@ -83,7 +83,8 @@ BEGIN
 	instruction_alu			<= ins_op(4 DOWNTO 3)="00";
 	instruction_branch		<= ins_op(4 DOWNTO 3)="01";
 	instruction_finished	<= (instruction_load and state=state_store_load) OR 
-								(not instruction_load and state=state_instruction);
+								(not instruction_load and state=state_instruction) OR
+								state=state_reset;
 	
 	--Outputs constructed from internal signals
 	program_counter_out		<= std_logic_vector(x"0000" & (program_counter + to_unsigned(1,14)) & "00");
@@ -168,7 +169,9 @@ BEGIN
 		ELSIF ins_op = OP_JAL THEN --If we jump we want to get the jump address from the bus
 			next_pc<=unsigned(jump_address(15 DOWNTO 2));
 		ELSE --Under normal circumstances we just fetch a new instruction
-			IF instruction_finished THEN 
+			IF state=state_reset THEN 
+				next_pc<=program_counter;
+			ELSIF instruction_finished THEN 
 				next_pc<=program_counter+to_unsigned(1,14);
 			ELSE
 				next_pc<=program_counter;

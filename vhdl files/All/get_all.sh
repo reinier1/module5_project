@@ -1,0 +1,12 @@
+cp "../ALU/alu.vhd" . 
+cp ../Control-unit/control_unit.vhd . 
+cp ../Control-unit/alu_package.vhd . 
+cp ../Control-unit/control_package.vhd . 
+cp ../Debug/debug.vhd . 
+cp ../Debug/inoutput.vhd . 
+cp ../Debug/top_level_debug.vhd . 
+cp ../Memory/four-byte-enable.vhd . 
+cp ../Memory/one-byte-enable.vhd . 
+cp ../Memory-interface/memory_controller.vhd . 
+cp ../Processor/top_level_processor.vhd . 
+cp ../Registers/registers.vhd . 

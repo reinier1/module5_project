@@ -161,7 +161,7 @@ BEGIN
 		END IF;
 	END PROCESS;
 	
-	PROCESS(ins_op,instruction_branch,instruction_finished,internal_flags,ins_imm16,jump_address,program_counter)
+	PROCESS(ins_op,instruction_branch,instruction_finished,internal_flags,ins_imm16,jump_address,program_counter,state)
 	BEGIN
 		IF  instruction_branch AND internal_flags(to_integer(unsigned(ins_op(1 DOWNTO 0))))='1' THEN	
 			--If we are executing a branch we want to branch only if the condition is true

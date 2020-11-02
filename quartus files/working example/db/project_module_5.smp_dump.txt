@@ -1,7 +1,0 @@
-
-State Machine - |top_level|top_level_processor:cpu|control_unit:cu|state
-Name state.state_debug state.state_store_load state.state_instruction state.state_reset 
-state.state_reset 0 0 0 0 
-state.state_instruction 0 0 1 1 
-state.state_store_load 0 1 0 1 
-state.state_debug 1 0 0 1 

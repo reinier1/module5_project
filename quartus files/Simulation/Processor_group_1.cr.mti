@@ -25,6 +25,24 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling architecture kerst of four_byte_enable_memory
 -- Loading entity one_byte_enable_memory
 
+} {} {}} ./memory_package.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/memory_package.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling package memory_package
+-- Compiling package body memory_package
+-- Loading package memory_package
+
+} {} {}} ./control_package.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_package.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Compiling package control_package
+-- Compiling package body control_package
+-- Loading package control_package
+
 } {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
@@ -39,6 +57,13 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Loading entity top_level_debug
 -- Loading package memory_package
 -- Loading entity four_byte_enable_memory
+
+} {} {}} ./alu_package.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu_package.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Compiling package alu_package
+-- Compiling package body alu_package
+-- Loading package alu_package
 
 } {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_package.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_package.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
@@ -58,12 +83,33 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling package body memory_package
 -- Loading package memory_package
 
+} {} {}} ./one-byte-enable.vhd {2 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/one-byte-enable.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package memory_package
+-- Compiling entity one_byte_enable_memory
+-- Compiling architecture rtl of one_byte_enable_memory
+** Warning: C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/one-byte-enable.vhd(41): (vcom-1236) Shared variables must be of a protected type.
+
 } {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu_package.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu_package.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
 -- Compiling package alu_package
 -- Compiling package body alu_package
 -- Loading package alu_package
+
+} {} {}} ./control_unit.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_unit.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package alu_package
+-- Loading package control_package
+-- Compiling entity control_unit
+-- Compiling architecture bhv of control_unit
 
 } {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/one-byte-enable.vhd {2 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/one-byte-enable.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
@@ -75,6 +121,17 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling architecture rtl of one_byte_enable_memory
 ** Warning: C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/one-byte-enable.vhd(41): (vcom-1236) Shared variables must be of a protected type.
 
+} {} {}} ./alu.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package alu_package
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package MATH_REAL
+-- Loading package NUMERIC_STD
+-- Compiling entity alu
+-- Compiling architecture bhv of alu
+
 } {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_unit.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_unit.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
@@ -85,6 +142,15 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Loading package control_package
 -- Compiling entity control_unit
 -- Compiling architecture bhv of control_unit
+
+} {} {}} ./memory_controller.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/memory_controller.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity memory_controller
+-- Compiling architecture bhv of memory_controller
 
 } {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
@@ -106,6 +172,83 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Compiling entity memory_controller
 -- Compiling architecture bhv of memory_controller
 
+} {} {}} ./debug.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/debug.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity debug
+-- Compiling architecture salade of debug
+
+} {} {}} ./testbench.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/testbench.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity testbench_top_level
+-- Compiling architecture appel of testbench_top_level
+-- Loading package alu_package
+-- Loading package control_package
+-- Loading entity top_level
+
+} {} {}} ./top_level_debug.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_debug.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity top_level_debug
+-- Compiling architecture plof of top_level_debug
+-- Loading entity inoutput
+-- Loading entity debug
+
+} {} {}} ./inoutput.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/inoutput.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity inoutput
+-- Compiling architecture bhv of inoutput
+
+} {} {}} ./registers.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/registers.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity registers
+-- Compiling architecture bhv of registers
+
+} {} {}} ./four-byte-enable.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/four-byte-enable.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package memory_package
+-- Compiling entity four_byte_enable_memory
+-- Compiling architecture kerst of four_byte_enable_memory
+-- Loading entity one_byte_enable_memory
+
+} {} {}} ./top_level_processor.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_processor.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package alu_package
+-- Loading package control_package
+-- Compiling entity top_level_processor
+-- Compiling architecture bhv of top_level_processor
+-- Loading entity control_unit
+-- Loading package MATH_REAL
+-- Loading entity alu
+-- Loading entity memory_controller
+-- Loading entity registers
+
 } {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/debug.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/debug.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
 -- Loading package STANDARD
@@ -114,6 +257,50 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Loading package NUMERIC_STD
 -- Compiling entity debug
 -- Compiling architecture salade of debug
+
+} {} {}} ./top_level.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Loading package alu_package
+-- Loading package control_package
+-- Compiling entity top_level
+-- Compiling architecture bhv of top_level
+-- Loading entity top_level_processor
+-- Loading entity top_level_debug
+-- Loading package memory_package
+-- Loading entity four_byte_enable_memory
+
+} {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_debug.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_debug.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity top_level_debug
+-- Compiling architecture plof of top_level_debug
+-- Loading entity inoutput
+-- Loading entity debug
+
+} {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/registers.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/registers.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity registers
+-- Compiling architecture bhv of registers
+
+} {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/inoutput.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/inoutput.vhd
+Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
+-- Loading package STANDARD
+-- Loading package TEXTIO
+-- Loading package std_logic_1164
+-- Loading package NUMERIC_STD
+-- Compiling entity inoutput
+-- Compiling architecture bhv of inoutput
 
 } {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/testbench.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/testbench.vhd
 Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
@@ -126,34 +313,5 @@ Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  
 -- Loading package alu_package
 -- Loading package control_package
 -- Loading entity top_level
-
-} {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/inoutput.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/inoutput.vhd
-Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity inoutput
--- Compiling architecture bhv of inoutput
-
-} {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/registers.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/registers.vhd
-Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity registers
--- Compiling architecture bhv of registers
-
-} {} {}} C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_debug.vhd {1 {vcom -work work -2002 -explicit -stats=none C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_debug.vhd
-Model Technology ModelSim - Intel FPGA Edition vcom 10.5b Compiler 2016.10 Oct  5 2016
--- Loading package STANDARD
--- Loading package TEXTIO
--- Loading package std_logic_1164
--- Loading package NUMERIC_STD
--- Compiling entity top_level_debug
--- Compiling architecture plof of top_level_debug
--- Loading entity inoutput
--- Loading entity debug
 
 } {} {}}

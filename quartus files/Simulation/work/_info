@@ -1,0 +1,648 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+dC:/Users/Daan/Documents/Programming/fpga/Modelsim/project_modelsim/processor_test
+Ealu
+Z0 w1604316721
+Z1 DPx4 ieee 11 numeric_std 0 22 :ASDNFgHXf_ih3J@9F3Ze1
+Z2 DPx4 ieee 9 math_real 0 22 Sk6CSihbPL<f[^Shm]=KX0
+Z3 DPx3 std 6 textio 0 22 zE1`LPoLg^DX3Oz^4Fj1K3
+Z4 DPx4 ieee 14 std_logic_1164 0 22 eNV`TJ_GofJTzYa?f<@Oe1
+Z5 DPx4 work 11 alu_package 0 22 9I1TfX0VhYbX[PJF;W2@;0
+Z6 dC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation
+Z7 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu.vhd
+Z8 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu.vhd
+l0
+L14
+Vbe1dE^e5YH@aAD5Hkaj052
+!s100 ZoDkR?3A3BblY4nbRDK1Q0
+Z9 OV;C;10.5b;63
+32
+Z10 !s110 1604407846
+!i10b 1
+Z11 !s108 1604407846.000000
+Z12 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu.vhd|
+Z13 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu.vhd|
+!i113 1
+Z14 o-work work -2002 -explicit
+Z15 tExplicit 1 CvgOpt 0
+Abhv
+R1
+R2
+R3
+R4
+R5
+Z16 DEx4 work 3 alu 0 22 be1dE^e5YH@aAD5Hkaj052
+l26
+L24
+VlIghWQlZl]j_UkV^3dZ>S1
+!s100 ONIZl[U9MDjbozlmU=l<H1
+R9
+32
+R10
+!i10b 1
+R11
+R12
+R13
+!i113 1
+R14
+R15
+Palu_package
+R0
+R6
+Z17 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu_package.vhd
+Z18 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu_package.vhd
+l0
+L1
+V9I1TfX0VhYbX[PJF;W2@;0
+!s100 3BPFg:`JWH5[UiA5R5K7b0
+R9
+32
+R10
+!i10b 1
+R11
+Z19 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu_package.vhd|
+Z20 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/alu_package.vhd|
+!i113 1
+R14
+R15
+Bbody
+R5
+l0
+L21
+VIjdL7SnN>gRDmNW@1o2HJ1
+!s100 AA4=VOj>bgH=GTM;E7ei_0
+R9
+32
+R10
+!i10b 1
+R11
+R19
+R20
+!i113 1
+R14
+R15
+Pcontrol_package
+R3
+R4
+R0
+R6
+Z21 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_package.vhd
+Z22 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_package.vhd
+l0
+L3
+VYJN1jZB@<gDG6MKaDJ>Sn2
+!s100 [0RaJo@SM;>I?U?el[B`[2
+R9
+32
+R10
+!i10b 1
+R11
+Z23 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_package.vhd|
+Z24 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_package.vhd|
+!i113 1
+R14
+R15
+Bbody
+Z25 DPx4 work 15 control_package 0 22 YJN1jZB@<gDG6MKaDJ>Sn2
+R3
+R4
+l0
+L37
+V]<TEeIjkb;ECjJVRmSMaU3
+!s100 ^TzIR242fgP?nOH>=3QzK2
+R9
+32
+R10
+!i10b 1
+R11
+R23
+R24
+!i113 1
+R14
+R15
+Econtrol_unit
+Z26 w1604323773
+R25
+R5
+R1
+R3
+R4
+R6
+Z27 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_unit.vhd
+Z28 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_unit.vhd
+l0
+L7
+V4EnU7[Y`2B<AUJ61UXEJe0
+!s100 C37HbcaTL^EfeCfQKb^Z70
+R9
+32
+R10
+!i10b 1
+R11
+Z29 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_unit.vhd|
+Z30 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/control_unit.vhd|
+!i113 1
+R14
+R15
+Abhv
+R25
+R5
+R1
+R3
+R4
+Z31 DEx4 work 12 control_unit 0 22 4EnU7[Y`2B<AUJ61UXEJe0
+l72
+L42
+VT<>F:z_b1Dc]0>O:3<P1_2
+!s100 h[>;]A;@i1^F6WUZ?f04F2
+R9
+32
+R10
+!i10b 1
+R11
+R29
+R30
+!i113 1
+R14
+R15
+Edebug
+Z32 w1604321308
+R1
+R3
+R4
+R6
+Z33 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/debug.vhd
+Z34 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/debug.vhd
+l0
+L4
+VkU7oZl?g3@b[TfIX[Eb]23
+!s100 Y0NaXiSA]DdOo]66Y1?R01
+R9
+32
+Z35 !s110 1604407847
+!i10b 1
+Z36 !s108 1604407847.000000
+Z37 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/debug.vhd|
+Z38 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/debug.vhd|
+!i113 1
+R14
+R15
+Asalade
+R1
+R3
+R4
+Z39 DEx4 work 5 debug 0 22 kU7oZl?g3@b[TfIX[Eb]23
+l71
+L29
+VGAfMkSifB:@SM4LDfa<zT1
+!s100 QD^^HJDi7ZTGF2JcZZQ>Q2
+R9
+32
+R35
+!i10b 1
+R36
+R37
+R38
+!i113 1
+R14
+R15
+Efour_byte_enable_memory
+R0
+Z40 DPx4 work 14 memory_package 0 22 YnSeJa5R?kGE[a=NoYM^S1
+R1
+R3
+R4
+R6
+Z41 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/four-byte-enable.vhd
+Z42 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/four-byte-enable.vhd
+l0
+L6
+VEm>42f_]k5QXWkNV9_zi_0
+!s100 G1jSiicIibjPi@B8FMiiL1
+R9
+32
+R35
+!i10b 1
+R36
+Z43 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/four-byte-enable.vhd|
+Z44 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/four-byte-enable.vhd|
+!i113 1
+R14
+R15
+Akerst
+Z45 DEx4 work 22 one_byte_enable_memory 0 22 M>Rac?j[0H1ZBODloYCUz2
+R40
+R1
+R3
+R4
+Z46 DEx4 work 23 four_byte_enable_memory 0 22 Em>42f_]k5QXWkNV9_zi_0
+l32
+L28
+VMkTLgXS=gzW53X8gzR_h@1
+!s100 33oiNY`L[m[EDEYHRY8IQ3
+R9
+32
+R35
+!i10b 1
+R36
+R43
+R44
+!i113 1
+R14
+R15
+Einoutput
+R0
+R1
+R3
+R4
+R6
+Z47 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/inoutput.vhd
+Z48 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/inoutput.vhd
+l0
+L5
+V=_dJ6f@e?d]kghWlR<_ml0
+!s100 zc[ZVeT1BYUX`QNLZ6:H^0
+R9
+32
+R35
+!i10b 1
+R36
+Z49 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/inoutput.vhd|
+Z50 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/inoutput.vhd|
+!i113 1
+R14
+R15
+Abhv
+R1
+R3
+R4
+Z51 DEx4 work 8 inoutput 0 22 =_dJ6f@e?d]kghWlR<_ml0
+l37
+L28
+Vbl<>3FUJ;i4Dc3zTbE[oF2
+!s100 3@_X_5AAQ]XQP5QBXJMO>0
+R9
+32
+R35
+!i10b 1
+R36
+R49
+R50
+!i113 1
+R14
+R15
+Ememory_controller
+R0
+R1
+R3
+R4
+R6
+Z52 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/memory_controller.vhd
+Z53 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/memory_controller.vhd
+l0
+L4
+V656PYQ[[Q;P9l3JiH6m[Y1
+!s100 Vg5gKgI;L2G9dkRDFV2<:3
+R9
+32
+R10
+!i10b 1
+R11
+Z54 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/memory_controller.vhd|
+Z55 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/memory_controller.vhd|
+!i113 1
+R14
+R15
+Abhv
+R1
+R3
+R4
+Z56 DEx4 work 17 memory_controller 0 22 656PYQ[[Q;P9l3JiH6m[Y1
+l27
+L24
+V<?IUoFUTi3J]7CBHLbz2c1
+!s100 @]Jcj0CKLC3eUYl;DKUJ]2
+R9
+32
+R10
+!i10b 1
+R11
+R54
+R55
+!i113 1
+R14
+R15
+Pmemory_package
+R3
+R4
+Z57 w1604155524
+R6
+Z58 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/memory_package.vhd
+Z59 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/memory_package.vhd
+l0
+L3
+VYnSeJa5R?kGE[a=NoYM^S1
+!s100 lZHJfVYA:4=c<WUoQPHUm3
+R9
+32
+R10
+!i10b 1
+R11
+Z60 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/memory_package.vhd|
+Z61 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/memory_package.vhd|
+!i113 1
+R14
+R15
+Bbody
+R40
+R3
+R4
+l0
+L36
+ViJXT_DEj7UeSCPhG2zGEj2
+!s100 Z6ajX]MIn>B6hCC?]9cKc2
+R9
+32
+R10
+!i10b 1
+R11
+R60
+R61
+!i113 1
+R14
+R15
+Eone_byte_enable_memory
+R0
+R40
+R3
+R4
+R6
+Z62 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/one-byte-enable.vhd
+Z63 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/one-byte-enable.vhd
+l0
+L17
+VM>Rac?j[0H1ZBODloYCUz2
+!s100 j3MUR8fEaBcBV]o?BV_0H3
+R9
+32
+R10
+!i10b 1
+R11
+Z64 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/one-byte-enable.vhd|
+Z65 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/one-byte-enable.vhd|
+!i113 1
+R14
+R15
+Artl
+R40
+R3
+R4
+R45
+l42
+L39
+VI1kk6k0DXjDMDeTaO0HeD3
+!s100 1WWIakMH?lS[87ALFBNWl3
+R9
+32
+R10
+!i10b 1
+R11
+R64
+R65
+!i113 1
+R14
+R15
+Eregisters
+R0
+R1
+R3
+R4
+R6
+Z66 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/registers.vhd
+Z67 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/registers.vhd
+l0
+L4
+VKljj8Qjl>>cin3RXik8@g3
+!s100 <REaz8:Ne2mC`j<RkiJ?W2
+R9
+32
+R10
+!i10b 1
+R11
+Z68 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/registers.vhd|
+Z69 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/registers.vhd|
+!i113 1
+R14
+R15
+Abhv
+R1
+R3
+R4
+Z70 DEx4 work 9 registers 0 22 Kljj8Qjl>>cin3RXik8@g3
+l22
+L18
+VT6IbncBZPj]F>QNIJ2Gnb2
+!s100 ;CiDVZH<CIRf_LYX]PFFN0
+R9
+32
+R10
+!i10b 1
+R11
+R68
+R69
+!i113 1
+R14
+R15
+Etestbench_top_level
+Z71 w1604333472
+R1
+R3
+R4
+R6
+Z72 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/testbench.vhd
+Z73 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/testbench.vhd
+l0
+L4
+V8Ie:X`Xb;ULAiFEDH?C4E0
+!s100 nb3>eha[T32`?7LSU;0Xl1
+R9
+32
+Z74 !s110 1604407848
+!i10b 1
+Z75 !s108 1604407848.000000
+Z76 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/testbench.vhd|
+Z77 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/testbench.vhd|
+!i113 1
+R14
+R15
+Aappel
+R25
+R5
+Z78 DEx4 work 9 top_level 0 22 7cEOQzMX=HYcjJ@mW=V`Y0
+R1
+R3
+R4
+Z79 DEx4 work 19 testbench_top_level 0 22 8Ie:X`Xb;ULAiFEDH?C4E0
+l27
+L6
+Z80 VBEOzBK`3<fZ[6L7Pc6PEd1
+Z81 !s100 nZaamC:7QYZZzIW0M=19E2
+R9
+32
+R74
+!i10b 1
+R75
+R76
+R77
+!i113 1
+R14
+R15
+Etop_level
+Z82 w1604331761
+R25
+R5
+R1
+R3
+R4
+R6
+Z83 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level.vhd
+Z84 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level.vhd
+l0
+L7
+V7cEOQzMX=HYcjJ@mW=V`Y0
+!s100 CQjzb7`NEcZ?IMmPSVTf_1
+R9
+32
+R35
+!i10b 1
+R36
+Z85 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level.vhd|
+Z86 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level.vhd|
+!i113 1
+R14
+R15
+Abhv
+R40
+R46
+Z87 DEx4 work 15 top_level_debug 0 22 alOBhSb0M@bO9FV@V9QH=0
+Z88 DEx4 work 19 top_level_processor 0 22 Q24I4H9]UMH4HEiG^KLmB0
+R25
+R5
+R1
+R3
+R4
+R78
+l55
+L26
+VljGI?GS23RkWEQPAA0H7Q2
+!s100 9;63d596l^acX>@`Q_^o>1
+R9
+32
+R35
+!i10b 1
+R36
+R85
+R86
+!i113 1
+R14
+R15
+Etop_level_debug
+Z89 w1604320329
+R1
+R3
+R4
+R6
+Z90 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_debug.vhd
+Z91 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_debug.vhd
+l0
+L6
+ValOBhSb0M@bO9FV@V9QH=0
+!s100 TSdU9_ADL;^SW;hd:ogWE0
+R9
+32
+R35
+!i10b 1
+R36
+Z92 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_debug.vhd|
+Z93 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_debug.vhd|
+!i113 1
+R14
+R15
+Aplof
+R39
+R51
+R1
+R3
+R4
+R87
+l92
+L48
+V=KV;04NaZEXXY3g;RBT@Z1
+!s100 WU8W>Q5238JkC1GoYhK540
+R9
+32
+R35
+!i10b 1
+R36
+R92
+R93
+!i113 1
+R14
+R15
+Etop_level_processor
+R0
+R25
+R5
+R1
+R3
+R4
+R6
+Z94 8C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_processor.vhd
+Z95 FC:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_processor.vhd
+l0
+L7
+VQ24I4H9]UMH4HEiG^KLmB0
+!s100 _`g6fDfgha`cBhezA?XVT0
+R9
+32
+R10
+!i10b 1
+R11
+Z96 !s90 -reportprogress|300|-work|work|-2002|-explicit|-stats=none|C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_processor.vhd|
+Z97 !s107 C:/Users/Daan/Documents/Programming/BertMolenkamp/Simulation/top_level_processor.vhd|
+!i113 1
+R14
+R15
+Abhv
+R70
+R56
+R2
+R16
+R31
+R25
+R5
+R1
+R3
+R4
+R88
+l61
+L29
+VOlEA<5_Wb9;1?ARbbKKG41
+!s100 Ef?]BadJ_FfSoSfz]GS782
+R9
+32
+R10
+!i10b 1
+R11
+R96
+R97
+!i113 1
+R14
+R15

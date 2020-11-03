@@ -1,0 +1,69 @@
+# Compile of alu_package.vhd was successful.
+# Compile of control_package.vhd was successful.
+# Compile of memory_package.vhd was successful.
+# Compile of alu.vhd was successful.
+# Compile of registers.vhd was successful.
+# Compile of control_unit.vhd was successful.
+# Compile of memory_controller.vhd was successful.
+# Compile of top_level_processor.vhd was successful.
+# Compile of one-byte-enable.vhd was successful with warnings.
+# Compile of four-byte-enable.vhd was successful.
+# Compile of debug.vhd was successful.
+# Compile of inoutput.vhd was successful.
+# Compile of top_level_debug.vhd was successful.
+# Compile of top_level.vhd was successful.
+# Compile of testbench.vhd was successful.
+# 15 compiles, 0 failed with no errors.
+do do.do
+# vsim -t ms -gui work.testbench_top_level 
+# Start time: 13:50:56 on Nov 03,2020
+# Loading std.standard
+# Loading std.textio(body)
+# Loading ieee.std_logic_1164(body)
+# Loading ieee.numeric_std(body)
+# Loading work.alu_package(body)
+# Loading work.control_package(body)
+# Loading work.testbench_top_level(appel)
+# ** Warning: (vsim-3479) Time unit 'us' is less than the simulator resolution (1ms).
+#    Time: 0 ms  Iteration: 0  Root: /
+# Loading work.memory_package(body)
+# Loading work.top_level(bhv)
+# Loading ieee.math_real(body)
+# Loading work.top_level_processor(bhv)
+# Loading work.control_unit(bhv)
+# Loading work.alu(bhv)
+# Loading work.memory_controller(bhv)
+# Loading work.registers(bhv)
+# Loading work.top_level_debug(plof)
+# Loading work.inoutput(bhv)
+# Loading work.debug(salade)
+# Loading work.four_byte_enable_memory(kerst)
+# Loading work.one_byte_enable_memory(rtl)
+# WARNING: No extended dataflow license exists
+# ** Warning: (vsim-WLF-5000) WLF file currently in use: vsim.wlf
+#           File in use by: Daan  Hostname: LAPTOP-7VG07KCL  ProcessID: 12484
+#           Attempting to use alternate WLF file "./wlftqc8f7f".
+# ** Warning: (vsim-WLF-5001) Could not open WLF file: vsim.wlf
+#           Using alternate file: ./wlftqc8f7f
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ms  Iteration: 0  Instance: /testbench_top_level/tld/mem
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ms  Iteration: 0  Instance: /testbench_top_level/tld/mem
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ms  Iteration: 0  Instance: /testbench_top_level/tld/cpu/rg
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ms  Iteration: 0  Instance: /testbench_top_level/tld/cpu/rg
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ms  Iteration: 0  Instance: /testbench_top_level/tld/cpu/mc
+# ** Warning: NUMERIC_STD."=": metavalue detected, returning FALSE
+#    Time: 0 ms  Iteration: 0  Instance: /testbench_top_level/tld/cpu/al
+# ** Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+#    Time: 0 ms  Iteration: 0  Instance: /testbench_top_level/tld/cpu/al
+# ** Warning: NUMERIC_STD."<": metavalue detected, returning FALSE
+#    Time: 0 ms  Iteration: 0  Instance: /testbench_top_level/tld/cpu/al
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ms  Iteration: 2  Instance: /testbench_top_level/tld/cpu/rg
+# ** Warning: NUMERIC_STD.TO_INTEGER: metavalue detected, returning 0
+#    Time: 0 ms  Iteration: 2  Instance: /testbench_top_level/tld/cpu/rg
+# End time: 13:51:08 on Nov 03,2020, Elapsed time: 0:00:12
+# Errors: 0, Warnings: 14
